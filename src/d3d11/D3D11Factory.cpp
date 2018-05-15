@@ -76,6 +76,8 @@ bool D3D11Factory::Present()
 		// TODO: Render Queue?
 		m_pSwapChain->Present(0, 0);
 	}
+
+	return true;
 }
 
 bool renderlib::CreateD3D11Factory(ID3D11Factory** ppFactory)
