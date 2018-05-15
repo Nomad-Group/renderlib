@@ -27,12 +27,12 @@ void D3D11RenderQueue::AddCommand(_detail::IRenderCommand* pCommand)
     m_vRenderCommands.push_back(pCommand);
 }
 
-void D3D11RenderQueue::Render()
+void D3D11RenderQueue::Render(IRenderContext* pRenderContext)
 {
     //std::lock_guard<std::recursive_mutex> lock(m_mutex);
     for (auto pCommand : m_vRenderCommands)
     {
-		pCommand->Render(reinterpret_cast<IRenderer*>(m_pRenderer));
+		pCommand->Render(m_pRenderer, pRenderContext);
 		delete pCommand;
     }
 
@@ -49,12 +49,12 @@ struct D3D11SetRenderTargetCommand : _detail::IRenderCommand
 {
 	IRenderTarget* pRenderTarget;
 
-	void Render(IRenderer* pRenderer) override
+	void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
 	{
 		if (pRenderTarget)
-			pRenderTarget->Apply(pRenderer->GetRenderContext());
+			pRenderTarget->Apply(pRenderContext);
 		else
-			pRenderer->GetBackBufferRenderTarget()->Apply(pRenderer->GetRenderContext());
+			pRenderContext->GetBackBufferRenderTarget()->Apply(pRenderContext);
 	}
 };
 
@@ -71,12 +71,12 @@ struct D3D11ClearRenderTargetCommand : _detail::IRenderCommand
 	IRenderTarget* pRenderTarget;
 	RGBA color;
 
-	void Render(IRenderer* pRenderer) override
+	void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
 	{
 		if (pRenderTarget)
-			pRenderTarget->Clear(pRenderer->GetRenderContext(), color);
+			pRenderTarget->Clear(pRenderContext, color);
 		else
-			pRenderer->GetBackBufferRenderTarget()->Clear(pRenderer->GetRenderContext(), color);
+			pRenderContext->GetBackBufferRenderTarget()->Clear(pRenderContext, color);
 	}
 };
 
@@ -101,9 +101,9 @@ struct D3D11DrawRectCommand : _detail::IRenderCommand
 	Rect rect;
     RGBA col;
 
-    void Render(IRenderer* pRenderer) override
+    void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
-        pRenderer->GetRenderContext()->DrawRect(rect, col);
+        pRenderContext->DrawRect(rect, col);
     }
 };
 
@@ -127,14 +127,14 @@ struct D3D11DrawTextCommand : _detail::IRenderCommand
 	Vector2f position;
     std::string str;
 
-    void Render(IRenderer* pRenderer) override
+    void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
         auto pFont = pRenderer->GetFont(font.font);
         if (pFont)
 		{
             pFont->SetSize(font.size);
             pFont->SetColor(font.color);
-            pFont->DrawString(pRenderer->GetRenderContext(), position, str);
+            pFont->DrawString(pRenderContext, position, str);
         }
     }
 };
@@ -159,14 +159,14 @@ struct D3D11DrawTextExCommand : _detail::IRenderCommand
 	Rectf rect;
     std::string str;
 
-    void Render(IRenderer* pRenderer) override
+    void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
         auto pFont = pRenderer->GetFont(font.font);
         if (pFont)
 		{
             pFont->SetSize(font.size);
             pFont->SetColor(font.color);
-            pFont->DrawStringEx(pRenderer->GetRenderContext(), rect, str, fontFlags);
+            pFont->DrawStringEx(pRenderContext, rect, str, fontFlags);
         }
     }
 };
@@ -189,10 +189,10 @@ struct D3D11DrawTextureCommand : _detail::IRenderCommand
     Vector2 position;
     IRenderTexture* pTexture;
 
-    void Render(IRenderer* pRenderer) override
+    void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
         pTexture->SetPosition(position);
-        pTexture->Render(pRenderer->GetRenderContext());
+        pTexture->Render(pRenderContext);
     }
 };
 

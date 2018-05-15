@@ -5,6 +5,7 @@
 
 class D3D11RenderContext : public IRenderContext
 {
+	friend class D3D11Factory;
 	friend class D3D11Renderer;
 	friend class D3D11Texture;
 
@@ -46,6 +47,8 @@ public:
 	// Viewport
 	virtual const Vector2& GetViewportSize() const override { return m_size; };
 	virtual void SetViewportSize(const Vector2&) override;
+
+	virtual IRenderTarget* GetBackBufferRenderTarget() override;
 
 	// Basic Drawing
 	virtual void DrawRect(const Rect& rect, const RGBA& color) override;

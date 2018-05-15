@@ -21,6 +21,9 @@
     <Filter Include="Source\d3d11">
       <UniqueIdentifier>{8ec951c1-5391-40f0-b2c1-50c47b8165c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header\renderlib\impl">
+      <UniqueIdentifier>{e0fdb124-7b1d-4a14-a38c-c242bed724c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderlib\IRenderer.h">
@@ -80,6 +83,15 @@
     <ClInclude Include="include\d3d11\D3D11RenderContext.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderlib\impl\renderlibD3D11.h">
+      <Filter>Header\renderlib\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\detail\renderlibFactory.h">
+      <Filter>Header\renderlib\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Factory.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
@@ -110,6 +122,9 @@
       <Filter>Source\d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11RenderContext.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Factory.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
   </ItemGroup>

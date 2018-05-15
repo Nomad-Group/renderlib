@@ -85,3 +85,5 @@ void D3D11RenderContext::RestoreState()
 {
 	m_stateSaver.restoreSavedState();
 }
+
+IRenderTarget* D3D11RenderContext::GetBackBufferRenderTarget() { return m_pRenderTarget; }

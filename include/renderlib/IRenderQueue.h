@@ -7,7 +7,7 @@ namespace _detail
 		virtual ~IRenderCommand() = 0;
 
 		// Render
-		virtual void Render(IRenderer*) = 0;
+		virtual void Render(IRenderer*, IRenderContext*) = 0;
 	};
 }
 
@@ -24,7 +24,7 @@ struct IRenderQueue
 	virtual void AddCommand(_detail::IRenderCommand* pCommand) = 0;
 
 	// Render
-	virtual void Render() = 0;
+	virtual void Render(IRenderContext*) = 0;
 
 	// Offset
 	virtual void SetRenderOffset(const Vector2& = Vector2()) = 0;

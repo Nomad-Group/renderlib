@@ -8,6 +8,7 @@
 
 
 struct IFW1Factory;
+class D3D11Factory;
 class D3D11Renderer;
 class D3D11RenderContext;
 class D3D11Texture;
@@ -19,6 +20,7 @@ class D3D11Font;
 
 class D3D11Renderer : public IRenderer
 {
+	friend class D3D11Factory;
 	friend class D3D11RenderContext;
 	friend class D3D11RenderTarget;
 
@@ -26,9 +28,6 @@ class D3D11Renderer : public IRenderer
 	IDXGISwapChain* m_pSwapChain = nullptr;
 	ID3D11Device* m_pDevice = nullptr;
 	bool m_bReleaseResources = false; // if SwapChain was created by us
-
-	// Render Context
-	D3D11RenderContext* m_pRenderContext = nullptr;
 
 	// Setup
 	bool m_bIsSetUp = false;
@@ -49,7 +48,6 @@ public:
 	virtual void Shutdown() override;
 
 	void Reset();
-	void Render(IDXGISwapChain*);
 
 	// Custom Swap Chain
 	bool SetupNewSwapChain(HWND);
@@ -60,5 +58,4 @@ public:
     virtual IRenderTexture* CreateTexture() override;
 
 	virtual IRenderTarget* CreateRenderTarget(const Vector2& size) override;
-	virtual IRenderTarget* GetBackBufferRenderTarget() override;
 };

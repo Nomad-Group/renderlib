@@ -35,29 +35,6 @@ void D3D11Renderer::Shutdown()
     m_pFW1Factory = nullptr;
 }
 
-void D3D11Renderer::Render(IDXGISwapChain* pSwapChain)
-{
-    // Device & Device Context
-    if (pSwapChain != nullptr && pSwapChain != m_pSwapChain)
-	{
-        m_pSwapChain = pSwapChain;
-        m_pSwapChain->GetDevice(__uuidof(m_pDevice), (void**)&m_pDevice);
-        m_pDevice->GetImmediateContext(&m_pRenderContext->m_pDeviceContext);
-    }
-
-    // Setup
-    if (!m_bIsSetUp)
-	{
-        if (!Setup())
-		{
-            MessageBoxA(nullptr, "Failed to setup D3D11Renderer!", "renderlib", MB_ICONERROR | MB_OK);
-            exit(0);
-        }
-
-        m_bIsSetUp = true;
-    }
-}
-
 bool D3D11Renderer::Setup()
 {
     // FW1FontWrapper
@@ -65,38 +42,8 @@ bool D3D11Renderer::Setup()
         return false;
 
     // Done
+	m_bIsSetUp = true;
     return true;
-}
-
-bool D3D11Renderer::SetupNewSwapChain(HWND hWindow)
-{
-	DXGI_SWAP_CHAIN_DESC scd;
-	ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
-	scd.BufferCount = 1;
-	scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	scd.OutputWindow = hWindow;
-	scd.SampleDesc.Count = 4;
-	scd.Windowed = TRUE;
-
-	auto hResult = D3D11CreateDeviceAndSwapChain(NULL,
-		D3D_DRIVER_TYPE_HARDWARE,
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		D3D11_SDK_VERSION,
-		&scd,
-		&m_pSwapChain,
-		&m_pDevice,
-		NULL,
-		&m_pRenderContext->m_pDeviceContext);
-
-	m_bReleaseResources = true;
-	if (FAILED(hResult))
-		return false;
-
-	return true;
 }
 
 void D3D11Renderer::Present()
@@ -106,7 +53,7 @@ void D3D11Renderer::Present()
 
 void D3D11Renderer::Reset()
 {
-	m_pRenderContext->Shutdown();
+	//m_pRenderContext->Shutdown();
 
     // Setup again
     m_bIsSetUp = false;
@@ -150,5 +97,3 @@ IRenderTarget* D3D11Renderer::CreateRenderTarget(const Vector2& size)
 
 	return pRenderTarget;
 }
-
-IRenderTarget* D3D11Renderer::GetBackBufferRenderTarget() { return m_pRenderContext->m_pRenderTarget; }

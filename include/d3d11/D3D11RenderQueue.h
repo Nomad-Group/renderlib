@@ -32,7 +32,7 @@ public:
 	void AddCommand(_detail::IRenderCommand* pCommand) override;
 
 	// Render
-	void Render() override;
+	void Render(IRenderContext*) override;
 
 	// Offset
 	virtual void SetRenderOffset(const Vector2& o) override { m_renderOffset = o; };
