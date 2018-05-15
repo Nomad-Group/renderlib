@@ -8,7 +8,7 @@ enum class ColorFormat : uint8_t
 
 struct IRenderTexture
 {
-	virtual ~IRenderTexture() = 0;
+	virtual ~IRenderTexture() = default;
 	virtual void Release() = 0;
 
     // Loader

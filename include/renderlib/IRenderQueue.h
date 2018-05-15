@@ -4,7 +4,7 @@ namespace _detail
 {
 	struct IRenderCommand
 	{
-		virtual ~IRenderCommand() = 0;
+		virtual ~IRenderCommand() = default;
 
 		// Render
 		virtual void Render(IRenderer*, IRenderContext*) = 0;
@@ -13,7 +13,7 @@ namespace _detail
 
 struct IRenderQueue
 {
-	virtual ~IRenderQueue() = 0;
+	virtual ~IRenderQueue() = default;
 
 	// Lock
 	virtual void Lock() = 0;

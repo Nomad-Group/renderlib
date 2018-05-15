@@ -3,7 +3,7 @@
 // IRenderContext is not threadsafe!
 struct IRenderContext
 {
-	virtual ~IRenderContext() = 0;
+	virtual ~IRenderContext() = default;
 
 	// Viewport
 	virtual const Vector2& GetViewportSize() const = 0;

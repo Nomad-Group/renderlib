@@ -17,7 +17,7 @@ class D3D11Font : public IRenderFont
 
 public:
 	D3D11Font(D3D11Renderer* pRenderer, std::string name);
-	~D3D11Font() override;
+	virtual ~D3D11Font() override;
 
 	bool Initialize();
 

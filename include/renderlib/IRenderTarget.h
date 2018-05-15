@@ -2,7 +2,7 @@
 
 struct IRenderTarget
 {
-    virtual ~IRenderTarget() = 0;
+    virtual ~IRenderTarget() = default;
 
     virtual bool Initialize(IRenderer* pRenderer, const Vector2& size) = 0;
 

@@ -14,7 +14,7 @@ struct FontRenderFlags
 
 struct IRenderFont
 {
-	virtual ~IRenderFont() = 0;
+	virtual ~IRenderFont() = default;
 
 	// Properties
 	virtual const std::string& GetName() const = 0;

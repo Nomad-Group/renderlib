@@ -4,7 +4,7 @@ namespace renderlib
 {
 	struct IFactory
 	{
-		virtual ~IFactory() = 0;
+		virtual ~IFactory() = default;
 
 		virtual const bool IsInitialized() const = 0;
 

@@ -3,7 +3,7 @@
 // IRenderer is threadsafe
 struct IRenderer
 {
-	virtual ~IRenderer() = 0;
+	virtual ~IRenderer() = default;
 	virtual void Shutdown() = 0;
 
 	// Resources
