@@ -1,22 +1,21 @@
 #include "d3d11/D3D11Renderer.h"
+#include "d3d11/D3D11RenderContext.h"
 #include "d3d11/D3D11RenderTarget.h"
 #include "d3d11/D3D11Texture.h"
-
-D3D11RenderTarget::D3D11RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext) :
-	m_pDevice(pDevice),
-	m_pDeviceContext(pDeviceContext)
-{}
 
 D3D11RenderTarget::~D3D11RenderTarget()
 {
 	if (m_pRenderTargetView)
 		m_pRenderTargetView->Release();
+
 	if (m_pRenderTexture)
 		m_pRenderTexture->Release();
 }
 
 bool D3D11RenderTarget::Initialize(IRenderer* pRenderer, const Vector2& size)
 {
+	auto pDevice = static_cast<D3D11Renderer*>(pRenderer)->GetDevice();
+
     // Description
     D3D11_TEXTURE2D_DESC textureDesc;
     memset(&textureDesc, 0, sizeof(D3D11_TEXTURE2D_DESC));
@@ -31,7 +30,7 @@ bool D3D11RenderTarget::Initialize(IRenderer* pRenderer, const Vector2& size)
     textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
     // Create Texture
-    if (FAILED(m_pDevice->CreateTexture2D(&textureDesc, nullptr, &m_pRenderTexture)))
+    if (FAILED(pDevice->CreateTexture2D(&textureDesc, nullptr, &m_pRenderTexture)))
         return false;
 
     // Render Target View Description
@@ -42,7 +41,7 @@ bool D3D11RenderTarget::Initialize(IRenderer* pRenderer, const Vector2& size)
     viewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
     // Create View
-    if (FAILED(m_pDevice->CreateRenderTargetView(m_pRenderTexture, &viewDesc, &m_pRenderTargetView))) {
+    if (FAILED(pDevice->CreateRenderTargetView(m_pRenderTexture, &viewDesc, &m_pRenderTargetView))) {
         return false;
     }
 
@@ -55,17 +54,17 @@ bool D3D11RenderTarget::Initialize(IRenderer* pRenderer, const Vector2& size)
     shaderDesc.Texture2D.MipLevels = 1;
 
     // Create Shader Resource View
-    if (FAILED(m_pDevice->CreateShaderResourceView(m_pRenderTexture, &shaderDesc, &m_pShaderResourceView)))
+    if (FAILED(pDevice->CreateShaderResourceView(m_pRenderTexture, &shaderDesc, &m_pShaderResourceView)))
         return false;
 
     // Done
     return true;
 }
 
-bool D3D11RenderTarget::InitializeBackbuffer(IDXGISwapChain* pSwapChain)
+bool D3D11RenderTarget::InitializeBackbuffer(D3D11Renderer* pRenderer)
 {
 	ID3D11Texture2D* pBackBuffer = nullptr;
-	HRESULT hResult = pSwapChain->GetBuffer(
+	HRESULT hResult = pRenderer->m_pSwapChain->GetBuffer(
 		0,
 		__uuidof(ID3D11Texture2D),
 		reinterpret_cast<void**>(&pBackBuffer)
@@ -74,7 +73,7 @@ bool D3D11RenderTarget::InitializeBackbuffer(IDXGISwapChain* pSwapChain)
 	if (FAILED(hResult))
 		return false;
 
-	hResult = m_pDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRenderTargetView);
+	hResult = pRenderer->m_pDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRenderTargetView);
 	if (FAILED(hResult))
 		return false;
 
@@ -82,7 +81,7 @@ bool D3D11RenderTarget::InitializeBackbuffer(IDXGISwapChain* pSwapChain)
 	return true;
 }
 
-void D3D11RenderTarget::Clear(const RGBA& col)
+void D3D11RenderTarget::Clear(IRenderContext* pRenderContext, const RGBA& col)
 {
 	float dcolor[4];
 	dcolor[0] = static_cast<float>(col.r) / 255;
@@ -90,22 +89,25 @@ void D3D11RenderTarget::Clear(const RGBA& col)
 	dcolor[2] = static_cast<float>(col.b) / 255;
 	dcolor[3] = static_cast<float>(col.a) / 255;
 
+	auto pDeviceContext = static_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
     if(m_pRenderTargetView)
-	    m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, dcolor);
+	    pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, dcolor);
 
 	if(m_pDepthStencilView)
-	    m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	    pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-void D3D11RenderTarget::ClearStencil()
+void D3D11RenderTarget::ClearStencil(IRenderContext* pRenderContext)
 {
+	auto pDeviceContext = static_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
     if(m_pDepthStencilView)
-        m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+        pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-void D3D11RenderTarget::Apply()
+void D3D11RenderTarget::Apply(IRenderContext* pRenderContext)
 {
-    m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
+	auto pDeviceContext = static_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+    pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
 }
 
 bool D3D11RenderTarget::CopyTexture(IRenderContext* pRenderContext, IRenderTexture* texture)

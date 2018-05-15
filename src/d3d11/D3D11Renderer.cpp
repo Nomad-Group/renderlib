@@ -147,7 +147,7 @@ IRenderTexture* D3D11Renderer::CreateTexture()
 
 IRenderTarget* D3D11Renderer::CreateRenderTarget(const Vector2& size)
 {
-	auto pRenderTarget = new D3D11RenderTarget(m_pDevice, m_pRenderContext->m_pDeviceContext);
+	auto pRenderTarget = new D3D11RenderTarget();
 	if (!pRenderTarget->Initialize(this, size))
 	{
 		delete pRenderTarget;

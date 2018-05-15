@@ -20,6 +20,7 @@ class D3D11Font;
 class D3D11Renderer : public IRenderer
 {
 	friend class D3D11RenderContext;
+	friend class D3D11RenderTarget;
 
 	// D3D11
 	IDXGISwapChain* m_pSwapChain = nullptr;

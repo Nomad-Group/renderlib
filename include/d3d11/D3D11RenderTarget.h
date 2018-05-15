@@ -4,12 +4,6 @@
 
 class D3D11RenderTarget : public IRenderTarget
 {
-	ID3D11Device* m_pDevice = nullptr;
-	ID3D11DeviceContext* m_pDeviceContext = nullptr;
-
-	ID3D11RenderTargetView* m_pPreviousRT = nullptr;
-    ID3D11DepthStencilView* m_pPreviousDSV = nullptr;
-
 	ID3D11Texture2D* m_pRenderTexture = nullptr;
     ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
 
@@ -19,17 +13,17 @@ class D3D11RenderTarget : public IRenderTarget
 	bool m_bBackbuffer = false;
 
 public:
-	D3D11RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual ~D3D11RenderTarget();
+	D3D11RenderTarget() = default;
+	virtual ~D3D11RenderTarget() override;
 
     virtual bool Initialize(IRenderer* pRenderer, const Vector2&) override;
-	bool InitializeBackbuffer(IDXGISwapChain* pSwapChain);
+	bool InitializeBackbuffer(D3D11Renderer*);
 	
     virtual bool IsBackbuffer() const override { return m_bBackbuffer; };
 
-	virtual void Apply() override;
-	virtual void Clear(const RGBA& col = { 0, 0, 0, 0 }) override;
-	virtual void ClearStencil() override;
+	virtual void Apply(IRenderContext*) override;
+	virtual void Clear(IRenderContext*, const RGBA& col) override;
+	virtual void ClearStencil(IRenderContext*) override;
 
 	virtual bool CopyTexture(IRenderContext*, IRenderTexture* pTexture) override;
 };

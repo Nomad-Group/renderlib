@@ -8,9 +8,9 @@ struct IRenderTarget
 
     virtual bool IsBackbuffer() const = 0;
 
-    virtual void Apply() = 0;
-    virtual void Clear(const RGBA& col) = 0;
-    virtual void ClearStencil() = 0;
+    virtual void Apply(IRenderContext*) = 0;
+    virtual void Clear(IRenderContext*, const RGBA& col) = 0;
+    virtual void ClearStencil(IRenderContext*) = 0;
 
     virtual bool CopyTexture(IRenderContext*, IRenderTexture* pTexture) = 0;
 };

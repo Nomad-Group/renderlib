@@ -16,8 +16,8 @@ D3D11RenderContext::~D3D11RenderContext()
 bool D3D11RenderContext::Setup()
 {
 	// Render Target
-	m_pRenderTarget = new D3D11RenderTarget(m_pRenderer->m_pDevice, m_pDeviceContext);
-	m_pRenderTarget->InitializeBackbuffer(m_pRenderer->m_pSwapChain);
+	m_pRenderTarget = new D3D11RenderTarget();
+	m_pRenderTarget->InitializeBackbuffer(m_pRenderer);
 
 	// Rect
 	m_pRect = new D3D11Rect(m_pRenderer);
@@ -66,7 +66,7 @@ void D3D11RenderContext::Render()
 
 	// Setup render state
 	m_pBlendState->Apply(this);
-	m_pRenderTarget->Apply();
+	m_pRenderTarget->Apply(this);
 }
 
 void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)

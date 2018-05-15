@@ -52,9 +52,9 @@ struct D3D11SetRenderTargetCommand : _detail::IRenderCommand
 	void Render(IRenderer* pRenderer) override
 	{
 		if (pRenderTarget)
-			pRenderTarget->Apply();
+			pRenderTarget->Apply(pRenderer->GetRenderContext());
 		else
-			pRenderer->GetBackBufferRenderTarget()->Apply();
+			pRenderer->GetBackBufferRenderTarget()->Apply(pRenderer->GetRenderContext());
 	}
 };
 
@@ -74,9 +74,9 @@ struct D3D11ClearRenderTargetCommand : _detail::IRenderCommand
 	void Render(IRenderer* pRenderer) override
 	{
 		if (pRenderTarget)
-			pRenderTarget->Clear(color);
+			pRenderTarget->Clear(pRenderer->GetRenderContext(), color);
 		else
-			pRenderer->GetBackBufferRenderTarget()->Clear(color);
+			pRenderer->GetBackBufferRenderTarget()->Clear(pRenderer->GetRenderContext(), color);
 	}
 };
 
