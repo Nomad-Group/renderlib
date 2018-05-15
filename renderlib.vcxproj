@@ -26,26 +26,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -76,7 +76,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
     </ClCompile>
+    <Lib>
+      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>third_party/libpng/x86/;</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -84,7 +89,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
     </ClCompile>
+    <Lib>
+      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>third_party/libpng/x64/;</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -94,11 +104,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>third_party/libpng/x86/;</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -108,13 +123,46 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>third_party/libpng/x64/;</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\d3d11\D3D11BlendState.h" />
+    <ClInclude Include="include\d3d11\D3D11Font.h" />
+    <ClInclude Include="include\d3d11\D3D11Rect.h" />
+    <ClInclude Include="include\d3d11\D3D11Renderer.h" />
+    <ClInclude Include="include\d3d11\D3D11RenderQueue.h" />
+    <ClInclude Include="include\d3d11\D3D11RenderTarget.h" />
+    <ClInclude Include="include\d3d11\D3D11ShaderBundle.h" />
+    <ClInclude Include="include\d3d11\D3D11Shaders.h" />
+    <ClInclude Include="include\d3d11\D3D11Texture.h" />
+    <ClInclude Include="include\renderlib\detail\renderlibColors.h" />
+    <ClInclude Include="include\renderlib\detail\renderlibMath.h" />
+    <ClInclude Include="include\renderlib\IRenderer.h" />
+    <ClInclude Include="include\renderlib\IRenderFont.h" />
+    <ClInclude Include="include\renderlib\IRenderQueue.h" />
+    <ClInclude Include="include\renderlib\IRenderTarget.h" />
+    <ClInclude Include="include\renderlib\IRenderTexture.h" />
+    <ClInclude Include="include\renderlib\renderlib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Font.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Rect.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
+    <ClCompile Include="src\d3d11\D3D11RenderQueue.cpp" />
+    <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
+    <ClCompile Include="src\d3d11\D3D11ShaderBundle.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
+    <ClCompile Include="src\d3d11\D3D11TexturePNG.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

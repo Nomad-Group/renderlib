@@ -1,17 +1,107 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="Source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="Header">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Header\renderlib">
+      <UniqueIdentifier>{ff6dcba7-3e6c-4332-8269-67146c67e45a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header\renderlib\detail">
+      <UniqueIdentifier>{5293a395-fd5b-4f1c-a58a-548003e9c660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\d3d11">
+      <UniqueIdentifier>{0af62e18-e2c7-46d0-9873-a10c7b972833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\d3d11">
+      <UniqueIdentifier>{8ec951c1-5391-40f0-b2c1-50c47b8165c6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\renderlib\IRenderer.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\IRenderQueue.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\IRenderTarget.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\IRenderTexture.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\renderlib.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\detail\renderlibMath.h">
+      <Filter>Header\renderlib\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\detail\renderlibColors.h">
+      <Filter>Header\renderlib\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\IRenderFont.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11BlendState.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Font.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Rect.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Renderer.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11RenderQueue.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11RenderTarget.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11ShaderBundle.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Shaders.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Texture.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Font.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Rect.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Renderer.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderQueue.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11ShaderBundle.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Texture.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11TexturePNG.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
