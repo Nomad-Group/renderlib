@@ -8,16 +8,17 @@ static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
 D3D11Font::D3D11Font(D3D11Renderer* pRenderer, std::string name) :
     m_pRenderer(pRenderer),
-    m_sName(name) {
+    m_sName(name)
+{}
 
-}
-
-D3D11Font::~D3D11Font() {
+D3D11Font::~D3D11Font()
+{
     if (m_pFontWrapper)
         m_pFontWrapper->Release();
 }
 
-bool D3D11Font::Initialize() {
+bool D3D11Font::Initialize()
+{
     m_pDevice = m_pRenderer->GetDevice();
     m_pDeviceContext = m_pRenderer->GetDeviceContext();
 
@@ -30,7 +31,8 @@ bool D3D11Font::Initialize() {
     return true;
 }
 
-void D3D11Font::DrawString(float x, float y, const std::string& str) {
+void D3D11Font::DrawString(float x, float y, const std::string& str)
+{
     if (!m_pFontWrapper)
         return;
 
@@ -63,7 +65,8 @@ void D3D11Font::DrawStringW(float x, float y, const std::wstring& str)
         FW1_NOWORDWRAP);
 }
 
-void D3D11Font::DrawStringEx(float x, float y, float w, float h, const std::string& str, FontRenderFlags::Enum eFlags) {
+void D3D11Font::DrawStringEx(float x, float y, float w, float h, const std::string& str, FontRenderFlags::Enum eFlags)
+{
     if (!m_pFontWrapper)
         return;
 
@@ -100,7 +103,8 @@ void D3D11Font::DrawStringEx(float x, float y, float w, float h, const std::stri
                                flags);
 }
 
-void D3D11Font::MeasureString(const std::string& str, float* pX, float* pY, FontRenderFlags::Enum eFlags) {
+void D3D11Font::MeasureString(const std::string& str, float* pX, float* pY, FontRenderFlags::Enum eFlags)
+{
     if (!m_pFontWrapper)
         return;
 

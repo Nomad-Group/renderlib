@@ -7,15 +7,18 @@ D3D11Texture::TextureDrawInfo D3D11Texture::m_textureDrawInfo;
 
 D3D11Texture::D3D11Texture(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext) :
     m_pDevice(pDevice),
-    m_pDeviceContext(pDeviceContext) {
+    m_pDeviceContext(pDeviceContext)
+{
     memset(&m_vertices, 0, sizeof(m_vertices));
 }
 
-D3D11Texture::~D3D11Texture() {
+D3D11Texture::~D3D11Texture()
+{
     Release();
 }
 
-bool D3D11Texture::Initialize(D3D11Renderer* pRenderer) {
+bool D3D11Texture::Initialize(D3D11Renderer* pRenderer)
+{
     m_pRenderer = pRenderer;
 
     // Init once
@@ -27,10 +30,8 @@ bool D3D11Texture::Initialize(D3D11Renderer* pRenderer) {
     m_textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader, d3d11_texture_shader);
     m_textureDrawInfo.pShaderBundle->SetupInputLayout(d3d11_texture_input, ARRAYSIZE(d3d11_texture_input));
 
-    if (!m_textureDrawInfo.pShaderBundle->Initialize()) {
-        __debugbreak();
+    if (!m_textureDrawInfo.pShaderBundle->Initialize())
         return false;
-    }
 
     // Sampler State
     D3D11_SAMPLER_DESC colorMapDesc;
@@ -47,16 +48,15 @@ bool D3D11Texture::Initialize(D3D11Renderer* pRenderer) {
     colorMapDesc.MinLOD = 0;
 
     // Sampler State
-    if (FAILED(m_pDevice->CreateSamplerState(&colorMapDesc, &m_textureDrawInfo.pSamplerState))) {
-        __debugbreak();
+    if (FAILED(m_pDevice->CreateSamplerState(&colorMapDesc, &m_textureDrawInfo.pSamplerState)))
         return false;
-    }
 
     // Done
     return true;
 }
 
-void D3D11Texture::Release() {
+void D3D11Texture::Release()
+{
     // Texture
     if (m_pTexture) {
         m_pTexture->Release();
@@ -76,12 +76,11 @@ void D3D11Texture::Release() {
     }
 }
 
-void D3D11Texture::Render() {
+void D3D11Texture::Render()
+{
     // Vertex Buffer
-    if (!m_pVertexBuffer && !UpdateVertexBuffer()) {
-        __debugbreak();
+    if (!m_pVertexBuffer && !UpdateVertexBuffer())
         return;
-    }
 
     // Shader
     m_textureDrawInfo.pShaderBundle->Apply();
@@ -101,7 +100,8 @@ void D3D11Texture::Render() {
     m_pDeviceContext->Draw(6, 0);
 }
 
-bool D3D11Texture::UpdateVertexBuffer() {
+bool D3D11Texture::UpdateVertexBuffer()
+{
     // Viewport Size
     float w, h;
     m_pRenderer->GetViewportSize(w, h);
@@ -131,7 +131,8 @@ bool D3D11Texture::UpdateVertexBuffer() {
     m_vertices[5] = {XMFLOAT3(rect.x, rect.y, 0.5f), XMFLOAT2(0.f, 0.f)};
 
     // Create Vertex Buffer
-    if (!m_pVertexBuffer) {
+    if (!m_pVertexBuffer)
+	{
         D3D11_BUFFER_DESC vertexDesc;
         ZeroMemory(&vertexDesc, sizeof(vertexDesc));
         vertexDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -143,18 +144,14 @@ bool D3D11Texture::UpdateVertexBuffer() {
         ZeroMemory(&resourceData, sizeof(resourceData));
         resourceData.pSysMem = m_vertices;
 
-        if (FAILED(m_pDevice->CreateBuffer(&vertexDesc, &resourceData, &m_pVertexBuffer))) {
-            __debugbreak();
+        if (FAILED(m_pDevice->CreateBuffer(&vertexDesc, &resourceData, &m_pVertexBuffer)))
             return false;
-        }
     }
 
     // Open (Map)
     D3D11_MAPPED_SUBRESOURCE subresource;
-    if (FAILED(m_pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource))) {
-        __debugbreak();
+    if (FAILED(m_pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource)))
         return false;
-    }
 
     // Copy
     memcpy(subresource.pData, (void*)&m_vertices, sizeof(m_vertices));
@@ -166,13 +163,12 @@ bool D3D11Texture::UpdateVertexBuffer() {
     return true;
 }
 
-bool D3D11Texture::InitializeShaderResourceView() {
+bool D3D11Texture::InitializeShaderResourceView()
+{
     // Resource
     ID3D11Resource* pResource = nullptr;
-    if (FAILED(m_pTexture->QueryInterface(__uuidof(ID3D11Resource), reinterpret_cast<LPVOID*>(&pResource)))) {
-        __debugbreak();
+    if (FAILED(m_pTexture->QueryInterface(__uuidof(ID3D11Resource), reinterpret_cast<LPVOID*>(&pResource))))
         return false;
-    }
 
     // Texture Info
     D3D11_TEXTURE2D_DESC textureDesc;
@@ -185,27 +181,25 @@ bool D3D11Texture::InitializeShaderResourceView() {
     resourceView.Texture2D.MostDetailedMip = 0;
     resourceView.Texture2D.MipLevels = textureDesc.MipLevels;
 
-    if (FAILED(m_pDevice->CreateShaderResourceView(pResource, &resourceView, &m_pResourceView))) {
-        __debugbreak();
+    if (FAILED(m_pDevice->CreateShaderResourceView(pResource, &resourceView, &m_pResourceView)))
         return false;
-    }
 
     // Done
     pResource->Release();
     return true;
 }
 
-void D3D11Texture::SetPosition(const Vector2& pos) {
+void D3D11Texture::SetPosition(const Vector2& pos)
+{
     if (m_position == pos)
         return;
     m_position = pos;
 
-    if (!UpdateVertexBuffer()) {
-        __debugbreak();
-    }
+	UpdateVertexBuffer();
 }
 
-bool D3D11Texture::LoadFrom2DTexture(ID3D11Texture2D* pTexture) {
+bool D3D11Texture::LoadFrom2DTexture(ID3D11Texture2D* pTexture)
+{
     Release();
 
     // Description
@@ -241,7 +235,8 @@ bool D3D11Texture::LoadFrom2DTexture(ID3D11Texture2D* pTexture) {
     return true;
 }
 
-bool D3D11Texture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format) {
+bool D3D11Texture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
+{
     // Texture Description
     D3D11_TEXTURE2D_DESC textureDesc;
     ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
@@ -288,17 +283,16 @@ bool D3D11Texture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t ui
     m_size.y = uiHeight;
 
     // Shader Resource View
-    if (!InitializeShaderResourceView()) {
-        __debugbreak();
+    if (!InitializeShaderResourceView())
         return false;
-    }
 
     // Done
     return true;
 }
 
 bool D3D11Texture::BlitFromMemory(uint8_t* pImage, const uint32_t rowPitch, const Vector2& position,
-                                  const Vector2& size) {
+                                  const Vector2& size)
+{
     D3D11_BOX box;
     box.front = 0;
     box.back = 1;

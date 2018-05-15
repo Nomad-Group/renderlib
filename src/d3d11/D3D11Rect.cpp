@@ -26,9 +26,8 @@ bool D3D11Rect::Initialize()
     // Shader
     m_pShaderBundle = new D3D11ShaderBundle(m_pRenderer);
     m_pShaderBundle->SetShaders(d3d11_rect_shader_quad, d3d11_rect_shader_color);
-    if (!m_pShaderBundle->Initialize()) {
+    if (!m_pShaderBundle->Initialize())
         return false;
-    }
 
     // Buffer
     D3D11_BUFFER_DESC bufferDesc;
@@ -39,7 +38,8 @@ bool D3D11Rect::Initialize()
     bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     // Create Buffer
-    if (m_pDevice->CreateBuffer(&bufferDesc, nullptr, &m_pBuffer) != S_OK) {
+    if (m_pDevice->CreateBuffer(&bufferDesc, nullptr, &m_pBuffer) != S_OK)
+	{
         if (m_pBuffer)
             m_pBuffer->Release();
 

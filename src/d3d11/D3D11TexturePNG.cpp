@@ -11,28 +11,25 @@ bool D3D11Texture::LoadFromPNG(const std::string& path)
     FILE* pFile = nullptr;
     fopen_s(&pFile, path.c_str(), "rb");
 
-    if (!pFile) {
-        __debugbreak();
+    if (!pFile)
         return false;
-    }
 
     png_byte header[8];
     fread(header, 1, 8, pFile);
-    if (png_sig_cmp(header, 0, 8)) {
-        __debugbreak();
-
+    if (png_sig_cmp(header, 0, 8))
+	{
         fclose(pFile);
         return false;
     }
 
     // Setup libpng
     png_structp pPNG = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-    if (!pPNG) return false;
+    if (!pPNG)
+		return false;
 
     png_infop pInfo = png_create_info_struct(pPNG);
-    if (!pInfo) {
-        __debugbreak();
-
+    if (!pInfo)
+	{
         png_destroy_read_struct(&pPNG, nullptr, nullptr);
         fclose(pFile);
         return false;

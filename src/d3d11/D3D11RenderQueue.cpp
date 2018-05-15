@@ -30,9 +30,6 @@ void D3D11RenderQueue::AddCommand(_detail::IRenderCommand* pCommand)
 void D3D11RenderQueue::Render()
 {
     //std::lock_guard<std::recursive_mutex> lock(m_mutex);
-	SetFont("Arial", 14, RGBA(0, 255, 0));
-	TextDrawString(Vector2(), "Render Commands: " + std::to_string(m_vRenderCommands.size()));
-
     for (auto pCommand : m_vRenderCommands)
     {
 		pCommand->Render(reinterpret_cast<IRenderer*>(m_pRenderer));
@@ -169,7 +166,8 @@ struct D3D11DrawTextExCommand : _detail::IRenderCommand
     void Render(IRenderer* pRenderer) override
     {
         auto pFont = pRenderer->GetFont(font.font);
-        if (pFont) {
+        if (pFont)
+		{
             pFont->SetSize(font.size);
             pFont->SetColor(font.color);
             pFont->DrawStringEx(x, y, w, h, str, fontFlags);

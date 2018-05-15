@@ -1,12 +1,14 @@
 #include "d3d11/D3D11Renderer.h"
 #include "d3d11/D3D11BlendState.h"
 
-D3D11BlendState::~D3D11BlendState() {
+D3D11BlendState::~D3D11BlendState()
+{
     if (m_pBlendState)
         m_pBlendState->Release();
 }
 
-bool D3D11BlendState::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext) {
+bool D3D11BlendState::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+{
     m_pDevice = pDevice;
     m_pDeviceContext = pDeviceContext;
 
@@ -35,11 +37,11 @@ bool D3D11BlendState::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pDe
     return true;
 }
 
-void D3D11BlendState::Apply() {
+void D3D11BlendState::Apply()
+{
     if (!m_pBlendState)
         return;
 
-    const float blend_factor[4] = {0.f, 0.f, 0.f, 0.f};
-	//const float blend_factor[4] = { 1.f, 1.f, 1.f, 1.f };
+	static const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
     m_pDeviceContext->OMSetBlendState(m_pBlendState, blend_factor, 0xffffffff);
 }

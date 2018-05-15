@@ -2,26 +2,31 @@
 #include "d3d11/D3D11ShaderBundle.h"
 
 D3D11ShaderBundle::D3D11ShaderBundle(D3D11Renderer* pRenderer) :
-    m_pRenderer(pRenderer) {}
+    m_pRenderer(pRenderer)
+{}
 
-D3D11ShaderBundle::~D3D11ShaderBundle() {
+D3D11ShaderBundle::~D3D11ShaderBundle()
+{
     if (m_pPixelShader)
         m_pPixelShader->Release();
     if (m_pVertexShader)
         m_pVertexShader->Release();
 }
 
-void D3D11ShaderBundle::SetShaders(const char* vertex_shader, const char* pixel_shader) {
+void D3D11ShaderBundle::SetShaders(const char* vertex_shader, const char* pixel_shader)
+{
     m_sVertexShader = vertex_shader;
     m_sPixelShader = pixel_shader;
 }
 
-void D3D11ShaderBundle::SetupInputLayout(D3D11_INPUT_ELEMENT_DESC* pDesc, uint32_t uiSize) {
+void D3D11ShaderBundle::SetupInputLayout(D3D11_INPUT_ELEMENT_DESC* pDesc, uint32_t uiSize)
+{
     m_pInputDescription = pDesc;
     m_uiInputDescSize = uiSize;
 }
 
-bool D3D11ShaderBundle::Initialize() {
+bool D3D11ShaderBundle::Initialize()
+{
     m_pDevice = m_pRenderer->GetDevice();
     m_pDeviceContext = m_pRenderer->GetDeviceContext();
 
@@ -113,7 +118,8 @@ bool D3D11ShaderBundle::Initialize() {
     return true;
 }
 
-void D3D11ShaderBundle::Apply(ID3D11Buffer* pBuffer) const {
+void D3D11ShaderBundle::Apply(ID3D11Buffer* pBuffer) const
+{
     if (m_pInputLayout)
         m_pDeviceContext->IASetInputLayout(m_pInputLayout);
 
@@ -130,7 +136,8 @@ void D3D11ShaderBundle::Apply(ID3D11Buffer* pBuffer) const {
 HRESULT D3D11ShaderBundle::CompileShader(const LPCVOID pSrcData, const SIZE_T SrcDataSize, const LPCSTR pFileName,
                                          CONST D3D_SHADER_MACRO* pDefines, ID3DInclude* pInclude, const LPCSTR pEntrypoint,
                                          const LPCSTR pTarget, const UINT Flags1, const UINT Flags2, ID3DBlob** ppCode,
-                                         ID3DBlob** ppErrorMsgs) {
+                                         ID3DBlob** ppErrorMsgs)
+{
     // Find D3DCompile
     HRESULT(*pD3DCompile)(LPCVOID, SIZE_T, LPCSTR,
         CONST D3D_SHADER_MACRO*, ID3DInclude*, LPCSTR,

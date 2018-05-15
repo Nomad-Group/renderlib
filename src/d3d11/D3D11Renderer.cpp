@@ -248,4 +248,4 @@ void D3D11Renderer::GetViewportSize(float& outWidth, float& outHeight) const
     outHeight = m_viewport.Height;
 }
 
-IRenderTarget* D3D11Renderer::GetBackBufferRenderTarget() { return m_pRenderTarget; };
+IRenderTarget* D3D11Renderer::GetBackBufferRenderTarget() { return m_pRenderTarget; }
