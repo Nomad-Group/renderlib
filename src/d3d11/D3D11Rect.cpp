@@ -1,4 +1,5 @@
 #include "d3d11/D3D11Renderer.h"
+#include "d3d11/D3D11RenderContext.h"
 #include "d3d11/D3D11Rect.h"
 #include "d3d11/D3D11ShaderBundle.h"
 #include "d3d11/D3D11Shaders.h"
@@ -18,7 +19,7 @@ D3D11Rect::~D3D11Rect()
 bool D3D11Rect::Initialize()
 {
     m_pDevice = m_pRenderer->GetDevice();
-    m_pDeviceContext = m_pRenderer->GetDeviceContext();
+    m_pDeviceContext = reinterpret_cast<D3D11RenderContext*>(m_pRenderer->GetRenderContext())->GetDeviceContext();
 
     // Constants
     ZeroMemory(&shaderConstants, sizeof(shaderConstants));

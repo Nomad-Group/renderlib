@@ -134,7 +134,7 @@ struct D3D11DrawTextCommand : _detail::IRenderCommand
 		{
             pFont->SetSize(font.size);
             pFont->SetColor(font.color);
-            pFont->DrawString(position, str);
+            pFont->DrawString(pRenderer->GetRenderContext(), position, str);
         }
     }
 };
@@ -166,7 +166,7 @@ struct D3D11DrawTextExCommand : _detail::IRenderCommand
 		{
             pFont->SetSize(font.size);
             pFont->SetColor(font.color);
-            pFont->DrawStringEx(rect, str, fontFlags);
+            pFont->DrawStringEx(pRenderer->GetRenderContext(), rect, str, fontFlags);
         }
     }
 };

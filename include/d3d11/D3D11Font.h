@@ -7,7 +7,6 @@ class D3D11Font : public IRenderFont
 {
 	D3D11Renderer* m_pRenderer = nullptr;
 	ID3D11Device* m_pDevice = nullptr;
-	ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
 	IFW1FontWrapper* m_pFontWrapper = nullptr;
 
@@ -32,9 +31,9 @@ public:
 	virtual const RGBA& GetColor() const override { return m_color; };
 
 	// Text
-	virtual void DrawString(const Vector2f&, const std::string&) const override;
-	virtual void DrawStringW(const Vector2f&, const std::wstring&) const override;
-	virtual void DrawStringEx(const Rectf&, const std::string&, FontRenderFlags::Enum) const override;
+	virtual void DrawString(IRenderContext*, const Vector2f&, const std::string&) const override;
+	virtual void DrawStringW(IRenderContext*, const Vector2f&, const std::wstring&) const override;
+	virtual void DrawStringEx(IRenderContext*, const Rectf&, const std::string&, FontRenderFlags::Enum) const override;
 	
 	virtual void MeasureString(const std::string&, Vector2f&, FontRenderFlags::Enum) const override;
 	virtual void MeasureStringW(const std::wstring&, Vector2f&, FontRenderFlags::Enum) const override;

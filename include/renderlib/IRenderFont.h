@@ -26,9 +26,9 @@ struct IRenderFont
 	virtual const RGBA& GetColor() const = 0;
 
 	// Text
-	virtual void DrawString(const Vector2f&, const std::string& str) const = 0;
-    virtual void DrawStringW(const Vector2f&, const std::wstring& str) const = 0;
-	virtual void DrawStringEx(const Rectf&, const std::string& str, FontRenderFlags::Enum eFlags) const = 0;
+	virtual void DrawString(IRenderContext*, const Vector2f&, const std::string& str) const = 0;
+    virtual void DrawStringW(IRenderContext*, const Vector2f&, const std::wstring& str) const = 0;
+	virtual void DrawStringEx(IRenderContext*, const Rectf&, const std::string& str, FontRenderFlags::Enum eFlags) const = 0;
 	
 	virtual void MeasureString(const std::string& str, Vector2f& size, FontRenderFlags::Enum eFlags) const = 0;
     virtual void MeasureStringW(const std::wstring& str, Vector2f& size, FontRenderFlags::Enum eFlags) const = 0;

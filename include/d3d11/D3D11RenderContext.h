@@ -19,6 +19,8 @@ class D3D11RenderContext : public IRenderContext
 public:
 	D3D11RenderContext(D3D11Renderer*);
 	virtual ~D3D11RenderContext() override;
+
+	inline ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; };
 	
 	void Shutdown();
 	bool Setup();

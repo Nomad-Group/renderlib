@@ -1,4 +1,5 @@
 #include "d3d11/D3D11Renderer.h"
+#include "d3d11/D3D11RenderContext.h"
 #include "d3d11/D3D11ShaderBundle.h"
 
 D3D11ShaderBundle::D3D11ShaderBundle(D3D11Renderer* pRenderer) :
@@ -28,7 +29,7 @@ void D3D11ShaderBundle::SetupInputLayout(D3D11_INPUT_ELEMENT_DESC* pDesc, uint32
 bool D3D11ShaderBundle::Initialize()
 {
     m_pDevice = m_pRenderer->GetDevice();
-    m_pDeviceContext = m_pRenderer->GetDeviceContext();
+	m_pDeviceContext = reinterpret_cast<D3D11RenderContext*>(m_pRenderer->GetRenderContext())->GetDeviceContext();
 
     // Quad Shader
     ID3DBlob* pVertexShaderCode = nullptr;

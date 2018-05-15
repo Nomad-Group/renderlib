@@ -64,14 +64,21 @@ bool D3D11RenderTarget::Initialize(IRenderer* pRenderer, const Vector2& size)
 
 bool D3D11RenderTarget::InitializeBackbuffer(IDXGISwapChain* pSwapChain)
 {
-    // use the back buffer address to create the render target
-    //if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&RenderTargetTexture))))
-    ID3D11Texture2D* pBackBuffer = nullptr;
-    if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer))))
-    {
-        m_pDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRenderTargetView);
-        pBackBuffer->Release();
-    }
+	ID3D11Texture2D* pBackBuffer = nullptr;
+	HRESULT hResult = pSwapChain->GetBuffer(
+		0,
+		__uuidof(ID3D11Texture2D),
+		reinterpret_cast<void**>(&pBackBuffer)
+	);
+
+	if (FAILED(hResult))
+		return false;
+
+	hResult = m_pDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRenderTargetView);
+	if (FAILED(hResult))
+		return false;
+
+    pBackBuffer->Release();
 	return true;
 }
 

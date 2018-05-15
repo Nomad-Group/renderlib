@@ -1,4 +1,5 @@
 #include "d3d11/D3D11Renderer.h"
+#include "d3d11/D3D11RenderContext.h"
 #include "d3d11/D3D11Font.h"
 #include "FW1FontWrapper/FW1FontWrapper.h"
 #include <locale>
@@ -20,18 +21,17 @@ D3D11Font::~D3D11Font()
 bool D3D11Font::Initialize()
 {
     m_pDevice = m_pRenderer->GetDevice();
-    m_pDeviceContext = m_pRenderer->GetDeviceContext();
 
-    if (FAILED(m_pRenderer->GetFW1Factory()->CreateFontWrapper(m_pDevice, converter.from_bytes(m_sName).c_str(), &
-        m_pFontWrapper))) {
-        return false;
-    }
+	HRESULT hResult = m_pRenderer->GetFW1Factory()->CreateFontWrapper(
+		m_pDevice,
+		converter.from_bytes(m_sName).c_str(), &
+		m_pFontWrapper
+	);
 
-    // Done
-    return true;
+	return SUCCEEDED(hResult);
 }
 
-void D3D11Font::DrawString(const Vector2f& pos, const std::string& str) const
+void D3D11Font::DrawString(IRenderContext* pRenderContext, const Vector2f& pos, const std::string& str) const
 {
     if (!m_pFontWrapper)
         return;
@@ -39,7 +39,8 @@ void D3D11Font::DrawString(const Vector2f& pos, const std::string& str) const
     uint32_t color = ((m_color.a & 0xff) << 24) + ((m_color.b & 0xff) << 16) + ((m_color.g & 0xff) << 8) + (
                          m_color.r & 0xff);
 
-    m_pFontWrapper->DrawString(m_pDeviceContext,
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+    m_pFontWrapper->DrawString(pDeviceContext,
                                converter.from_bytes(str).c_str(),
                                m_fSize,
                                pos.x,
@@ -48,7 +49,7 @@ void D3D11Font::DrawString(const Vector2f& pos, const std::string& str) const
                                FW1_NOWORDWRAP);
 }
 
-void D3D11Font::DrawStringW(const Vector2f& pos, const std::wstring& str) const
+void D3D11Font::DrawStringW(IRenderContext* pRenderContext, const Vector2f& pos, const std::wstring& str) const
 {
     if (!m_pFontWrapper)
         return;
@@ -56,7 +57,8 @@ void D3D11Font::DrawStringW(const Vector2f& pos, const std::wstring& str) const
     uint32_t color = ((m_color.a & 0xff) << 24) + ((m_color.b & 0xff) << 16) + ((m_color.g & 0xff) << 8) + (
         m_color.r & 0xff);
 
-    m_pFontWrapper->DrawString(m_pDeviceContext,
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+    m_pFontWrapper->DrawString(pDeviceContext,
         str.c_str(),
         m_fSize,
         pos.x,
@@ -65,7 +67,7 @@ void D3D11Font::DrawStringW(const Vector2f& pos, const std::wstring& str) const
         FW1_NOWORDWRAP);
 }
 
-void D3D11Font::DrawStringEx(const Rectf& rect, const std::string& str, FontRenderFlags::Enum eFlags) const
+void D3D11Font::DrawStringEx(IRenderContext* pRenderContext, const Rectf& rect, const std::string& str, FontRenderFlags::Enum eFlags) const
 {
     if (!m_pFontWrapper)
         return;
@@ -92,7 +94,8 @@ void D3D11Font::DrawStringEx(const Rectf& rect, const std::string& str, FontRend
         rect.y + rect.h
     };
 
-    m_pFontWrapper->DrawString(m_pDeviceContext,
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+    m_pFontWrapper->DrawString(pDeviceContext,
                                converter.from_bytes(str).c_str(),
                                nullptr,
                                m_fSize,
