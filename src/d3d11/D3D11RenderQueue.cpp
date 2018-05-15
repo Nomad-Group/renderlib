@@ -124,17 +124,17 @@ struct D3D11DrawTextCommand : _detail::IRenderCommand
 {
     D3D11RenderQueue::FontInfo font;
 
-    float x;
-    float y;
+	Vector2f position;
     std::string str;
 
     void Render(IRenderer* pRenderer) override
     {
         auto pFont = pRenderer->GetFont(font.font);
-        if (pFont) {
+        if (pFont)
+		{
             pFont->SetSize(font.size);
             pFont->SetColor(font.color);
-            pFont->DrawString(x, y, str);
+            pFont->DrawString(position, str);
         }
     }
 };
@@ -144,8 +144,7 @@ void D3D11RenderQueue::TextDrawString(const Vector2& position, const std::string
     auto pCommand = new D3D11DrawTextCommand();
     pCommand->font = m_fontInfo;
 
-    pCommand->x = static_cast<float>(m_renderOffset.x + position.x);
-    pCommand->y = static_cast<float>(m_renderOffset.y + position.y);
+	pCommand->position = position;
     pCommand->str = str;
 
     AddCommand(pCommand);
@@ -157,10 +156,7 @@ struct D3D11DrawTextExCommand : _detail::IRenderCommand
     D3D11RenderQueue::FontInfo font;
     FontRenderFlags::Enum fontFlags;
 
-    float x;
-    float y;
-    float w;
-    float h;
+	Rectf rect;
     std::string str;
 
     void Render(IRenderer* pRenderer) override
@@ -170,7 +166,7 @@ struct D3D11DrawTextExCommand : _detail::IRenderCommand
 		{
             pFont->SetSize(font.size);
             pFont->SetColor(font.color);
-            pFont->DrawStringEx(x, y, w, h, str, fontFlags);
+            pFont->DrawStringEx(rect, str, fontFlags);
         }
     }
 };
@@ -181,10 +177,7 @@ void D3D11RenderQueue::TextDrawStringEx(const Vector2& position, const Vector2& 
     pCommand->font = m_fontInfo;
     pCommand->fontFlags = eFlags;
 
-    pCommand->x = static_cast<float>(m_renderOffset.x + position.x);
-    pCommand->y = static_cast<float>(m_renderOffset.y + position.y);
-    pCommand->w = static_cast<float>(size.x);
-    pCommand->h = static_cast<float>(size.y);
+	pCommand->rect = Rectf(position, size);
     pCommand->str = str;
 
     AddCommand(pCommand);

@@ -25,47 +25,57 @@ namespace _detail
 			x(_x), y(_y)
 		{}
 
-		Vector2& operator=(const Vector2& other)
+		Vector2(const Vector2<T>& other) :
+			x(other.x, other.y)
+		{}
+
+		template <typename TOther>
+		Vector2(const Vector2<TOther>& other) :
+			x(static_cast<T>(other.x)), y(static_cast<T>(other.y))
+		{}
+
+		Vector2& operator=(const Vector2<T>& other)
 		{
 			x = other.x;
 			y = other.y;
 			return *this;
 		}
 
-		Vector2 operator+(const Vector2& other) const
+		Vector2<T> operator+(const Vector2<T>& other) const
 		{
 			return Vector2(x + other.x, y + other.y);
 		}
-		Vector2& operator+=(const Vector2& other)
+		Vector2<T>& operator+=(const Vector2<T>& other)
 		{
 			x += other.x;
 			y += other.y;
 			return *this;
 		}
 
-		Vector2 operator-(const Vector2& other) const
+		Vector2<T> operator-(const Vector2<T>& other) const
 		{
-			return Vector2(x - other.x, y - other.y);
+			return Vector2<T>(x - other.x, y - other.y);
 		}
-		Vector2& operator-=(const Vector2& other)
+		Vector2<T>& operator-=(const Vector2<T>& other)
 		{
 			x -= other.x;
 			y -= other.y;
+
 			return *this;
 		}
 
-		Vector2 operator*(const T v) const
+		Vector2<T> operator*(const T v) const
 		{
-			return Vector2(x * v, y * v);
+			return Vector2<T>(x * v, y * v);
 		}
-		Vector2& operator*=(const T v)
+		Vector2<T>& operator*=(const T v)
 		{
 			x *= v;
 			y *= v;
 			return *this;
 		}
 
-		bool operator==(const Vector2& other)
+		bool operator==(const Vector2<T>& other)
 		{
 			return x == other.x && y == other.y;
 		}

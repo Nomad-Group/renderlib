@@ -31,7 +31,7 @@ bool D3D11Font::Initialize()
     return true;
 }
 
-void D3D11Font::DrawString(float x, float y, const std::string& str)
+void D3D11Font::DrawString(const Vector2f& pos, const std::string& str) const
 {
     if (!m_pFontWrapper)
         return;
@@ -42,13 +42,13 @@ void D3D11Font::DrawString(float x, float y, const std::string& str)
     m_pFontWrapper->DrawString(m_pDeviceContext,
                                converter.from_bytes(str).c_str(),
                                m_fSize,
-                               x,
-                               y,
+                               pos.x,
+                               pos.y,
                                color,
                                FW1_NOWORDWRAP);
 }
 
-void D3D11Font::DrawStringW(float x, float y, const std::wstring& str) 
+void D3D11Font::DrawStringW(const Vector2f& pos, const std::wstring& str) const
 {
     if (!m_pFontWrapper)
         return;
@@ -59,13 +59,13 @@ void D3D11Font::DrawStringW(float x, float y, const std::wstring& str)
     m_pFontWrapper->DrawString(m_pDeviceContext,
         str.c_str(),
         m_fSize,
-        x,
-        y,
+        pos.x,
+        pos.y,
         color,
         FW1_NOWORDWRAP);
 }
 
-void D3D11Font::DrawStringEx(float x, float y, float w, float h, const std::string& str, FontRenderFlags::Enum eFlags)
+void D3D11Font::DrawStringEx(const Rectf& rect, const std::string& str, FontRenderFlags::Enum eFlags) const
 {
     if (!m_pFontWrapper)
         return;
@@ -85,25 +85,25 @@ void D3D11Font::DrawStringEx(float x, float y, float w, float h, const std::stri
         flags |= FW1_CLIPRECT;
 
     // Draw
-    FW1_RECTF rect{
-        x,
-        y,
-        x + w,
-        y + h
+    FW1_RECTF fwRect {
+        rect.x,
+        rect.y,
+        rect.x + rect.w,
+        rect.y + rect.h
     };
 
     m_pFontWrapper->DrawString(m_pDeviceContext,
                                converter.from_bytes(str).c_str(),
                                nullptr,
                                m_fSize,
-                               &rect,
+                               &fwRect,
                                color,
-                               &rect,
+                               &fwRect,
                                nullptr,
                                flags);
 }
 
-void D3D11Font::MeasureString(const std::string& str, float* pX, float* pY, FontRenderFlags::Enum eFlags)
+void D3D11Font::MeasureString(const std::string& str, Vector2f& size, FontRenderFlags::Enum eFlags) const
 {
     if (!m_pFontWrapper)
         return;
@@ -123,19 +123,19 @@ void D3D11Font::MeasureString(const std::string& str, float* pX, float* pY, Font
         flags |= FW1_VCENTER;
 
     // Measure
-    FW1_RECTF frect{0, 0, *pX, *pY};
+    FW1_RECTF fwRect { 0, 0, size.x, size.y };
     auto rect = m_pFontWrapper->MeasureString(converter.from_bytes(str).c_str(),
                                               converter.from_bytes(m_sName).c_str(),
                                               m_fSize,
-                                              &frect,
+                                              &fwRect,
                                               flags);
 
     // Out
-    *pX = rect.Left + rect.Right;
-    *pY = rect.Top + rect.Bottom;
+    size.x = rect.Left + rect.Right;
+    size.y = rect.Top + rect.Bottom;
 }
 
-void D3D11Font::MeasureStringW(const std::wstring& str, float* pX, float* pY, FontRenderFlags::Enum eFlags) 
+void D3D11Font::MeasureStringW(const std::wstring& str, Vector2f& size, FontRenderFlags::Enum eFlags) const
 {
     if (!m_pFontWrapper)
         return;
@@ -154,14 +154,14 @@ void D3D11Font::MeasureStringW(const std::wstring& str, float* pX, float* pY, Fo
         flags |= FW1_VCENTER;
 
     // Measure
-    FW1_RECTF frect{ 0, 0, *pX, *pY };
+    FW1_RECTF fwRect { 0, 0, size.x, size.y };
     auto rect = m_pFontWrapper->MeasureString(str.c_str(),
         converter.from_bytes(m_sName).c_str(),
         m_fSize,
-        &frect,
+        &fwRect,
         flags);
 
     // Out
-    *pX = rect.Left + rect.Right;
-    *pY = rect.Top + rect.Bottom;
+    size.x = rect.Left + rect.Right;
+    size.y = rect.Top + rect.Bottom;
 }

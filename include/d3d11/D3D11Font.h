@@ -20,22 +20,22 @@ public:
 	D3D11Font(D3D11Renderer* pRenderer, std::string name);
 	~D3D11Font() override;
 
-	//
 	bool Initialize();
 
-	//
-	const std::string& GetName() const override { return m_sName; };
-	float GetSize() const override { return m_fSize; };
-	const RGBA& GetColor() const override { return m_color; };
+	// Properties
+	virtual const std::string& GetName() const override { return m_sName; };
 
-	//
-	void SetSize(const float fSize) override { m_fSize = fSize; }
-	void SetColor(const RGBA& color) override { m_color = color; };
+	virtual void SetSize(const float fSize) override { m_fSize = fSize; };
+	virtual float GetSize() const override { return m_fSize; };
 
-	//
-	void DrawString(float x, float y, const std::string& str) override;
-    void DrawStringW(float x, float y, const std::wstring& str) override;
-	void DrawStringEx(float x, float y, float w, float h, const std::string& str, FontRenderFlags::Enum eFlags) override;
-	void MeasureString(const std::string& str, float* pWidth, float* pHeight, FontRenderFlags::Enum eFlags) override;
-    void MeasureStringW(const std::wstring& str, float* pWidth, float* pHeight, FontRenderFlags::Enum eFlags) override;
+	virtual void SetColor(const RGBA& color) override { m_color = color; };
+	virtual const RGBA& GetColor() const override { return m_color; };
+
+	// Text
+	virtual void DrawString(const Vector2f&, const std::string&) const override;
+	virtual void DrawStringW(const Vector2f&, const std::wstring&) const override;
+	virtual void DrawStringEx(const Rectf&, const std::string&, FontRenderFlags::Enum) const override;
+	
+	virtual void MeasureString(const std::string&, Vector2f&, FontRenderFlags::Enum) const override;
+	virtual void MeasureStringW(const std::wstring&, Vector2f&, FontRenderFlags::Enum) const override;
 };
