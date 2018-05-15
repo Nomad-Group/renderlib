@@ -26,7 +26,7 @@ bool D3D11RenderContext::Setup()
 
 	// Blend State
 	m_pBlendState = new D3D11BlendState();
-	if (!m_pBlendState->Initialize(m_pRenderer->m_pDevice, m_pDeviceContext))
+	if (!m_pBlendState->Initialize(m_pRenderer->m_pDevice))
 		return false;
 
 	// Texture Info
@@ -65,7 +65,7 @@ void D3D11RenderContext::Render()
 	m_pDeviceContext->RSSetViewports(1, &m_viewport);
 
 	// Setup render state
-	m_pBlendState->Apply();
+	m_pBlendState->Apply(this);
 	m_pRenderTarget->Apply();
 }
 
