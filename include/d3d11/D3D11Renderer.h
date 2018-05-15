@@ -52,10 +52,7 @@ class D3D11Renderer : public IRenderer
 
 	// Fonts
 	IFW1Factory* m_pFW1Factory = nullptr;
-	std::vector<IRenderFont*> m_vFonts;
-
-	// Textures
-	std::map<std::string, IRenderTexture*> m_mTextures;
+	std::vector<IRenderFont*> m_fonts;
 
     FW1FontWrapper::CFW1StateSaver m_stateSaver;
 
@@ -81,7 +78,6 @@ public:
 
 	// Resources
 	virtual IRenderFont* GetFont(const std::string& name) override;
-	virtual IRenderTexture* GetTexture(const std::string& path) override;
     virtual IRenderTexture* CreateTexture() override;
 
 	virtual IRenderTarget* CreateRenderTarget(const Vector2& size) override;

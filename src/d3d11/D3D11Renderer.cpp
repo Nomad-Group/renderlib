@@ -24,13 +24,9 @@ D3D11Renderer::~D3D11Renderer()
 void D3D11Renderer::Shutdown()
 {
     // Resources
-    for (auto pFont : m_vFonts)
+    for (auto pFont : m_fonts)
         delete pFont;
-    m_vFonts.clear();
-
-    for (auto& info : m_mTextures)
-        delete info.second;
-    m_mTextures.clear();
+    m_fonts.clear();
 
     // FW1FontWrapper
     if (m_pFW1Factory)
@@ -42,7 +38,8 @@ void D3D11Renderer::Shutdown()
 void D3D11Renderer::Render(IDXGISwapChain* pSwapChain)
 {
     // Device & Device Context
-    if (pSwapChain != nullptr && pSwapChain != m_pSwapChain) {
+    if (pSwapChain != nullptr && pSwapChain != m_pSwapChain)
+	{
         m_pSwapChain = pSwapChain;
         m_pSwapChain->GetDevice(__uuidof(m_pDevice), (void**)&m_pDevice);
         m_pDevice->GetImmediateContext(&m_pRenderContext->m_pDeviceContext);
@@ -60,8 +57,6 @@ void D3D11Renderer::Render(IDXGISwapChain* pSwapChain)
 
         m_bIsSetUp = true;
     }
-
-    
 }
 
 void D3D11Renderer::RestoreState()
@@ -72,10 +67,8 @@ void D3D11Renderer::RestoreState()
 bool D3D11Renderer::Setup()
 {
     // FW1FontWrapper
-    if (!m_pFW1Factory && FAILED(FW1CreateFactory(FW1_VERSION, &m_pFW1Factory))) {
-        __debugbreak();
+    if (!m_pFW1Factory && FAILED(FW1CreateFactory(FW1_VERSION, &m_pFW1Factory)))
         return false;
-    }
 
     // Done
     return true;
@@ -128,47 +121,30 @@ void D3D11Renderer::Reset()
 IRenderFont* D3D11Renderer::GetFont(const std::string& name)
 {
     // Find Font
-    for (auto pFont : m_vFonts) {
+    for (auto pFont : m_fonts)
+	{
         if (pFont->GetName() == name)
             return pFont;
     }
 
     // Create new Font
     auto pFont = new D3D11Font(this, name);
-    if (!pFont->Initialize()) {
+    if (!pFont->Initialize())
+	{
         delete pFont;
         return nullptr;
     }
 
     // Store Font & Done
-    m_vFonts.push_back(pFont);
+    m_fonts.push_back(pFont);
     return pFont;
-}
-
-IRenderTexture* D3D11Renderer::GetTexture(const std::string& path)
-{
-    // Find Texture
-    for (auto& entry : m_mTextures) {
-        if (entry.first == path)
-            return entry.second;
-    }
-
-    // Create Texture
-    auto pTexture = new D3D11Texture(m_pDevice, m_pRenderContext->m_pDeviceContext);
-    if (!pTexture->Initialize(this) || !pTexture->LoadFromPNG(path)) {
-        delete pTexture;
-        return nullptr;
-    }
-
-    // Store & Done
-    m_mTextures[path] = pTexture;
-    return pTexture;
 }
 
 IRenderTexture* D3D11Renderer::CreateTexture()
 {
-    auto pTexture = new D3D11Texture(m_pDevice, m_pRenderContext->m_pDeviceContext);
-    if (!pTexture->Initialize(this)) {
+    auto pTexture = new D3D11Texture(this);
+    if (!pTexture->Initialize())
+	{
         delete pTexture;
         return nullptr;
     }

@@ -108,21 +108,11 @@ void D3D11RenderTarget::Apply()
     m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
 }
 
-bool D3D11RenderTarget::CopyTexture(IRenderTexture* pTexture)
+bool D3D11RenderTarget::CopyTexture(IRenderContext* pRenderContext, IRenderTexture* texture)
 {
-    auto texture = reinterpret_cast<D3D11Texture*>(pTexture);
-
-	if (!texture)
-	{
-        __debugbreak();
+    auto pTexture = reinterpret_cast<D3D11Texture*>(texture);
+	if (pTexture == nullptr || m_bBackbuffer)
 		return false;
-	}
 
-	if (IsBackbuffer())
-	{
-        __debugbreak();
-		return false;
-	}
-
-	return texture->LoadFrom2DTexture(m_pRenderTexture);
+	return pTexture->LoadFrom2DTexture(pRenderContext, m_pRenderTexture);
 }

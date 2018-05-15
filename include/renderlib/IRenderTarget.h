@@ -12,5 +12,5 @@ struct IRenderTarget
     virtual void Clear(const RGBA& col) = 0;
     virtual void ClearStencil() = 0;
 
-    virtual bool CopyTexture(IRenderTexture* pTexture) = 0;
+    virtual bool CopyTexture(IRenderContext*, IRenderTexture* pTexture) = 0;
 };

@@ -3,7 +3,7 @@
 #include "png.h"
 #include <sstream>
 
-bool D3D11Texture::LoadFromPNG(const std::string& path)
+bool D3D11Texture::LoadFromPNG(IRenderContext* pRenderContext, const std::string& path)
 {
     Release();
 
@@ -98,7 +98,7 @@ bool D3D11Texture::LoadFromPNG(const std::string& path)
     fclose(pFile);
 
     // Create Texture
-    const bool success = LoadFromMemory(pImageData, uiWidth, uiHeight, ColorFormat::RGBA);
+    const bool success = LoadFromMemory(pRenderContext, pImageData, uiWidth, uiHeight, ColorFormat::RGBA);
      
     free(pImageData);
 

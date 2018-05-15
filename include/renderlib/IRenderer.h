@@ -11,7 +11,6 @@ struct IRenderer
 
 	// Resources
 	virtual IRenderFont* GetFont(const std::string& name) = 0;
-	virtual IRenderTexture* GetTexture(const std::string& path) = 0;
     virtual IRenderTexture* CreateTexture() = 0;
 
 	// Render Target

@@ -1,13 +1,13 @@
 #include "d3d11/D3D11Renderer.h"
+#include "d3d11/D3D11RenderContext.h"
 #include "d3d11/D3D11Texture.h"
 #include "d3d11/D3D11ShaderBundle.h"
 #include "d3d11/D3D11Shaders.h"
 
 D3D11Texture::TextureDrawInfo D3D11Texture::m_textureDrawInfo;
 
-D3D11Texture::D3D11Texture(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext) :
-    m_pDevice(pDevice),
-    m_pDeviceContext(pDeviceContext)
+D3D11Texture::D3D11Texture(D3D11Renderer* pRenderer) :
+    m_pRenderer(pRenderer)
 {
     memset(&m_vertices, 0, sizeof(m_vertices));
 }
@@ -17,10 +17,8 @@ D3D11Texture::~D3D11Texture()
     Release();
 }
 
-bool D3D11Texture::Initialize(D3D11Renderer* pRenderer)
+bool D3D11Texture::Initialize()
 {
-    m_pRenderer = pRenderer;
-
     // Init once
     if (m_textureDrawInfo.pShaderBundle)
         return true;
@@ -48,7 +46,7 @@ bool D3D11Texture::Initialize(D3D11Renderer* pRenderer)
     colorMapDesc.MinLOD = 0;
 
     // Sampler State
-    if (FAILED(m_pDevice->CreateSamplerState(&colorMapDesc, &m_textureDrawInfo.pSamplerState)))
+    if (FAILED(m_pRenderer->GetDevice()->CreateSamplerState(&colorMapDesc, &m_textureDrawInfo.pSamplerState)))
         return false;
 
     // Done
@@ -76,34 +74,40 @@ void D3D11Texture::Release()
     }
 }
 
-void D3D11Texture::Render()
+void D3D11Texture::Render(IRenderContext* pRenderContext)
 {
+	auto d3d11RenderContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext);
+	auto pDeviceContext = d3d11RenderContext->GetDeviceContext();
+
     // Vertex Buffer
-    if (!m_pVertexBuffer && !UpdateVertexBuffer())
+    if ((m_pVertexBuffer == nullptr || m_bUpdateVertexBuffer) && !UpdateVertexBuffer(pRenderContext))
         return;
 
     // Shader
-    m_textureDrawInfo.pShaderBundle->Apply(reinterpret_cast<D3D11RenderContext*>(m_pRenderer->GetRenderContext()));
-    m_pDeviceContext->PSSetShaderResources(0, 1, &m_pResourceView);
+	m_textureDrawInfo.pShaderBundle->Apply(d3d11RenderContext);
+	pDeviceContext->PSSetShaderResources(0, 1, &m_pResourceView);
 
     // Sampler
-    m_pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
+	pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
 
     // Vertex
-    m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     uint32_t stride = sizeof(VertexPos);
     uint32_t offset = 0;
-    m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
     // Draw
-    m_pDeviceContext->Draw(6, 0);
+	pDeviceContext->Draw(6, 0);
 }
 
-bool D3D11Texture::UpdateVertexBuffer()
+bool D3D11Texture::UpdateVertexBuffer(IRenderContext* pRenderContext)
 {
+	auto d3d11RenderContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext);
+	auto pDeviceContext = d3d11RenderContext->GetDeviceContext();
+
     // Viewport Size
-    const Vector2f& viewport = m_pRenderer->GetRenderContext()->GetViewportSize();
+    const Vector2f& viewport = pRenderContext->GetViewportSize();
 
     const float scalex = 1 / viewport.x * 2.f;
     const float scaley = 1 / viewport.y * 2.f;
@@ -143,22 +147,23 @@ bool D3D11Texture::UpdateVertexBuffer()
         ZeroMemory(&resourceData, sizeof(resourceData));
         resourceData.pSysMem = m_vertices;
 
-        if (FAILED(m_pDevice->CreateBuffer(&vertexDesc, &resourceData, &m_pVertexBuffer)))
+        if (FAILED(m_pRenderer->GetDevice()->CreateBuffer(&vertexDesc, &resourceData, &m_pVertexBuffer)))
             return false;
     }
 
     // Open (Map)
     D3D11_MAPPED_SUBRESOURCE subresource;
-    if (FAILED(m_pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource)))
+    if (FAILED(pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource)))
         return false;
 
     // Copy
     memcpy(subresource.pData, (void*)&m_vertices, sizeof(m_vertices));
 
     // Close (Unmap)
-    m_pDeviceContext->Unmap(m_pVertexBuffer, 0);
+    pDeviceContext->Unmap(m_pVertexBuffer, 0);
 
     // Done
+	m_bUpdateVertexBuffer = false;
     return true;
 }
 
@@ -180,7 +185,7 @@ bool D3D11Texture::InitializeShaderResourceView()
     resourceView.Texture2D.MostDetailedMip = 0;
     resourceView.Texture2D.MipLevels = textureDesc.MipLevels;
 
-    if (FAILED(m_pDevice->CreateShaderResourceView(pResource, &resourceView, &m_pResourceView)))
+    if (FAILED(m_pRenderer->GetDevice()->CreateShaderResourceView(pResource, &resourceView, &m_pResourceView)))
         return false;
 
     // Done
@@ -192,12 +197,12 @@ void D3D11Texture::SetPosition(const Vector2& pos)
 {
     if (m_position == pos)
         return;
-    m_position = pos;
 
-	UpdateVertexBuffer();
+    m_position = pos;
+	m_bUpdateVertexBuffer = true;
 }
 
-bool D3D11Texture::LoadFrom2DTexture(ID3D11Texture2D* pTexture)
+bool D3D11Texture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Texture2D* pTexture)
 {
     Release();
 
@@ -210,31 +215,28 @@ bool D3D11Texture::LoadFrom2DTexture(ID3D11Texture2D* pTexture)
     m_size.y = textureDesc.Height;
 
     // Create Texture
-    if (FAILED(m_pDevice->CreateTexture2D(&textureDesc, nullptr, &m_pTexture))) {
+    if (FAILED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, nullptr, &m_pTexture))) {
         __debugbreak();
         return false;
     }
 
     // Copy
-    m_pDeviceContext->CopyResource(m_pTexture, pTexture);
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+	pDeviceContext->CopyResource(m_pTexture, pTexture);
 
     // Shader Resource View
-    if (!InitializeShaderResourceView()) {
-        __debugbreak();
+    if (!InitializeShaderResourceView())
         return false;
-    }
 
     // Vertex Buffer
-    if (!UpdateVertexBuffer()) {
-        __debugbreak();
+    if (!UpdateVertexBuffer(pRenderContext))
         return false;
-    }
 
     // Done
     return true;
 }
 
-bool D3D11Texture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
+bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
 {
     // Texture Description
     D3D11_TEXTURE2D_DESC textureDesc;
@@ -272,10 +274,8 @@ bool D3D11Texture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t ui
     if (m_pTexture)
         m_pTexture->Release();
 
-    if (FAILED(m_pDevice->CreateTexture2D(&textureDesc, &subresourceData, &m_pTexture))) {
-        __debugbreak();
+    if (FAILED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, &subresourceData, &m_pTexture)))
         return false;
-    }
 
     // Setup D3D11Texture
     m_size.x = uiWidth;
@@ -289,7 +289,7 @@ bool D3D11Texture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t ui
     return true;
 }
 
-bool D3D11Texture::BlitFromMemory(uint8_t* pImage, const uint32_t rowPitch, const Vector2& position,
+bool D3D11Texture::BlitFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, const uint32_t rowPitch, const Vector2& position,
                                   const Vector2& size)
 {
     D3D11_BOX box;
@@ -300,6 +300,7 @@ bool D3D11Texture::BlitFromMemory(uint8_t* pImage, const uint32_t rowPitch, cons
     box.top = position.y;
     box.bottom = box.top + size.y;
 
-    m_pDeviceContext->UpdateSubresource(m_pTexture, 0, &box, pImage, rowPitch, size.x * size.y * 4);
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+	pDeviceContext->UpdateSubresource(m_pTexture, 0, &box, pImage, rowPitch, size.x * size.y * 4);
     return true;
 }

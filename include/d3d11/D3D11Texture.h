@@ -26,9 +26,7 @@ class D3D11ShaderBundle;
 class D3D11Texture : public IRenderTexture
 {
 private:
-	D3D11Renderer* m_pRenderer = nullptr;
-	ID3D11Device* m_pDevice;
-	ID3D11DeviceContext* m_pDeviceContext;
+	D3D11Renderer* m_pRenderer;
 
 	// Static Info
 	static struct TextureDrawInfo
@@ -47,24 +45,25 @@ private:
 
 	// Vertex
 	ID3D11Buffer* m_pVertexBuffer = nullptr;
+	bool m_bUpdateVertexBuffer = false;
 	VertexPos m_vertices[6];
-	bool UpdateVertexBuffer();
+	bool UpdateVertexBuffer(IRenderContext*);
 
 	// Texture
 	ID3D11Texture2D* m_pTexture = nullptr;	
 
 public:
-	D3D11Texture(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	D3D11Texture(D3D11Renderer*);
 	virtual ~D3D11Texture();
 
-	bool Initialize(D3D11Renderer* pRenderer);
+	bool Initialize();
 	virtual void Release() override;
 
 	// Load
-	bool LoadFrom2DTexture(ID3D11Texture2D* pTexture);
-    bool LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format) override;
-	bool LoadFromPNG(const std::string& path) override;
-    bool BlitFromMemory(uint8_t* pImage, uint32_t rowPitch, const Vector2& position, const Vector2& size) override;
+	bool LoadFrom2DTexture(IRenderContext*, ID3D11Texture2D* pTexture);
+	virtual bool LoadFromMemory(IRenderContext*, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format) override;
+	virtual bool LoadFromPNG(IRenderContext*, const std::string& path) override;
+	virtual bool BlitFromMemory(IRenderContext*, uint8_t* pImage, uint32_t rowPitch, const Vector2& position, const Vector2& size) override;
 	
 	// Settings
     virtual const Vector2& GetSize() const override { return m_size; };
@@ -73,5 +72,5 @@ public:
 
 	// Render
     virtual bool IsValid() const override { return m_pTexture != nullptr; };
-	void Render() override;
+	virtual void Render(IRenderContext*) override;
 };

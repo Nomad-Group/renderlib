@@ -31,5 +31,5 @@ public:
 	virtual void Clear(const RGBA& col = { 0, 0, 0, 0 }) override;
 	virtual void ClearStencil() override;
 
-	virtual bool CopyTexture(IRenderTexture* pTexture) override;
+	virtual bool CopyTexture(IRenderContext*, IRenderTexture* pTexture) override;
 };
