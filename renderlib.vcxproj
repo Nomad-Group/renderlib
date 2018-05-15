@@ -138,6 +138,7 @@
     <ClInclude Include="include\d3d11\D3D11BlendState.h" />
     <ClInclude Include="include\d3d11\D3D11Font.h" />
     <ClInclude Include="include\d3d11\D3D11Rect.h" />
+    <ClInclude Include="include\d3d11\D3D11RenderContext.h" />
     <ClInclude Include="include\d3d11\D3D11Renderer.h" />
     <ClInclude Include="include\d3d11\D3D11RenderQueue.h" />
     <ClInclude Include="include\d3d11\D3D11RenderTarget.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="include\d3d11\D3D11Texture.h" />
     <ClInclude Include="include\renderlib\detail\renderlibColors.h" />
     <ClInclude Include="include\renderlib\detail\renderlibMath.h" />
+    <ClInclude Include="include\renderlib\IRenderContext.h" />
     <ClInclude Include="include\renderlib\IRenderer.h" />
     <ClInclude Include="include\renderlib\IRenderFont.h" />
     <ClInclude Include="include\renderlib\IRenderQueue.h" />
@@ -157,6 +159,7 @@
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
     <ClCompile Include="src\d3d11\D3D11Font.cpp" />
     <ClCompile Include="src\d3d11\D3D11Rect.cpp" />
+    <ClCompile Include="src\d3d11\D3D11RenderContext.cpp" />
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderQueue.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />

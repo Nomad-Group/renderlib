@@ -24,5 +24,5 @@ public:
 	bool Initialize();
 	
 	// Draw
-	void DrawRect(float x, float y, float w, float h, RGBA color);
+	void DrawRect(const Rectf& rect, const RGBA& color);
 };

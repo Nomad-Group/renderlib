@@ -105,6 +105,17 @@ namespace _detail
 			w(_w), h(_h)
 		{}
 
+		Rect(const Rect<T>& other) :
+			x(other.x), y(other.y),
+			w(other.w), h(other.h)
+		{}
+
+		template <typename TOther>
+		Rect(const Rect<TOther>& other) :
+			x(static_cast<T>(other.x)), y(static_cast<T>(other.y)),
+			w(static_cast<T>(other.w)), h(static_cast<T>(other.h))
+		{}
+
 		Rect(const _detail::Vector2<T>& position, const _detail::Vector2<T>& size) :
 			x(position.x), y(position.y),
 			w(size.x), h(size.y)

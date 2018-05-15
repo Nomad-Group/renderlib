@@ -32,9 +32,7 @@ bool D3D11RenderTarget::Initialize(IRenderer* pRenderer, const Vector2& size)
 
     // Create Texture
     if (FAILED(m_pDevice->CreateTexture2D(&textureDesc, nullptr, &m_pRenderTexture)))
-    {
         return false;
-    }
 
     // Render Target View Description
     D3D11_RENDER_TARGET_VIEW_DESC viewDesc;
@@ -58,9 +56,7 @@ bool D3D11RenderTarget::Initialize(IRenderer* pRenderer, const Vector2& size)
 
     // Create Shader Resource View
     if (FAILED(m_pDevice->CreateShaderResourceView(m_pRenderTexture, &shaderDesc, &m_pShaderResourceView)))
-    {
         return false;
-    }
 
     // Done
     return true;

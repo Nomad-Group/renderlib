@@ -37,7 +37,7 @@ struct IRenderQueue
 	virtual void ClearRenderTarget(IRenderTarget*, const RGBA&) = 0;
 
 	// Draw
-	virtual void DrawRect(const Vector2& position, const Vector2& size, const RGBA&) = 0;
+	virtual void DrawRect(const Rect& rect, const RGBA&) = 0;
 	virtual void DrawTexture(const Vector2& position, IRenderTexture* pTexture) = 0;
 
 	// Text

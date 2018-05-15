@@ -98,22 +98,22 @@ void D3D11RenderQueue::SetFont(const std::string& name, float size, const RGBA& 
 // Rect
 struct D3D11DrawRectCommand : _detail::IRenderCommand
 {
-    Vector2 position;
-    Vector2 size;
+	Rect rect;
     RGBA col;
 
     void Render(IRenderer* pRenderer) override
     {
-        pRenderer->DrawRect(position, size, col);
+        pRenderer->GetRenderContext()->DrawRect(rect, col);
     }
 };
 
-void D3D11RenderQueue::DrawRect(const Vector2& position, const Vector2& size, const RGBA& color)
+void D3D11RenderQueue::DrawRect(const Rect& rect, const RGBA& color)
 {
     auto pCommand = new D3D11DrawRectCommand();
 
-    pCommand->position = m_renderOffset + position;
-    pCommand->size = size;
+	pCommand->rect = rect;
+	pCommand->rect.x += m_renderOffset.x; pCommand->rect.y += m_renderOffset.y;
+
     pCommand->col = color;
 
     AddCommand(pCommand);

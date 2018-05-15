@@ -44,7 +44,7 @@ public:
 	virtual void ClearRenderTarget(IRenderTarget*, const RGBA&) override;
 
 	// Draw
-	void DrawRect(const Vector2& position, const Vector2& size, const RGBA&) override;
+	void DrawRect(const Rect& rect, const RGBA&) override;
 	void DrawTexture(const Vector2&, IRenderTexture* p_texture) override;
 
 	// Text

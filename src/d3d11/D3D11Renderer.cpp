@@ -1,4 +1,5 @@
 #include "d3d11/D3D11Renderer.h"
+#include "d3d11/D3D11RenderContext.h"
 #include "d3d11/D3D11BlendState.h"
 #include "d3d11/D3D11ShaderBundle.h"
 #include "d3d11/D3D11RenderTarget.h"
@@ -17,27 +18,11 @@ D3D11Renderer::~D3D11Renderer()
 
 		if(m_pDevice)
 			m_pDevice->Release();
-
-		if(m_pDeviceContext)
-			m_pDeviceContext->Release();
 	}
 }
 
 void D3D11Renderer::Shutdown()
 {
-    if (!m_pDevice || !m_pDeviceContext)
-        return;
-
-    // D3D11
-    delete m_pBlendState;
-    m_pBlendState = nullptr;
-
-    delete m_pRenderTarget;
-    m_pRenderTarget = nullptr;
-
-    delete m_pRect;
-    m_pRect = nullptr;
-
     // Resources
     for (auto pFont : m_vFonts)
         delete pFont;
@@ -60,11 +45,11 @@ void D3D11Renderer::Render(IDXGISwapChain* pSwapChain)
     if (pSwapChain != nullptr && pSwapChain != m_pSwapChain) {
         m_pSwapChain = pSwapChain;
         m_pSwapChain->GetDevice(__uuidof(m_pDevice), (void**)&m_pDevice);
-        m_pDevice->GetImmediateContext(&m_pDeviceContext);
+        m_pDevice->GetImmediateContext(&m_pRenderContext->m_pDeviceContext);
     }
 
     // State Saver
-    //m_stateSaver.saveCurrentState(m_pDeviceContext);
+    m_stateSaver.saveCurrentState(m_pRenderContext->m_pDeviceContext);
 
     // Setup
     if (!m_bIsSetUp) {
@@ -76,39 +61,16 @@ void D3D11Renderer::Render(IDXGISwapChain* pSwapChain)
         m_bIsSetUp = true;
     }
 
-    // Render calls
-    m_pDeviceContext->RSSetViewports(1, &m_viewport);
-
-    // Setup render state
-    m_pBlendState->Apply();
-    m_pRenderTarget->Apply();
+    
 }
 
 void D3D11Renderer::RestoreState()
 {
-	//m_stateSaver.restoreSavedState();
+	m_stateSaver.restoreSavedState();
 }
 
 bool D3D11Renderer::Setup()
 {
-    // Rect
-    m_pRect = new D3D11Rect(this);
-    if (!m_pRect->Initialize()) {
-        __debugbreak();
-        return false;
-    }
-
-    // Blend State
-    m_pBlendState = new D3D11BlendState();
-    if (!m_pBlendState->Initialize(m_pDevice, m_pDeviceContext)) {
-        __debugbreak();
-        return false;
-    }
-
-    // Render Target
-    m_pRenderTarget = new D3D11RenderTarget(m_pDevice, m_pDeviceContext);
-    m_pRenderTarget->InitializeBackbuffer(m_pSwapChain);
-
     // FW1FontWrapper
     if (!m_pFW1Factory && FAILED(FW1CreateFactory(FW1_VERSION, &m_pFW1Factory))) {
         __debugbreak();
@@ -141,7 +103,7 @@ bool D3D11Renderer::SetupNewSwapChain(HWND hWindow)
 		&m_pSwapChain,
 		&m_pDevice,
 		NULL,
-		&m_pDeviceContext);
+		&m_pRenderContext->m_pDeviceContext);
 
 	m_bReleaseResources = true;
 	if (FAILED(hResult))
@@ -157,15 +119,7 @@ void D3D11Renderer::Present()
 
 void D3D11Renderer::Reset()
 {
-    // D3D11
-    delete m_pBlendState;
-    m_pBlendState = nullptr;
-
-    delete m_pRenderTarget;
-    m_pRenderTarget = nullptr;
-
-    delete m_pRect;
-    m_pRect = nullptr;
+	m_pRenderContext->Shutdown();
 
     // Setup again
     m_bIsSetUp = false;
@@ -200,7 +154,7 @@ IRenderTexture* D3D11Renderer::GetTexture(const std::string& path)
     }
 
     // Create Texture
-    auto pTexture = new D3D11Texture(m_pDevice, m_pDeviceContext);
+    auto pTexture = new D3D11Texture(m_pDevice, m_pRenderContext->m_pDeviceContext);
     if (!pTexture->Initialize(this) || !pTexture->LoadFromPNG(path)) {
         delete pTexture;
         return nullptr;
@@ -213,7 +167,7 @@ IRenderTexture* D3D11Renderer::GetTexture(const std::string& path)
 
 IRenderTexture* D3D11Renderer::CreateTexture()
 {
-    auto pTexture = new D3D11Texture(m_pDevice, m_pDeviceContext);
+    auto pTexture = new D3D11Texture(m_pDevice, m_pRenderContext->m_pDeviceContext);
     if (!pTexture->Initialize(this)) {
         delete pTexture;
         return nullptr;
@@ -224,7 +178,7 @@ IRenderTexture* D3D11Renderer::CreateTexture()
 
 IRenderTarget* D3D11Renderer::CreateRenderTarget(const Vector2& size)
 {
-	auto pRenderTarget = new D3D11RenderTarget(m_pDevice, m_pDeviceContext);
+	auto pRenderTarget = new D3D11RenderTarget(m_pDevice, m_pRenderContext->m_pDeviceContext);
 	if (!pRenderTarget->Initialize(this, size))
 	{
 		delete pRenderTarget;
@@ -234,18 +188,4 @@ IRenderTarget* D3D11Renderer::CreateRenderTarget(const Vector2& size)
 	return pRenderTarget;
 }
 
-void D3D11Renderer::SetViewportSize(const Vector2& size)
-{
-    m_size = size;
-
-    m_viewport.Width  = static_cast<float>(size.x);
-    m_viewport.Height = static_cast<float>(size.y);
-}
-
-void D3D11Renderer::GetViewportSize(float& outWidth, float& outHeight) const
-{
-    outWidth  = m_viewport.Width;
-    outHeight = m_viewport.Height;
-}
-
-IRenderTarget* D3D11Renderer::GetBackBufferRenderTarget() { return m_pRenderTarget; }
+IRenderTarget* D3D11Renderer::GetBackBufferRenderTarget() { return m_pRenderContext->m_pRenderTarget; }

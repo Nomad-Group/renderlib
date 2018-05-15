@@ -74,6 +74,12 @@
     <ClInclude Include="include\d3d11\D3D11Texture.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderlib\IRenderContext.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11RenderContext.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
@@ -101,6 +107,9 @@
       <Filter>Source\d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11TexturePNG.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderContext.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
   </ItemGroup>

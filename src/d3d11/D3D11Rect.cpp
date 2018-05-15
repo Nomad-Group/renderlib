@@ -50,20 +50,19 @@ bool D3D11Rect::Initialize()
     return true;
 }
 
-void D3D11Rect::DrawRect(float x, float y, float w, float h, RGBA color)
+void D3D11Rect::DrawRect(const Rectf& rect, const RGBA& color)
 {
-    float viewportWidth, viewportHeight;
-    m_pRenderer->GetViewportSize(viewportWidth, viewportHeight);
-
     // Setup
     m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
     m_pShaderBundle->Apply(m_pBuffer);
 
     // Matrix
-    shaderConstants.TransformMatrix[0] = w * 2.0f / viewportWidth;
-    shaderConstants.TransformMatrix[12] = -1.0f + x * 2.0f / viewportWidth;
-    shaderConstants.TransformMatrix[5] = h * -2.0f / viewportHeight;
-    shaderConstants.TransformMatrix[13] = 1.0f + y * -2.0f / viewportHeight;
+	const Vector2f& viewport = m_pRenderer->GetRenderContext()->GetViewportSize();
+
+    shaderConstants.TransformMatrix[0] = rect.w * 2.0f / viewport.x;
+    shaderConstants.TransformMatrix[12] = -1.0f + rect.x * 2.0f / viewport.x;
+    shaderConstants.TransformMatrix[5] = rect.h * -2.0f / viewport.y;
+    shaderConstants.TransformMatrix[13] = 1.0f + rect.y * -2.0f / viewport.y;
     shaderConstants.TransformMatrix[10] = 1.0f;
     shaderConstants.TransformMatrix[15] = 1.0f;
 
@@ -76,15 +75,4 @@ void D3D11Rect::DrawRect(float x, float y, float w, float h, RGBA color)
     // Draw
     m_pDeviceContext->UpdateSubresource(m_pBuffer, 0, nullptr, &shaderConstants, 0, 0);
     m_pDeviceContext->Draw(4, 0);
-}
-
-void D3D11Renderer::DrawRect(const Vector2& position, const Vector2& size, const RGBA& color)
-{
-    if (m_pRect)
-        m_pRect->DrawRect(
-            static_cast<float>(position.x),
-            static_cast<float>(position.y),
-            static_cast<float>(size.x),
-            static_cast<float>(size.y),
-            color);
 }

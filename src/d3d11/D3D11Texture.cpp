@@ -103,11 +103,10 @@ void D3D11Texture::Render()
 bool D3D11Texture::UpdateVertexBuffer()
 {
     // Viewport Size
-    float w, h;
-    m_pRenderer->GetViewportSize(w, h);
+    const Vector2f& viewport = m_pRenderer->GetRenderContext()->GetViewportSize();
 
-    const float scalex = 1 / w * 2.f;
-    const float scaley = 1 / h * 2.f;
+    const float scalex = 1 / viewport.x * 2.f;
+    const float scaley = 1 / viewport.y * 2.f;
 
     // Rect Matrix
     XMFLOAT4A rect(
