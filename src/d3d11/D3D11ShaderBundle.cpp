@@ -29,7 +29,6 @@ void D3D11ShaderBundle::SetupInputLayout(D3D11_INPUT_ELEMENT_DESC* pDesc, uint32
 bool D3D11ShaderBundle::Initialize()
 {
     m_pDevice = m_pRenderer->GetDevice();
-	m_pDeviceContext = reinterpret_cast<D3D11RenderContext*>(m_pRenderer->GetRenderContext())->GetDeviceContext();
 
     // Quad Shader
     ID3DBlob* pVertexShaderCode = nullptr;
@@ -43,7 +42,8 @@ bool D3D11ShaderBundle::Initialize()
         0,
         0,
         &pVertexShaderCode,
-        nullptr))) {
+        nullptr)))
+	{
         if (pVertexShaderCode)
             pVertexShaderCode->Release();
 
@@ -54,28 +54,31 @@ bool D3D11ShaderBundle::Initialize()
     if (FAILED(m_pDevice->CreateVertexShader(pVertexShaderCode->GetBufferPointer(),
         pVertexShaderCode->GetBufferSize(),
         nullptr,
-        &m_pVertexShader))) {
+        &m_pVertexShader)))
+	{
         if (pVertexShaderCode)
             pVertexShaderCode->Release();
 
         return false;
     }
 
-    // Input Layout
-    if (m_uiInputDescSize > 0 && m_pInputDescription) {
-        Apply();
+	// Input Layout
+	if (m_uiInputDescSize > 0 && m_pInputDescription)
+	{
+		// Apply?
 
-        if (FAILED(m_pDevice->CreateInputLayout(m_pInputDescription,
-            m_uiInputDescSize,
-            pVertexShaderCode->GetBufferPointer(),
-            pVertexShaderCode->GetBufferSize(),
-            &m_pInputLayout))) {
-            if (pVertexShaderCode)
-                pVertexShaderCode->Release();
+		if (FAILED(m_pDevice->CreateInputLayout(m_pInputDescription,
+			m_uiInputDescSize,
+			pVertexShaderCode->GetBufferPointer(),
+			pVertexShaderCode->GetBufferSize(),
+			&m_pInputLayout)))
+		{
+			if (pVertexShaderCode)
+				pVertexShaderCode->Release();
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 
     // Vertex Shader
     if (pVertexShaderCode)
@@ -93,7 +96,8 @@ bool D3D11ShaderBundle::Initialize()
         0,
         0,
         &pPixelShaderCode,
-        nullptr))) {
+        nullptr)))
+	{
         if (pPixelShaderCode)
             pPixelShaderCode->Release();
 
@@ -104,7 +108,8 @@ bool D3D11ShaderBundle::Initialize()
     if (FAILED(m_pDevice->CreatePixelShader(pPixelShaderCode->GetBufferPointer(),
         pPixelShaderCode->GetBufferSize(),
         NULL,
-        &m_pPixelShader))) {
+        &m_pPixelShader)))
+	{
         if (pPixelShaderCode)
             pPixelShaderCode->Release();
 
@@ -119,19 +124,25 @@ bool D3D11ShaderBundle::Initialize()
     return true;
 }
 
-void D3D11ShaderBundle::Apply(ID3D11Buffer* pBuffer) const
+void D3D11ShaderBundle::Apply(D3D11RenderContext* pRenderContext, ID3D11Buffer* pBuffer) const
 {
-    if (m_pInputLayout)
-        m_pDeviceContext->IASetInputLayout(m_pInputLayout);
+	auto pDeviceContext = pRenderContext->GetDeviceContext();
 
-    m_pDeviceContext->PSSetShader(m_pPixelShader, nullptr, 0);
-    m_pDeviceContext->VSSetShader(m_pVertexShader, nullptr, 0);
-    m_pDeviceContext->GSSetShader(nullptr, nullptr, 0);
+	// Shader
+    pDeviceContext->PSSetShader(m_pPixelShader, nullptr, 0);
+    pDeviceContext->VSSetShader(m_pVertexShader, nullptr, 0);
+    pDeviceContext->GSSetShader(nullptr, nullptr, 0);
 
-    if (pBuffer) {
-        m_pDeviceContext->PSSetConstantBuffers(0, 1, &pBuffer);
-        m_pDeviceContext->VSSetConstantBuffers(0, 1, &pBuffer);
+	// Constant Buffer
+    if (pBuffer)
+	{
+        pDeviceContext->PSSetConstantBuffers(0, 1, &pBuffer);
+        pDeviceContext->VSSetConstantBuffers(0, 1, &pBuffer);
     }
+
+	// Input Layout
+	if (m_pInputLayout)
+		pDeviceContext->IASetInputLayout(m_pInputLayout);
 }
 
 HRESULT D3D11ShaderBundle::CompileShader(const LPCVOID pSrcData, const SIZE_T SrcDataSize, const LPCSTR pFileName,
@@ -144,7 +155,8 @@ HRESULT D3D11ShaderBundle::CompileShader(const LPCVOID pSrcData, const SIZE_T Sr
         CONST D3D_SHADER_MACRO*, ID3DInclude*, LPCSTR,
         LPCSTR, UINT, UINT, ID3DBlob**, ID3DBlob**) = nullptr;
 
-    if (!pD3DCompile) {
+    if (!pD3DCompile)
+	{
         const char* compiler[] = {
             "d3dcompiler_47.dll",
             "d3dcompiler_46.dll",
@@ -156,19 +168,20 @@ HRESULT D3D11ShaderBundle::CompileShader(const LPCVOID pSrcData, const SIZE_T Sr
 
         for (const auto &name : compiler)
         {
-            if (!name) break;
+            if (!name)
+				break;
 
-            const auto h_lib = LoadLibraryA(name);
-
-            if (h_lib)
+            const auto hLibrary = LoadLibraryA(name);
+            if (hLibrary)
             {
-                pD3DCompile = reinterpret_cast<decltype(pD3DCompile)>(GetProcAddress(h_lib, "D3DCompile"));
-
-                if (pD3DCompile) break;
+                pD3DCompile = reinterpret_cast<decltype(pD3DCompile)>(GetProcAddress(hLibrary, "D3DCompile"));
+                if (pD3DCompile)
+					break;
             }
         }
 
-        if (!pD3DCompile) return E_FAIL;
+        if (!pD3DCompile)
+			return E_FAIL;
     }
 
     // Compile

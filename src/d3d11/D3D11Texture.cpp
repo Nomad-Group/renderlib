@@ -83,7 +83,7 @@ void D3D11Texture::Render()
         return;
 
     // Shader
-    m_textureDrawInfo.pShaderBundle->Apply();
+    m_textureDrawInfo.pShaderBundle->Apply(reinterpret_cast<D3D11RenderContext*>(m_pRenderer->GetRenderContext()));
     m_pDeviceContext->PSSetShaderResources(0, 1, &m_pResourceView);
 
     // Sampler

@@ -19,7 +19,6 @@ D3D11Rect::~D3D11Rect()
 bool D3D11Rect::Initialize()
 {
     m_pDevice = m_pRenderer->GetDevice();
-    m_pDeviceContext = reinterpret_cast<D3D11RenderContext*>(m_pRenderer->GetRenderContext())->GetDeviceContext();
 
     // Constants
     ZeroMemory(&shaderConstants, sizeof(shaderConstants));
@@ -51,14 +50,16 @@ bool D3D11Rect::Initialize()
     return true;
 }
 
-void D3D11Rect::DrawRect(const Rectf& rect, const RGBA& color)
+void D3D11Rect::DrawRect(D3D11RenderContext* pRenderContext, const Rectf& rect, const RGBA& color)
 {
+	auto pDeviceContext = pRenderContext->GetDeviceContext();
+
     // Setup
-    m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-    m_pShaderBundle->Apply(m_pBuffer);
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    m_pShaderBundle->Apply(pRenderContext, m_pBuffer);
 
     // Matrix
-	const Vector2f& viewport = m_pRenderer->GetRenderContext()->GetViewportSize();
+	const Vector2f& viewport = pRenderContext->GetViewportSize();
 
     shaderConstants.TransformMatrix[0] = rect.w * 2.0f / viewport.x;
     shaderConstants.TransformMatrix[12] = -1.0f + rect.x * 2.0f / viewport.x;
@@ -74,6 +75,6 @@ void D3D11Rect::DrawRect(const Rectf& rect, const RGBA& color)
     shaderConstants.Color[3] = static_cast<float>(color.a) / 255.0f;
 
     // Draw
-    m_pDeviceContext->UpdateSubresource(m_pBuffer, 0, nullptr, &shaderConstants, 0, 0);
-    m_pDeviceContext->Draw(4, 0);
+	pDeviceContext->UpdateSubresource(m_pBuffer, 0, nullptr, &shaderConstants, 0, 0);
+	pDeviceContext->Draw(4, 0);
 }

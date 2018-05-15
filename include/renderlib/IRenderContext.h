@@ -10,5 +10,5 @@ struct IRenderContext
 	virtual void SetViewportSize(const Vector2&) = 0;
 
 	// Basic Drawing
-	virtual void DrawRect(const Rect& rect, const RGBA& color) const = 0;
+	virtual void DrawRect(const Rect& rect, const RGBA& color) = 0;
 };

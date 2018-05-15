@@ -32,5 +32,5 @@ public:
 	virtual void SetViewportSize(const Vector2&) override;
 
 	// Basic Drawing
-	virtual void DrawRect(const Rect& rect, const RGBA& color) const override;
+	virtual void DrawRect(const Rect& rect, const RGBA& color) override;
 };

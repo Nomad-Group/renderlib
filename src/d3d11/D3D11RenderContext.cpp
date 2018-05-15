@@ -63,10 +63,10 @@ void D3D11RenderContext::Render()
 	m_pRenderTarget->Apply();
 }
 
-void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color) const
+void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
 {
 	if (m_pRect == nullptr)
 		return;
 
-	m_pRect->DrawRect(rect, color);
+	m_pRect->DrawRect(this, rect, color);
 }

@@ -6,7 +6,6 @@ class D3D11Rect
 {
 	D3D11Renderer* m_pRenderer = nullptr;
 	ID3D11Device* m_pDevice = nullptr;
-	ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
 	D3D11ShaderBundle* m_pShaderBundle = nullptr;
 	ID3D11Buffer* m_pBuffer = nullptr;
@@ -24,5 +23,5 @@ public:
 	bool Initialize();
 	
 	// Draw
-	void DrawRect(const Rectf& rect, const RGBA& color);
+	void DrawRect(D3D11RenderContext*, const Rectf& rect, const RGBA& color);
 };
