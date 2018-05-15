@@ -142,14 +142,7 @@ IRenderFont* D3D11Renderer::GetFont(const std::string& name)
 
 IRenderTexture* D3D11Renderer::CreateTexture()
 {
-    auto pTexture = new D3D11Texture(this);
-    if (!pTexture->Initialize())
-	{
-        delete pTexture;
-        return nullptr;
-    }
-
-    return pTexture;
+    return new D3D11Texture(this);
 }
 
 IRenderTarget* D3D11Renderer::CreateRenderTarget(const Vector2& size)

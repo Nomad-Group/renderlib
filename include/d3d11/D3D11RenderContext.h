@@ -4,6 +4,7 @@
 class D3D11RenderContext : public IRenderContext
 {
 	friend class D3D11Renderer;
+	friend class D3D11Texture;
 
 	D3D11Renderer* m_pRenderer;
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
@@ -15,6 +16,16 @@ class D3D11RenderContext : public IRenderContext
 	// Viewport
 	D3D11_VIEWPORT m_viewport;
 	Vector2 m_size;
+
+	// Texture
+	struct TextureDrawInfo
+	{
+		TextureDrawInfo() = default;
+		~TextureDrawInfo() = default;
+
+		D3D11ShaderBundle* pShaderBundle = nullptr;
+		ID3D11SamplerState* pSamplerState = nullptr;
+	} m_textureDrawInfo;
 
 public:
 	D3D11RenderContext(D3D11Renderer*);

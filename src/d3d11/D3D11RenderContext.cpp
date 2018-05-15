@@ -28,6 +28,9 @@ bool D3D11RenderContext::Setup()
 	m_pBlendState = new D3D11BlendState();
 	if (!m_pBlendState->Initialize(m_pRenderer->m_pDevice, m_pDeviceContext))
 		return false;
+
+	// Texture Info
+	D3D11Texture::SetupContext(m_pRenderer, this);
 	
 	// Done
 	return true;
@@ -55,6 +58,9 @@ void D3D11RenderContext::SetViewportSize(const Vector2& size)
 
 void D3D11RenderContext::Render()
 {
+	if (m_pDeviceContext)
+		return;
+
 	// Render calls
 	m_pDeviceContext->RSSetViewports(1, &m_viewport);
 

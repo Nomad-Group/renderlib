@@ -4,8 +4,6 @@
 #include "d3d11/D3D11ShaderBundle.h"
 #include "d3d11/D3D11Shaders.h"
 
-D3D11Texture::TextureDrawInfo D3D11Texture::m_textureDrawInfo;
-
 D3D11Texture::D3D11Texture(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)
 {
@@ -17,18 +15,20 @@ D3D11Texture::~D3D11Texture()
     Release();
 }
 
-bool D3D11Texture::Initialize()
+bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pContext)
 {
+	auto& textureDrawInfo = pContext->m_textureDrawInfo;
+
     // Init once
-    if (m_textureDrawInfo.pShaderBundle)
+    if (textureDrawInfo.pShaderBundle)
         return true;
 
     // Texture Shader
-    m_textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(m_pRenderer);
-    m_textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader, d3d11_texture_shader);
-    m_textureDrawInfo.pShaderBundle->SetupInputLayout(d3d11_texture_input, ARRAYSIZE(d3d11_texture_input));
+    textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(pRenderer);
+    textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader, d3d11_texture_shader);
+    textureDrawInfo.pShaderBundle->SetupInputLayout(d3d11_texture_input, ARRAYSIZE(d3d11_texture_input));
 
-    if (!m_textureDrawInfo.pShaderBundle->Initialize())
+    if (!textureDrawInfo.pShaderBundle->Initialize())
         return false;
 
     // Sampler State
@@ -46,7 +46,7 @@ bool D3D11Texture::Initialize()
     colorMapDesc.MinLOD = 0;
 
     // Sampler State
-    if (FAILED(m_pRenderer->GetDevice()->CreateSamplerState(&colorMapDesc, &m_textureDrawInfo.pSamplerState)))
+    if (FAILED(pRenderer->GetDevice()->CreateSamplerState(&colorMapDesc, &textureDrawInfo.pSamplerState)))
         return false;
 
     // Done
@@ -84,16 +84,16 @@ void D3D11Texture::Render(IRenderContext* pRenderContext)
         return;
 
     // Shader
-	m_textureDrawInfo.pShaderBundle->Apply(d3d11RenderContext);
+	d3d11RenderContext->m_textureDrawInfo.pShaderBundle->Apply(d3d11RenderContext);
 	pDeviceContext->PSSetShaderResources(0, 1, &m_pResourceView);
 
     // Sampler
-	pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
+	pDeviceContext->PSSetSamplers(0, 1, &d3d11RenderContext->m_textureDrawInfo.pSamplerState);
 
     // Vertex
 	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    uint32_t stride = sizeof(VertexPos);
+    uint32_t stride = sizeof(TextureVertex);
     uint32_t offset = 0;
 	pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
@@ -140,7 +140,7 @@ bool D3D11Texture::UpdateVertexBuffer(IRenderContext* pRenderContext)
         ZeroMemory(&vertexDesc, sizeof(vertexDesc));
         vertexDesc.Usage = D3D11_USAGE_DYNAMIC;
         vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        vertexDesc.ByteWidth = sizeof(VertexPos) * 6;
+        vertexDesc.ByteWidth = sizeof(TextureVertex) * 6;
         vertexDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
         D3D11_SUBRESOURCE_DATA resourceData;
@@ -215,10 +215,8 @@ bool D3D11Texture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Textu
     m_size.y = textureDesc.Height;
 
     // Create Texture
-    if (FAILED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, nullptr, &m_pTexture))) {
-        __debugbreak();
+    if (FAILED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, nullptr, &m_pTexture)))
         return false;
-    }
 
     // Copy
 	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();

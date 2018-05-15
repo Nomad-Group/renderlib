@@ -6,15 +6,7 @@ using XMFLOAT4A = DirectX::XMFLOAT4A;
 using XMFLOAT3  = DirectX::XMFLOAT3;
 using XMFLOAT2  = DirectX::XMFLOAT2;
 
-struct FRect
-{
-	float x;
-	float y;
-	float w;
-	float h;
-};
-
-struct VertexPos
+struct TextureVertex
 {
 	XMFLOAT3 pos;
 	XMFLOAT2 tex0;
@@ -28,13 +20,6 @@ class D3D11Texture : public IRenderTexture
 private:
 	D3D11Renderer* m_pRenderer;
 
-	// Static Info
-	static struct TextureDrawInfo
-	{
-		D3D11ShaderBundle* pShaderBundle = nullptr;
-		ID3D11SamplerState* pSamplerState = nullptr;
-	} m_textureDrawInfo;
-
 	// Settings
     Vector2 m_position;
     Vector2 m_size;
@@ -46,7 +31,7 @@ private:
 	// Vertex
 	ID3D11Buffer* m_pVertexBuffer = nullptr;
 	bool m_bUpdateVertexBuffer = false;
-	VertexPos m_vertices[6];
+	TextureVertex m_vertices[6];
 	bool UpdateVertexBuffer(IRenderContext*);
 
 	// Texture
@@ -56,7 +41,7 @@ public:
 	D3D11Texture(D3D11Renderer*);
 	virtual ~D3D11Texture();
 
-	bool Initialize();
+	static bool SetupContext(D3D11Renderer*, D3D11RenderContext*);
 	virtual void Release() override;
 
 	// Load
