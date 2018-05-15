@@ -11,4 +11,8 @@ struct IRenderContext
 
 	// Basic Drawing
 	virtual void DrawRect(const Rect& rect, const RGBA& color) = 0;
+
+	// State Saver
+	virtual void SaveState() = 0;
+	virtual void RestoreState() = 0;
 };

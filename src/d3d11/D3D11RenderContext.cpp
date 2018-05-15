@@ -76,3 +76,12 @@ void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
 
 	m_pRect->DrawRect(this, rect, color);
 }
+
+void D3D11RenderContext::SaveState()
+{
+	m_stateSaver.saveCurrentState(m_pDeviceContext);
+}
+void D3D11RenderContext::RestoreState()
+{
+	m_stateSaver.restoreSavedState();
+}

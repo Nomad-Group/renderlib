@@ -1,6 +1,8 @@
 #pragma once
 #include "D3D11Renderer.h"
 
+#include "FW1FontWrapper/CFW1StateSaver.h"
+
 class D3D11RenderContext : public IRenderContext
 {
 	friend class D3D11Renderer;
@@ -27,6 +29,9 @@ class D3D11RenderContext : public IRenderContext
 		ID3D11SamplerState* pSamplerState = nullptr;
 	} m_textureDrawInfo;
 
+	// State Saver
+	FW1FontWrapper::CFW1StateSaver m_stateSaver;
+
 public:
 	D3D11RenderContext(D3D11Renderer*);
 	virtual ~D3D11RenderContext() override;
@@ -44,4 +49,8 @@ public:
 
 	// Basic Drawing
 	virtual void DrawRect(const Rect& rect, const RGBA& color) override;
+
+	// State Saver
+	virtual void SaveState() override;
+	virtual void RestoreState() override;
 };

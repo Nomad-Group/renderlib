@@ -45,23 +45,17 @@ void D3D11Renderer::Render(IDXGISwapChain* pSwapChain)
         m_pDevice->GetImmediateContext(&m_pRenderContext->m_pDeviceContext);
     }
 
-    // State Saver
-    m_stateSaver.saveCurrentState(m_pRenderContext->m_pDeviceContext);
-
     // Setup
-    if (!m_bIsSetUp) {
-        if (!Setup()) {
-            MessageBoxA(nullptr, "Failed to setup D3D11Renderer!", "ScriptHook", MB_ICONERROR | MB_OK);
+    if (!m_bIsSetUp)
+	{
+        if (!Setup())
+		{
+            MessageBoxA(nullptr, "Failed to setup D3D11Renderer!", "renderlib", MB_ICONERROR | MB_OK);
             exit(0);
         }
 
         m_bIsSetUp = true;
     }
-}
-
-void D3D11Renderer::RestoreState()
-{
-	m_stateSaver.restoreSavedState();
 }
 
 bool D3D11Renderer::Setup()
