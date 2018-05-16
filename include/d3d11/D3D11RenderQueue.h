@@ -12,7 +12,8 @@ class D3D11RenderQueue : public IRenderQueue
 public:
 	struct FontInfo
 	{
-		std::string font = "Arial";
+		IRenderFont* pFont = nullptr;
+
 		float size = 14.0f;
 		RGBA color;
 	} m_fontInfo;
@@ -24,15 +25,15 @@ public:
 	virtual ~D3D11RenderQueue() = default;
 
 	// Lock
-    void Lock() override;
-	void Unlock() override;
+	virtual void Lock() override;
+	virtual void Unlock() override;
 
 	// Queue
-	void Clear() override;
-	void AddCommand(_detail::IRenderCommand* pCommand) override;
+	virtual void Clear() override;
+	virtual void AddCommand(_detail::IRenderCommand* pCommand) override;
 
 	// Render
-	void Render(IRenderContext*) override;
+	virtual void Render(IRenderContext*) override;
 
 	// Offset
 	virtual void SetRenderOffset(const Vector2& o) override { m_renderOffset = o; };
@@ -44,11 +45,13 @@ public:
 	virtual void ClearRenderTarget(IRenderTarget*, const RGBA&) override;
 
 	// Draw
-	void DrawRect(const Rect& rect, const RGBA&) override;
-	void DrawTexture(const Vector2&, IRenderTexture* p_texture) override;
+	virtual void DrawRect(const Rect& rect, const RGBA&) override;
+	virtual void DrawTexture(const Vector2&, IRenderTexture* p_texture) override;
 
 	// Text
-	void SetFont(const std::string& name, float size, const RGBA& color) override;
-	void TextDrawString(const Vector2& position, const std::string& str) override;
-	void TextDrawStringEx(const Vector2& position, const Vector2& size, const std::string& str, FontRenderFlags::Enum eFlags) override;
+	virtual void SetFont(const std::string& name, float size, const RGBA& color) override;
+	virtual void SetFont(IRenderFont*) override;
+
+	virtual void TextDrawString(const Vector2& position, const std::string& str) override;
+	virtual void TextDrawStringEx(const Vector2& position, const Vector2& size, const std::string& str, FontRenderFlags::Enum eFlags) override;
 };

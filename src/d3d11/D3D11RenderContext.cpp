@@ -65,8 +65,8 @@ void D3D11RenderContext::Render()
 	m_pDeviceContext->RSSetViewports(1, &m_viewport);
 
 	// Setup render state
-	m_pBlendState->Apply(this);
 	m_pRenderTarget->Apply(this);
+	m_pBlendState->Apply(this);
 }
 
 void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)

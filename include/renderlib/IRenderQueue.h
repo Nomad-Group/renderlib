@@ -42,6 +42,8 @@ struct IRenderQueue
 
 	// Text
 	virtual void SetFont(const std::string& name, float size, const RGBA& color) = 0;
+	virtual void SetFont(IRenderFont*) = 0;
+
 	virtual void TextDrawString(const Vector2& position, const std::string& str) = 0;
 	virtual void TextDrawStringEx(const Vector2& position, const Vector2& size, const std::string& str, FontRenderFlags::Enum eFlags) = 0;
 };

@@ -92,7 +92,14 @@ void D3D11RenderQueue::ClearRenderTarget(IRenderTarget* pRenderTarget, const RGB
 // Font
 void D3D11RenderQueue::SetFont(const std::string& name, float size, const RGBA& color)
 {
-    m_fontInfo = { name, size, color };
+    m_fontInfo = { m_pRenderer->GetFont(name), size, color };
+}
+void D3D11RenderQueue::SetFont(IRenderFont* pFont)
+{
+	if (pFont == nullptr)
+		pFont = m_pRenderer->GetFont("Arial");
+
+	m_fontInfo = { pFont, pFont->GetSize(), pFont->GetColor() };
 }
 
 // Rect
@@ -130,7 +137,7 @@ struct D3D11DrawTextCommand : _detail::IRenderCommand
 
     void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
-        auto pFont = pRenderer->GetFont(font.font);
+        auto pFont = font.pFont == nullptr ? pRenderer->GetFont("Arial") : font.pFont;
         if (pFont)
 		{
             pFont->SetSize(font.size);
@@ -162,7 +169,7 @@ struct D3D11DrawTextExCommand : _detail::IRenderCommand
 
     void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
-        auto pFont = pRenderer->GetFont(font.font);
+		auto pFont = font.pFont == nullptr ? pRenderer->GetFont("Arial") : font.pFont;
         if (pFont)
 		{
             pFont->SetSize(font.size);

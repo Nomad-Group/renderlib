@@ -29,9 +29,9 @@ bool D3D11BlendState::Initialize(ID3D11Device* pDevice)
 
 void D3D11BlendState::Apply(D3D11RenderContext* pRenderContext)
 {
-    if (!m_pBlendState)
+    if (m_pBlendState == nullptr)
         return;
 
-	static const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
-	pRenderContext->GetDeviceContext()->OMSetBlendState(m_pBlendState, blend_factor, 0xffffffff);
+	//static const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
+	pRenderContext->GetDeviceContext()->OMSetBlendState(m_pBlendState, 0, 0xffffffff);
 }

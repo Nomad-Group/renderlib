@@ -47,9 +47,6 @@
     <ClInclude Include="include\renderlib\renderlib.h">
       <Filter>Header\renderlib</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderlib\detail\renderlibMath.h">
-      <Filter>Header\renderlib\detail</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderlib\detail\renderlibColors.h">
       <Filter>Header\renderlib\detail</Filter>
     </ClInclude>
@@ -97,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Factory.h">
       <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderlib\detail\renderlibMath.h">
+      <Filter>Header\renderlib\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
