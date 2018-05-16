@@ -14,10 +14,9 @@ namespace renderlib
 		// Use renderlib from Hook
 		virtual bool InitializeFromHook(IDXGISwapChain*) = 0;
 
-		// Present
+		// Render function
 		// Hook mode = call from your Present hook, run render calls AFTER!
 		// Create mode = calls Present, run render calls BEFORE
-		virtual bool Present() = 0;
 	};
 
 	__declspec(dllexport) bool CreateD3D11Factory(ID3D11Factory** ppFactory);

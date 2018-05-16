@@ -2,6 +2,7 @@
 #include "../renderlib/impl/renderlibD3D11.h"
 #include "D3D11Renderer.h"
 #include "D3D11RenderContext.h"
+#include "D3D11RenderQueue.h"
 
 class D3D11Factory : public renderlib::ID3D11Factory
 {
@@ -11,6 +12,8 @@ class D3D11Factory : public renderlib::ID3D11Factory
 
 	D3D11Renderer m_renderer;
 	D3D11RenderContext m_renderContext;
+
+	std::vector<D3D11RenderQueue*> m_renderQueues;
 
 public:
 	D3D11Factory();
@@ -23,5 +26,7 @@ public:
 	virtual bool Initialize(HWND hWindow) override;
 	virtual bool InitializeFromHook(IDXGISwapChain*) override;
 
-	virtual bool Present() override;
+	virtual bool Render() override;
+
+	virtual IRenderQueue* CreateRenderQueue() override;
 };

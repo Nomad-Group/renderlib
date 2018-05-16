@@ -24,6 +24,12 @@
     <Filter Include="Header\renderlib\impl">
       <UniqueIdentifier>{e0fdb124-7b1d-4a14-a38c-c242bed724c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\third_party">
+      <UniqueIdentifier>{734720b6-f769-4841-97ff-bfbde63e76b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\third_party\FW1FontWrapper">
+      <UniqueIdentifier>{09254ed7-128a-4cdc-aca9-86541348b0ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderlib\IRenderer.h">
@@ -126,6 +132,81 @@
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11Factory.cpp">
       <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBA.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBAInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1DWriteRenderTarget.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1DWriteRenderTargetInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1Factory.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1FactoryInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1FontWrapper.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1FontWrapperInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphAtlas.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphAtlasInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphProvider.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphProviderInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphRenderStates.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphRenderStatesInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphSheet.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphSheetInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphVertexDrawer.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphVertexDrawerInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1StateSaver.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextGeometry.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextGeometryInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextRenderer.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextRendererInterface.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\FW1FontWrapper.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\FW1FontWrapper\FW1Precompiled.cpp">
+      <Filter>Source\third_party\FW1FontWrapper</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

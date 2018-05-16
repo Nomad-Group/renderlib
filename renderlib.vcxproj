@@ -26,26 +26,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -107,7 +107,7 @@
       <AdditionalLibraryDirectories>third_party/libpng/x64/;</AdditionalLibraryDirectories>
     </Lib>
     <Link>
-      <AdditionalDependencies>zlib.lib;libpng16.lib</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>third_party/libpng/x64/</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -145,7 +145,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>zlib.lib;libpng16.lib</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>third_party/libpng/x64/</AdditionalLibraryDirectories>
     </Link>
     <Lib>
@@ -189,6 +189,31 @@
     <ClCompile Include="src\d3d11\D3D11ShaderBundle.cpp" />
     <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
     <ClCompile Include="src\d3d11\D3D11TexturePNG.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBA.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBAInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1DWriteRenderTarget.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1DWriteRenderTargetInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1Factory.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1FactoryInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1FontWrapper.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1FontWrapperInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphAtlas.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphAtlasInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphProvider.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphProviderInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphRenderStates.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphRenderStatesInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphSheet.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphSheetInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphVertexDrawer.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1GlyphVertexDrawerInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1StateSaver.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextGeometry.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextGeometryInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextRenderer.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\CFW1TextRendererInterface.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\FW1FontWrapper.cpp" />
+    <ClCompile Include="third_party\FW1FontWrapper\FW1Precompiled.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

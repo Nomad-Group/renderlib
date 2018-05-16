@@ -92,7 +92,7 @@ void D3D11RenderQueue::ClearRenderTarget(IRenderTarget* pRenderTarget, const RGB
 // Font
 void D3D11RenderQueue::SetFont(const std::string& name, float size, const RGBA& color)
 {
-    m_fontInfo = {name, size, color};
+    m_fontInfo = { name, size, color };
 }
 
 // Rect
@@ -112,7 +112,8 @@ void D3D11RenderQueue::DrawRect(const Rect& rect, const RGBA& color)
     auto pCommand = new D3D11DrawRectCommand();
 
 	pCommand->rect = rect;
-	pCommand->rect.x += m_renderOffset.x; pCommand->rect.y += m_renderOffset.y;
+	pCommand->rect.x += m_renderOffset.x;
+	pCommand->rect.y += m_renderOffset.y;
 
     pCommand->col = color;
 
@@ -144,7 +145,7 @@ void D3D11RenderQueue::TextDrawString(const Vector2& position, const std::string
     auto pCommand = new D3D11DrawTextCommand();
     pCommand->font = m_fontInfo;
 
-	pCommand->position = position;
+	pCommand->position = m_renderOffset + position;
     pCommand->str = str;
 
     AddCommand(pCommand);
@@ -177,7 +178,7 @@ void D3D11RenderQueue::TextDrawStringEx(const Vector2& position, const Vector2& 
     pCommand->font = m_fontInfo;
     pCommand->fontFlags = eFlags;
 
-	pCommand->rect = Rectf(position, size);
+	pCommand->rect = Rectf(m_renderOffset + position, size);
     pCommand->str = str;
 
     AddCommand(pCommand);

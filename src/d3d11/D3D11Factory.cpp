@@ -1,4 +1,7 @@
 #include "d3d11/D3D11Factory.h"
+#include "d3d11/D3D11RenderQueue.h"
+
+#pragma comment(lib, "d3d11.lib")
 
 D3D11Factory::D3D11Factory() :
 	m_renderContext(&m_renderer)
@@ -8,6 +11,9 @@ D3D11Factory::~D3D11Factory()
 {
 	if (!m_bHookMode && m_pSwapChain)
 		m_pSwapChain->Release();
+
+	for (auto pRenderQueue : m_renderQueues)
+		delete pRenderQueue;
 }
 
 bool D3D11Factory::Initialize(HWND hWindow)
@@ -36,6 +42,11 @@ bool D3D11Factory::Initialize(HWND hWindow)
 		NULL,
 		&m_renderContext.m_pDeviceContext
 	);
+	m_renderer.m_pSwapChain = m_pSwapChain;
+
+	// Setup
+	if (!m_renderer.Setup() || !m_renderContext.Setup())
+		return false;
 
 	// Done
 	m_bHookMode = false;
@@ -61,7 +72,7 @@ bool D3D11Factory::InitializeFromHook(IDXGISwapChain* pSwapChain)
 	return true;
 }
 
-bool D3D11Factory::Present()
+bool D3D11Factory::Render()
 {
 	if (m_bHookMode)
 	{
@@ -78,6 +89,12 @@ bool D3D11Factory::Present()
 	}
 
 	return true;
+}
+
+IRenderQueue* D3D11Factory::CreateRenderQueue()
+{
+	m_renderQueues.push_back(new D3D11RenderQueue(&m_renderer));
+	return m_renderQueues.back();
 }
 
 bool renderlib::CreateD3D11Factory(ID3D11Factory** ppFactory)

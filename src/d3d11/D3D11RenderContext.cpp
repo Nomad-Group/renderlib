@@ -58,7 +58,7 @@ void D3D11RenderContext::SetViewportSize(const Vector2& size)
 
 void D3D11RenderContext::Render()
 {
-	if (m_pDeviceContext)
+	if (m_pDeviceContext == nullptr)
 		return;
 
 	// Render calls

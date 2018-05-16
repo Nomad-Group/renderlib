@@ -26,7 +26,7 @@ namespace _detail
 		{}
 
 		Vector2(const Vector2<T>& other) :
-			x(other.x, other.y)
+			x(other.x), y(other.y)
 		{}
 
 		template <typename TOther>

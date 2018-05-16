@@ -10,5 +10,8 @@ namespace renderlib
 
 		virtual IRenderer* GetRenderer() = 0;
 		virtual IRenderContext* GetRenderContext() = 0;
+		virtual IRenderQueue* CreateRenderQueue() = 0;
+
+		virtual bool Render() = 0;
 	};
 }

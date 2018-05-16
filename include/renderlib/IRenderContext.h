@@ -11,6 +11,9 @@ struct IRenderContext
 
 	virtual IRenderTarget* GetBackBufferRenderTarget() = 0;
 
+	// Render
+	virtual void Render() = 0;
+
 	// Basic Drawing
 	virtual void DrawRect(const Rect& rect, const RGBA& color) = 0;
 

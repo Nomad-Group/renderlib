@@ -42,7 +42,7 @@ public:
 	void Shutdown();
 	bool Setup();
 
-	void Render();
+	virtual void Render() override;
 
 	// Viewport
 	virtual const Vector2& GetViewportSize() const override { return m_size; };
