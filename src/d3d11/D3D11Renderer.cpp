@@ -6,6 +6,7 @@
 #include "d3d11/D3D11Rect.h"
 #include "d3d11/D3D11Font.h"
 #include "d3d11/D3D11Texture.h"
+#include "d3d11/D3D11Shader.h"
 #include "FW1FontWrapper/FW1FontWrapper.h"
 #include "FW1FontWrapper/CFW1StateSaver.h"
 
@@ -84,6 +85,11 @@ IRenderFont* D3D11Renderer::GetFont(const std::string& name)
 IRenderTexture* D3D11Renderer::CreateTexture()
 {
     return new D3D11Texture(this);
+}
+
+IRenderShader* D3D11Renderer::CreateShader(const ShaderType shaderType)
+{
+	return new D3D11Shader(this, shaderType);
 }
 
 IRenderTarget* D3D11Renderer::CreateRenderTarget(const Vector2& size)

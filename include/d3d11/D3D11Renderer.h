@@ -57,5 +57,7 @@ public:
 	virtual IRenderFont* GetFont(const std::string& name) override;
     virtual IRenderTexture* CreateTexture() override;
 
+	virtual IRenderShader* CreateShader(const ShaderType) override;
+
 	virtual IRenderTarget* CreateRenderTarget(const Vector2& size) override;
 };

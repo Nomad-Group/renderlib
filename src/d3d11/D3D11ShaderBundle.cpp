@@ -1,6 +1,7 @@
 #include "d3d11/D3D11Renderer.h"
 #include "d3d11/D3D11RenderContext.h"
 #include "d3d11/D3D11ShaderBundle.h"
+#include "d3d11/D3D11Shader.h"
 
 D3D11ShaderBundle::D3D11ShaderBundle(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)
@@ -32,7 +33,7 @@ bool D3D11ShaderBundle::Initialize()
 
     // Quad Shader
     ID3DBlob* pVertexShaderCode = nullptr;
-    if (FAILED(CompileShader(m_sVertexShader,
+    if (FAILED(D3D11Shader::CompileShader(m_sVertexShader,
         strlen(m_sVertexShader),
         nullptr,
         nullptr,
@@ -86,7 +87,7 @@ bool D3D11ShaderBundle::Initialize()
 
     // Compile Pixel Shader
     ID3DBlob* pPixelShaderCode = nullptr;
-    if (FAILED(CompileShader(m_sPixelShader,
+    if (FAILED(D3D11Shader::CompileShader(m_sPixelShader,
         strlen(m_sPixelShader),
         nullptr,
         nullptr,
@@ -143,48 +144,4 @@ void D3D11ShaderBundle::Apply(D3D11RenderContext* pRenderContext, ID3D11Buffer* 
 	// Input Layout
 	if (m_pInputLayout)
 		pDeviceContext->IASetInputLayout(m_pInputLayout);
-}
-
-HRESULT D3D11ShaderBundle::CompileShader(const LPCVOID pSrcData, const SIZE_T SrcDataSize, const LPCSTR pFileName,
-                                         CONST D3D_SHADER_MACRO* pDefines, ID3DInclude* pInclude, const LPCSTR pEntrypoint,
-                                         const LPCSTR pTarget, const UINT Flags1, const UINT Flags2, ID3DBlob** ppCode,
-                                         ID3DBlob** ppErrorMsgs)
-{
-    // Find D3DCompile
-    HRESULT(WINAPI *pD3DCompile)(LPCVOID, SIZE_T, LPCSTR,
-        CONST D3D_SHADER_MACRO*, ID3DInclude*, LPCSTR,
-        LPCSTR, UINT, UINT, ID3DBlob**, ID3DBlob**) = nullptr;
-
-    if (!pD3DCompile)
-	{
-        const char* compiler[] = {
-            "d3dcompiler_47.dll",
-            "d3dcompiler_46.dll",
-            "d3dcompiler_45.dll",
-            "d3dcompiler_44.dll",
-            "d3dcompiler_43.dll",
-            nullptr
-        };
-
-        for (const auto &name : compiler)
-        {
-            if (!name)
-				break;
-
-            const auto hLibrary = LoadLibraryA(name);
-            if (hLibrary)
-            {
-                pD3DCompile = reinterpret_cast<decltype(pD3DCompile)>(GetProcAddress(hLibrary, "D3DCompile"));
-                if (pD3DCompile)
-					break;
-            }
-        }
-
-        if (!pD3DCompile)
-			return E_FAIL;
-    }
-
-    // Compile
-    return pD3DCompile(pSrcData, SrcDataSize, pFileName, pDefines, pInclude, pEntrypoint, pTarget, Flags1, Flags2,
-                       ppCode, ppErrorMsgs);
 }

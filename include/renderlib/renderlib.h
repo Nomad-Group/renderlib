@@ -10,7 +10,9 @@ struct IRenderContext;
 struct IRenderFont;
 struct IRenderTexture;
 struct IRenderTarget;
+struct IRenderShader;
 
+#include "IRenderShader.h" // (ShaderType enum)
 #include "IRenderer.h"
 #include "IRenderContext.h"
 #include "IRenderTexture.h"

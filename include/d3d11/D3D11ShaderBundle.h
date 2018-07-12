@@ -27,7 +27,4 @@ public:
 
 	bool Initialize();
 	void Apply(D3D11RenderContext* pRenderContext, ID3D11Buffer* pConstantBuffer = nullptr) const;
-
-	// Compile
-	static HRESULT CompileShader(LPCVOID pSrcData, SIZE_T SrcDataSize, LPCSTR pFileName, CONST D3D_SHADER_MACRO* pDefines, ID3DInclude* pInclude, LPCSTR pEntrypoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppCode, ID3DBlob** ppErrorMsgs);
 };

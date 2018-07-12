@@ -98,6 +98,12 @@
     <ClInclude Include="include\renderlib\detail\renderlibMath.h">
       <Filter>Header\renderlib\detail</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderlib\IRenderShader.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Shader.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
@@ -207,6 +213,9 @@
     </ClCompile>
     <ClCompile Include="third_party\FW1FontWrapper\FW1Precompiled.cpp">
       <Filter>Source\third_party\FW1FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Shader.cpp">
+      <Filter>Source\d3d11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
