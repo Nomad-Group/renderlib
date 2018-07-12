@@ -30,6 +30,10 @@ namespace _detail
 			r(255), g(255), b(255), a(255)
 		{};
 
+		RGBA(T RGB, T A = 255) :
+			r(RGB), g(RGB), b(RGB), a(A)
+		{}
+
 		RGBA(T R, T G, T B, T A = 255) :
 			r(R), g(G), b(B), a(A)
 		{};

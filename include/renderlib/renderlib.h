@@ -18,3 +18,5 @@ struct IRenderTarget;
 #include "IRenderFont.h"
 
 #include "IRenderQueue.h"
+
+namespace renderlib { struct IFactory; };
