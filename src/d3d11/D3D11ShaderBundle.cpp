@@ -151,7 +151,7 @@ HRESULT D3D11ShaderBundle::CompileShader(const LPCVOID pSrcData, const SIZE_T Sr
                                          ID3DBlob** ppErrorMsgs)
 {
     // Find D3DCompile
-    HRESULT(*pD3DCompile)(LPCVOID, SIZE_T, LPCSTR,
+    HRESULT(WINAPI *pD3DCompile)(LPCVOID, SIZE_T, LPCSTR,
         CONST D3D_SHADER_MACRO*, ID3DInclude*, LPCSTR,
         LPCSTR, UINT, UINT, ID3DBlob**, ID3DBlob**) = nullptr;
 
