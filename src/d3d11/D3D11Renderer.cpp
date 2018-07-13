@@ -7,6 +7,7 @@
 #include "d3d11/D3D11Font.h"
 #include "d3d11/D3D11Texture.h"
 #include "d3d11/D3D11Shader.h"
+#include "d3d11/D3D11ShaderInputLayout.h"
 #include "d3d11/D3D11VideoBuffer.h"
 #include "FW1FontWrapper/FW1FontWrapper.h"
 #include "FW1FontWrapper/CFW1StateSaver.h"
@@ -39,9 +40,9 @@ void D3D11Renderer::Shutdown()
 
 bool D3D11Renderer::Setup()
 {
-    // FW1FontWrapper
-    if (!m_pFW1Factory && FAILED(FW1CreateFactory(FW1_VERSION, &m_pFW1Factory)))
-        return false;
+	// FW1FontWrapper
+	if (!m_pFW1Factory && FAILED(FW1CreateFactory(FW1_VERSION, &m_pFW1Factory)))
+		return false;
 
     // Done
 	m_bIsSetUp = true;
@@ -91,6 +92,11 @@ IRenderTexture* D3D11Renderer::CreateTexture()
 IRenderShader* D3D11Renderer::CreateShader(const ShaderType shaderType)
 {
 	return new D3D11Shader(this, shaderType);
+}
+
+IShaderInputLayout* D3D11Renderer::CreateShaderInputLayout()
+{
+	return new D3D11ShaderInputLayout(this);
 }
 
 IVideoBuffer* D3D11Renderer::CreateBuffer(const BufferType eType, const size_t stSize, const BufferUsage eUsage)

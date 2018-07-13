@@ -107,7 +107,7 @@ void D3D11RenderTarget::ClearStencil(IRenderContext* pRenderContext)
 void D3D11RenderTarget::Apply(IRenderContext* pRenderContext)
 {
 	auto pDeviceContext = static_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
-    pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
+    pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
 }
 
 bool D3D11RenderTarget::CopyTexture(IRenderContext* pRenderContext, IRenderTexture* texture)

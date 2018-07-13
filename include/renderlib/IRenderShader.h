@@ -12,6 +12,9 @@ struct IRenderShader
 
 	// Compiler
 	virtual bool Compile(const char* strShader, const char* strEntrypoint = nullptr) = 0;
+
+	// Input Layout
+	virtual bool SetInputLayout(IShaderInputLayout*) = 0;
 	
 	// Apply
 	virtual void Apply(IRenderContext*) = 0;

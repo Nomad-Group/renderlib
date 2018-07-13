@@ -28,4 +28,7 @@ public:
 
 	virtual bool Map(IRenderContext*, BufferAccess, void**) override;
 	virtual void Unmap(IRenderContext*) override;
+
+	// Internal
+	inline ID3D11Buffer* GetBuffer() { return m_pBuffer; };
 };

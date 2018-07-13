@@ -1,6 +1,7 @@
 #include "d3d11/D3D11Shader.h"
 #include "d3d11/D3D11Renderer.h"
 #include "d3d11/D3D11RenderContext.h"
+#include "d3d11/D3D11ShaderInputLayout.h"
 
 D3D11Shader::D3D11Shader(D3D11Renderer* pRenderer, const ShaderType shaderType) :
 	m_pRenderer(pRenderer),
@@ -9,6 +10,9 @@ D3D11Shader::D3D11Shader(D3D11Renderer* pRenderer, const ShaderType shaderType) 
 
 D3D11Shader::~D3D11Shader()
 {
+	if (m_pShaderCode)
+		m_pShaderCode->Release();
+
 	if(m_pShader)
 		m_pShader->Release();
 }
@@ -35,7 +39,8 @@ bool D3D11Shader::Compile(const char* strShader, const char* strEntrypoint)
 	}
 
 	// Compile (Shader Code)
-	ID3DBlob* pShaderCode = nullptr;
+	ID3DBlob* pErrorMsgs = nullptr;
+
 	if (FAILED(CompileShader(strShader,
 		strlen(strShader),
 		nullptr,
@@ -45,11 +50,10 @@ bool D3D11Shader::Compile(const char* strShader, const char* strEntrypoint)
 		strTarget,
 		0,
 		0,
-		&pShaderCode,
-		nullptr)))
+		&m_pShaderCode,
+		&pErrorMsgs)))
 	{
-		if (pShaderCode)
-			pShaderCode->Release();
+		const char* s = (const char*)pErrorMsgs->GetBufferPointer();
 
 		return false;
 	}
@@ -61,25 +65,38 @@ bool D3D11Shader::Compile(const char* strShader, const char* strEntrypoint)
 	switch (m_shaderType)
 	{
 	case ShaderType::Vertex:
-		success = SUCCEEDED(pDevice->CreateVertexShader(pShaderCode->GetBufferPointer(),
-			pShaderCode->GetBufferSize(),
+		success = SUCCEEDED(pDevice->CreateVertexShader(m_pShaderCode->GetBufferPointer(),
+			m_pShaderCode->GetBufferSize(),
 			nullptr,
 			(ID3D11VertexShader**)&m_pShader));
 		break;
 
 	case ShaderType::Pixel:
-		success = SUCCEEDED(pDevice->CreatePixelShader(pShaderCode->GetBufferPointer(),
-			pShaderCode->GetBufferSize(),
+		success = SUCCEEDED(pDevice->CreatePixelShader(m_pShaderCode->GetBufferPointer(),
+			m_pShaderCode->GetBufferSize(),
 			nullptr,
 			(ID3D11PixelShader**)&m_pShader));
 		break;
 
 	default:
-		pShaderCode->Release();
 		return false;
 	}
 
-	pShaderCode->Release();
+	// Done
+	return success;
+}
+
+bool D3D11Shader::SetInputLayout(IShaderInputLayout* pInputLayout)
+{
+	auto pInputElements = reinterpret_cast<D3D11ShaderInputLayout*>(pInputLayout)->GetInputElements();
+	bool success = SUCCEEDED(m_pRenderer->GetDevice()->CreateInputLayout(pInputElements,
+		pInputLayout->GetNumElements(),
+		m_pShaderCode->GetBufferPointer(),
+		m_pShaderCode->GetBufferSize(),
+		&m_pInputLayout));
+
+	free(pInputElements);
+
 	return success;
 }
 
@@ -100,6 +117,9 @@ void D3D11Shader::Apply(IRenderContext* pRenderContext)
 	default:
 		return;
 	}
+
+	if(m_pInputLayout)
+		pDeviceContext->IASetInputLayout(m_pInputLayout);
 }
 
 HRESULT D3D11Shader::CompileShader(const LPCVOID pSrcData, const SIZE_T SrcDataSize, const LPCSTR pFileName,

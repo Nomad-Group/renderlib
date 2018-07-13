@@ -10,6 +10,8 @@ class D3D11Shader : public IRenderShader
 
 	// Shader: both ID3D11Vertex/PixelShader inherit ID3D11DeviceChild
 	ID3D11DeviceChild* m_pShader = nullptr;
+	ID3DBlob* m_pShaderCode = nullptr;
+	ID3D11InputLayout* m_pInputLayout = nullptr;
 
 public:
 	D3D11Shader(D3D11Renderer*, const ShaderType);
@@ -18,6 +20,9 @@ public:
 	// Compiler
 	virtual bool Compile(const char* strShader, const char* strEntrypoint) override;
 	static HRESULT CompileShader(LPCVOID pSrcData, SIZE_T SrcDataSize, LPCSTR pFileName, CONST D3D_SHADER_MACRO* pDefines, ID3DInclude* pInclude, LPCSTR pEntrypoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppCode, ID3DBlob** ppErrorMsgs);
+
+	// Input Layout
+	virtual bool SetInputLayout(IShaderInputLayout*) override;
 
 	// Apply
 	virtual void Apply(IRenderContext*) override;

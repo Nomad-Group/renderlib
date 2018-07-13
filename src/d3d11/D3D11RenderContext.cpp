@@ -2,6 +2,7 @@
 #include "d3d11/D3D11BlendState.h"
 #include "d3d11/D3D11RenderTarget.h"
 #include "d3d11/D3D11Rect.h"
+#include "d3d11/D3D11VideoBuffer.h"
 
 D3D11RenderContext::D3D11RenderContext(D3D11Renderer* pRenderer) :
 	m_pRenderer(pRenderer)
@@ -61,12 +62,17 @@ void D3D11RenderContext::Render()
 	if (m_pDeviceContext == nullptr)
 		return;
 
-	// Render calls
-	m_pDeviceContext->RSSetViewports(1, &m_viewport);
-
 	// Setup render state
 	m_pRenderTarget->Apply(this);
-	m_pBlendState->Apply(this);
+	m_pDeviceContext->RSSetViewports(1, &m_viewport);
+
+	if(m_pBlendState)
+		m_pBlendState->Apply(this);
+}
+
+void D3D11RenderContext::Draw(size_t stNumElements)
+{
+	m_pDeviceContext->Draw(stNumElements, 0);
 }
 
 void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
@@ -75,6 +81,20 @@ void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
 		return;
 
 	m_pRect->DrawRect(this, rect, color);
+}
+
+void D3D11RenderContext::SetVertexBuffer(IVideoBuffer* pVertexBuffer, size_t stVertexSize, size_t stOffset)
+{
+	if (pVertexBuffer == nullptr /* type check */)
+		return;
+
+	auto pBuffer = reinterpret_cast<D3D11VideoBuffer*>(pVertexBuffer);
+
+	auto buffer = pBuffer->GetBuffer();
+	UINT stride = stVertexSize;
+	UINT offset = stOffset;
+	m_pDeviceContext->IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
+	m_pDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void D3D11RenderContext::SaveState()
