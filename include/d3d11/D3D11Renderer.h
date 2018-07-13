@@ -1,8 +1,10 @@
 #pragma once
+#include "renderlib/renderlib.h"
+using namespace math;
+
 #include <vector>
 #include <map>
 #include <d3d11.h>
-#include "renderlib/renderlib.h"
 
 #include "FW1FontWrapper/FW1FontWrapper.h"
 

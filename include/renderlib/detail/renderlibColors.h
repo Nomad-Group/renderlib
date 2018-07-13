@@ -17,7 +17,19 @@ namespace _detail
 			r(_r), g(_g), b(_b)
 		{}
 	};
+}
 
+namespace math
+{
+	using RGB = ::_detail::RGB<uint8_t>;
+	using RGBf = ::_detail::RGB<float>;
+}
+
+/*
+	* RGBA
+	*/
+namespace _detail
+{
 	template <typename T>
 	struct RGBA
 	{
@@ -58,7 +70,7 @@ namespace _detail
 	};
 }
 
-using RGB = _detail::RGB<uint8_t>;
-using RGBf = _detail::RGB<float>;
-
-using RGBA = _detail::RGBA<uint8_t>;
+namespace math
+{
+	using RGBA = ::_detail::RGBA<uint8_t>;
+}

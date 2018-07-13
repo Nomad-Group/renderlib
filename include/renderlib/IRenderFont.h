@@ -22,14 +22,14 @@ struct IRenderFont
 	virtual void SetSize(float) = 0;
 	virtual float GetSize() const = 0;
 
-	virtual void SetColor(const RGBA&) = 0;
-	virtual const RGBA& GetColor() const = 0;
+	virtual void SetColor(const math::RGBA&) = 0;
+	virtual const math::RGBA& GetColor() const = 0;
 
 	// Text
-	virtual void DrawString(IRenderContext*, const Vector2f&, const std::string& str) const = 0;
-    virtual void DrawStringW(IRenderContext*, const Vector2f&, const std::wstring& str) const = 0;
-	virtual void DrawStringEx(IRenderContext*, const Rectf&, const std::string& str, FontRenderFlags::Enum eFlags) const = 0;
+	virtual void DrawString(IRenderContext*, const math::Vector2f&, const std::string& str) const = 0;
+    virtual void DrawStringW(IRenderContext*, const math::Vector2f&, const std::wstring& str) const = 0;
+	virtual void DrawStringEx(IRenderContext*, const math::Rectf&, const std::string& str, FontRenderFlags::Enum eFlags) const = 0;
 	
-	virtual void MeasureString(const std::string& str, Vector2f& size, FontRenderFlags::Enum eFlags) const = 0;
-    virtual void MeasureStringW(const std::wstring& str, Vector2f& size, FontRenderFlags::Enum eFlags) const = 0;
+	virtual void MeasureString(const std::string& str, math::Vector2f& size, FontRenderFlags::Enum eFlags) const = 0;
+    virtual void MeasureStringW(const std::wstring& str, math::Vector2f& size, FontRenderFlags::Enum eFlags) const = 0;
 };

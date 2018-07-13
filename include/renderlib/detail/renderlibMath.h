@@ -7,8 +7,8 @@
 #include <string>
 
 /*
-* Math
-*/
+ * Vector2
+ */
 namespace _detail
 {
 	template <typename T>
@@ -82,9 +82,102 @@ namespace _detail
 	};
 }
 
-using Vector2 = _detail::Vector2<int32_t>;
-using Vector2f = _detail::Vector2<float>;
+namespace math
+{
+	using Vector2  = ::_detail::Vector2<int32_t>;
+	using Vector2f = ::_detail::Vector2<float>;
+}
 
+/*
+ * Vector3
+ */
+namespace _detail
+{
+	template <typename T>
+	struct Vector3
+	{
+		T x;
+		T y;
+		T z;
+
+		Vector3() :
+			x((T)0), y((T)0), z((T)0)
+		{}
+
+		Vector3(const T& _x, const T& _y, const T& _z) :
+			x(_x), y(_y), z(_z)
+		{}
+
+		Vector3(const Vector3<T>& other) :
+			x(other.x), y(other.y), z(other.z)
+		{}
+
+		template <typename TOther>
+		Vector3(const Vector3<TOther>& other) :
+			x(static_cast<T>(other.x)), y(static_cast<T>(other.y)), z(static_cast<T>(other.z))
+		{}
+
+		Vector3& operator=(const Vector3<T>& other)
+		{
+			x = other.x;
+			y = other.y;
+			z = other.z;
+			return *this;
+		}
+
+		Vector3<T> operator+(const Vector3<T>& other) const
+		{
+			return Vector3(x + other.x, y + other.y, z + other.z);
+		}
+		Vector3<T>& operator+=(const Vector3<T>& other)
+		{
+			x += other.x;
+			y += other.y;
+			z += other.z;
+			return *this;
+		}
+
+		Vector3<T> operator-(const Vector3<T>& other) const
+		{
+			return Vector3<T>(x - other.x, y - other.y, z - other.z);
+		}
+		Vector3<T>& operator-=(const Vector3<T>& other)
+		{
+			x -= other.x;
+			y -= other.y;
+			z -= other.z;
+
+			return *this;
+		}
+
+		Vector3<T> operator*(const T v) const
+		{
+			return Vector3<T>(x * v, y * v, z * v);
+		}
+		Vector3<T>& operator*=(const T v)
+		{
+			x *= v;
+			y *= v;
+			z *= v;
+			return *this;
+		}
+
+		bool operator==(const Vector3<T>& other)
+		{
+			return x == other.x && y == other.y && z == other.z;
+		}
+	};
+}
+
+namespace math
+{
+	using Vector3  = ::_detail::Vector3<int32_t>;
+	using Vector3f = ::_detail::Vector3<float>;
+}
+
+/*
+ * Rect
+ */
 namespace _detail
 {
 	template <typename T>
@@ -149,5 +242,8 @@ namespace _detail
 	};
 }
 
-using Rect = _detail::Rect<int32_t>;
-using Rectf = _detail::Rect<float>;
+namespace math
+{
+	using Rect  = ::_detail::Rect<int32_t>;
+	using Rectf = ::_detail::Rect<float>;
+}
