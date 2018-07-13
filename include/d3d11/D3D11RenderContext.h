@@ -54,8 +54,6 @@ public:
 	virtual void Draw(size_t) override;
 	virtual void DrawRect(const Rect& rect, const RGBA& color) override;
 
-	virtual void SetVertexBuffer(IVideoBuffer*, size_t stVertexSize, size_t stOffset) override;
-
 	// State Saver
 	virtual void SaveState() override;
 	virtual void RestoreState() override;

@@ -32,6 +32,9 @@ bool D3D11RenderContext::Setup()
 
 	// Texture Info
 	D3D11Texture::SetupContext(m_pRenderer, this);
+
+	// TODO: This has to be configurable
+	m_pDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	// Done
 	return true;
@@ -81,20 +84,6 @@ void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
 		return;
 
 	m_pRect->DrawRect(this, rect, color);
-}
-
-void D3D11RenderContext::SetVertexBuffer(IVideoBuffer* pVertexBuffer, size_t stVertexSize, size_t stOffset)
-{
-	if (pVertexBuffer == nullptr /* type check */)
-		return;
-
-	auto pBuffer = reinterpret_cast<D3D11VideoBuffer*>(pVertexBuffer);
-
-	auto buffer = pBuffer->GetBuffer();
-	UINT stride = stVertexSize;
-	UINT offset = stOffset;
-	m_pDeviceContext->IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
-	m_pDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void D3D11RenderContext::SaveState()

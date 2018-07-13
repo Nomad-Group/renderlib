@@ -46,7 +46,7 @@ void D3D11Font::DrawString(IRenderContext* pRenderContext, const Vector2f& pos, 
                                pos.x,
                                pos.y,
                                color,
-                               FW1_NOWORDWRAP);
+                               FW1_RESTORESTATE | FW1_NOWORDWRAP);
 }
 
 void D3D11Font::DrawStringW(IRenderContext* pRenderContext, const Vector2f& pos, const std::wstring& str) const
@@ -64,7 +64,7 @@ void D3D11Font::DrawStringW(IRenderContext* pRenderContext, const Vector2f& pos,
         pos.x,
         pos.y,
         color,
-        FW1_NOWORDWRAP);
+		FW1_RESTORESTATE | FW1_NOWORDWRAP);
 }
 
 void D3D11Font::DrawStringEx(IRenderContext* pRenderContext, const Rectf& rect, const std::string& str, FontRenderFlags::Enum eFlags) const
@@ -76,7 +76,7 @@ void D3D11Font::DrawStringEx(IRenderContext* pRenderContext, const Rectf& rect, 
                          m_color.r & 0xff);
 
     // Text-Wrap
-    UINT flags = 0;
+    UINT flags = FW1_RESTORESTATE;
     if (eFlags & FontRenderFlags::NO_WORD_WRAP)
         flags |= FW1_NOWORDWRAP;
     if (eFlags & FontRenderFlags::ALIGN_HCENTER)

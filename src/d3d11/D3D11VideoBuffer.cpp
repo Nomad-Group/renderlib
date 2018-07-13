@@ -74,6 +74,31 @@ bool D3D11VideoBuffer::Initialize(void* pInitialData)
 	return SUCCEEDED(m_pRenderer->GetDevice()->CreateBuffer(&desc, &data, &m_pBuffer));
 }
 
+void D3D11VideoBuffer::Apply(IRenderContext* pRenderContext, size_t stSize, size_t stOffset)
+{
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+	switch (m_eType)
+	{
+	case BufferType::Vertex:
+	{
+		UINT stride = stSize;
+		UINT offset = stOffset;
+		pDeviceContext->IASetVertexBuffers(0, 1, &m_pBuffer, &stride, &offset);
+	} break;
+
+	case BufferType::Index:
+		pDeviceContext->IASetIndexBuffer(m_pBuffer, DXGI_FORMAT_R32_UINT, stOffset);
+		break;
+
+	case BufferType::Constant:
+		pDeviceContext->VSSetConstantBuffers(0, 1, &m_pBuffer);
+		break;
+
+	default:
+		return;
+	}
+}
+
 bool D3D11VideoBuffer::IsAccessAllowed(BufferAccess eAccess) const
 {
 	switch (m_eUsage)

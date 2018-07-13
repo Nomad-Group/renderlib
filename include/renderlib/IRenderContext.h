@@ -18,8 +18,6 @@ struct IRenderContext
 	virtual void Draw(size_t stNumElements) = 0;
 	virtual void DrawRect(const math::Rect& rect, const math::RGBA& color) = 0;
 
-	virtual void SetVertexBuffer(IVideoBuffer*, size_t stVertexSize, size_t stOffset = 0) = 0;
-
 	// State Saver
 	virtual void SaveState() = 0;
 	virtual void RestoreState() = 0;
