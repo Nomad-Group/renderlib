@@ -104,6 +104,12 @@
     <ClInclude Include="include\d3d11\D3D11Shader.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderlib\IVideoBuffer.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11VideoBuffer.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
@@ -215,6 +221,9 @@
       <Filter>Source\third_party\FW1FontWrapper</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11Shader.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11VideoBuffer.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
   </ItemGroup>

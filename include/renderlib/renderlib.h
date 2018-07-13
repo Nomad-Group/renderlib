@@ -11,8 +11,11 @@ struct IRenderFont;
 struct IRenderTexture;
 struct IRenderTarget;
 struct IRenderShader;
+struct IVideoBuffer;
 
 #include "IRenderShader.h" // (ShaderType enum)
+#include "IVideoBuffer.h" // (BufferType, BufferUsage enum)
+
 #include "IRenderer.h"
 #include "IRenderContext.h"
 #include "IRenderTexture.h"

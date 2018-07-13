@@ -85,8 +85,7 @@ bool D3D11Shader::Compile(const char* strShader, const char* strEntrypoint)
 
 void D3D11Shader::Apply(IRenderContext* pRenderContext)
 {
-	auto d3d11RenderContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext);
-	auto pDeviceContext = d3d11RenderContext->GetDeviceContext();
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
 
 	switch (m_shaderType)
 	{

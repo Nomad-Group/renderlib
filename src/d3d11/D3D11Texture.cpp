@@ -103,8 +103,7 @@ void D3D11Texture::Render(IRenderContext* pRenderContext)
 
 bool D3D11Texture::UpdateVertexBuffer(IRenderContext* pRenderContext)
 {
-	auto d3d11RenderContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext);
-	auto pDeviceContext = d3d11RenderContext->GetDeviceContext();
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
 
     // Viewport Size
     const Vector2f& viewport = pRenderContext->GetViewportSize();
