@@ -16,6 +16,8 @@ struct IRenderContext
 
 	// Basic Drawing
 	virtual void Draw(size_t stNumElements) = 0;
+	virtual void DrawIndexed(size_t stNumElements) = 0;
+
 	virtual void DrawRect(const math::Rect& rect, const math::RGBA& color) = 0;
 
 	// State Saver

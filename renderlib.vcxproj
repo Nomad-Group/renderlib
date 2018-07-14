@@ -206,6 +206,7 @@
     <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
     <ClCompile Include="src\d3d11\D3D11TexturePNG.cpp" />
     <ClCompile Include="src\d3d11\D3D11VideoBuffer.cpp" />
+    <ClCompile Include="src\renderlib\renderlibMath.cpp" />
     <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBA.cpp" />
     <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBAInterface.cpp" />
     <ClCompile Include="third_party\FW1FontWrapper\CFW1DWriteRenderTarget.cpp" />

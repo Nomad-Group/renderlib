@@ -74,14 +74,14 @@ bool D3D11VideoBuffer::Initialize(void* pInitialData)
 	return SUCCEEDED(m_pRenderer->GetDevice()->CreateBuffer(&desc, &data, &m_pBuffer));
 }
 
-void D3D11VideoBuffer::Apply(IRenderContext* pRenderContext, size_t stSize, size_t stOffset)
+void D3D11VideoBuffer::Apply(IRenderContext* pRenderContext, size_t stIndexOrSize, size_t stOffset)
 {
 	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
 	switch (m_eType)
 	{
 	case BufferType::Vertex:
 	{
-		UINT stride = stSize;
+		UINT stride = stIndexOrSize;
 		UINT offset = stOffset;
 		pDeviceContext->IASetVertexBuffers(0, 1, &m_pBuffer, &stride, &offset);
 	} break;
@@ -91,7 +91,7 @@ void D3D11VideoBuffer::Apply(IRenderContext* pRenderContext, size_t stSize, size
 		break;
 
 	case BufferType::Constant:
-		pDeviceContext->VSSetConstantBuffers(0, 1, &m_pBuffer);
+		pDeviceContext->VSSetConstantBuffers(stIndexOrSize, 1, &m_pBuffer);
 		break;
 
 	default:
@@ -104,7 +104,7 @@ bool D3D11VideoBuffer::IsAccessAllowed(BufferAccess eAccess) const
 	switch (m_eUsage)
 	{
 	case BufferUsage::Dynamic:
-		return eAccess == BufferAccess::Write;
+		return eAccess == BufferAccess::Write || eAccess == BufferAccess::WriteDiscard;
 
 	case BufferUsage::Staging:
 		return true;
@@ -147,7 +147,11 @@ bool D3D11VideoBuffer::Map(IRenderContext* pRenderContext, BufferAccess eAccess,
 	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	return SUCCEEDED(pDeviceContext->Map(m_pBuffer, 0, mapType, 0, &mappedResource));
+	if (FAILED(pDeviceContext->Map(m_pBuffer, 0, mapType, 0, &mappedResource)))
+		return false;
+
+	*ppData = mappedResource.pData;
+	return true;
 }
 
 void D3D11VideoBuffer::Unmap(IRenderContext* pRenderContext)

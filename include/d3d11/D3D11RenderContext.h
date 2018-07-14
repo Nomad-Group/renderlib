@@ -52,6 +52,8 @@ public:
 
 	// Basic Drawing
 	virtual void Draw(size_t) override;
+	virtual void DrawIndexed(size_t stNumElements) override;
+
 	virtual void DrawRect(const Rect& rect, const RGBA& color) override;
 
 	// State Saver

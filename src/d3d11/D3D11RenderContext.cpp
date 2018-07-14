@@ -34,7 +34,8 @@ bool D3D11RenderContext::Setup()
 	D3D11Texture::SetupContext(m_pRenderer, this);
 
 	// TODO: This has to be configurable
-	m_pDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	
 	// Done
 	return true;
@@ -76,6 +77,10 @@ void D3D11RenderContext::Render()
 void D3D11RenderContext::Draw(size_t stNumElements)
 {
 	m_pDeviceContext->Draw(stNumElements, 0);
+}
+void D3D11RenderContext::DrawIndexed(size_t stNumElements)
+{
+	m_pDeviceContext->DrawIndexed(stNumElements, 0, 0);
 }
 
 void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)

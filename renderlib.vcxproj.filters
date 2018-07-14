@@ -30,6 +30,9 @@
     <Filter Include="Source\third_party\FW1FontWrapper">
       <UniqueIdentifier>{09254ed7-128a-4cdc-aca9-86541348b0ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\renderlib">
+      <UniqueIdentifier>{432b1e60-b82f-4bfa-a6b5-7f2e6996d59d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderlib\IRenderer.h">
@@ -234,6 +237,9 @@
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11ShaderInputLayout.cpp">
       <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderlib\renderlibMath.cpp">
+      <Filter>Source\renderlib</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

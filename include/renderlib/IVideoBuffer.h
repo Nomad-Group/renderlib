@@ -31,7 +31,8 @@ struct IVideoBuffer
 	virtual bool Initialize(void* pInitialData = nullptr) = 0;
 
 	// Buffer
-	virtual void Apply(IRenderContext*, size_t stSize = 0, size_t stOffset = 0) = 0;
+	// for constant buffer: stIndexOrSize = slot
+	virtual void Apply(IRenderContext*, size_t stIndexOrSize = 0, size_t stOffset = 0) = 0;
 
 	virtual size_t GetSize() const = 0;
 	virtual BufferUsage GetUsage() const = 0;

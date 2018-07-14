@@ -20,7 +20,7 @@ public:
 	virtual bool Initialize(void*) override;
 
 	// Buffer
-	virtual void Apply(IRenderContext*, size_t stSize, size_t stOffset) override;
+	virtual void Apply(IRenderContext*, size_t stIndexOrSize, size_t stOffset) override;
 
 	virtual size_t GetSize() const override { return m_stSize; };
 	virtual BufferUsage GetUsage() const override { return m_eUsage; };
