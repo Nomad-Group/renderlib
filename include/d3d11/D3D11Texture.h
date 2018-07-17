@@ -42,12 +42,14 @@ public:
 	virtual ~D3D11Texture();
 
 	static bool SetupContext(D3D11Renderer*, D3D11RenderContext*);
-	virtual void Release() override;
+	void Release();
 
-	// Load
+	// Loader
 	bool LoadFrom2DTexture(IRenderContext*, ID3D11Texture2D* pTexture);
 	virtual bool LoadFromMemory(IRenderContext*, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format) override;
 	virtual bool LoadFromPNG(IRenderContext*, const std::string& path) override;
+	
+	// Update
 	virtual bool BlitFromMemory(IRenderContext*, uint8_t* pImage, uint32_t rowPitch, const Vector2& position, const Vector2& size) override;
 	
 	// Settings

@@ -10,6 +10,9 @@ struct IRenderShader
 {
 	virtual ~IRenderShader() = default;
 
+	// Shader
+	virtual ShaderType GetType() const = 0;
+
 	// Compiler
 	virtual bool Compile(const char* strShader, const char* strEntrypoint = nullptr) = 0;
 

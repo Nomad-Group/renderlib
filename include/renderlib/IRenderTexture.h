@@ -9,12 +9,13 @@ enum class ColorFormat : uint8_t
 struct IRenderTexture
 {
 	virtual ~IRenderTexture() = default;
-	virtual void Release() = 0;
 
     // Loader
     virtual bool LoadFromMemory(IRenderContext*, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format = ColorFormat::RGBA) = 0;
     virtual bool LoadFromPNG(IRenderContext*, const std::string& path) = 0;
-    virtual bool BlitFromMemory(IRenderContext*, uint8_t* pImage, uint32_t rowPitch, const math::Vector2& position, const math::Vector2& size) = 0;
+    
+	// Update
+	virtual bool BlitFromMemory(IRenderContext*, uint8_t* pImage, uint32_t rowPitch, const math::Vector2& position, const math::Vector2& size) = 0;
 
 	// Settings
 	virtual const math::Vector2& GetSize() const = 0;

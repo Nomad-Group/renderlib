@@ -35,8 +35,28 @@ bool D3D11RenderContext::Setup()
 
 	// TODO: This has to be configurable
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-	
+	//m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	// TODO: Also configurable
+	D3D11_RASTERIZER_DESC rd;
+	rd.FillMode = D3D11_FILL_SOLID;
+	rd.CullMode = D3D11_CULL_BACK;
+	rd.FrontCounterClockwise = FALSE;
+	rd.DepthClipEnable = TRUE;
+	rd.ScissorEnable = FALSE;
+	rd.AntialiasedLineEnable = FALSE;
+	rd.MultisampleEnable = FALSE;
+	rd.DepthBias = 0;
+	rd.DepthBiasClamp = 0.0f;
+	rd.SlopeScaledDepthBias = 0.0f;
+
+	rd.FillMode = D3D11_FILL_WIREFRAME;
+	rd.AntialiasedLineEnable = TRUE;
+
+	ID3D11RasterizerState* pRS = nullptr;
+	m_pRenderer->m_pDevice->CreateRasterizerState(&rd, &pRS);
+	m_pDeviceContext->RSSetState(pRS);
+
 	// Done
 	return true;
 }

@@ -56,19 +56,22 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
 void D3D11Texture::Release()
 {
     // Texture
-    if (m_pTexture) {
+    if (m_pTexture)
+	{
         m_pTexture->Release();
         m_pTexture = nullptr;
     }
 
     // Resource View
-    if (m_pResourceView) {
+    if (m_pResourceView)
+	{
         m_pResourceView->Release();
         m_pResourceView = nullptr;
     }
 
     // Vertex Buffer
-    if (m_pVertexBuffer) {
+    if (m_pVertexBuffer)
+	{
         m_pVertexBuffer->Release();
         m_pVertexBuffer = nullptr;
     }
@@ -184,8 +187,11 @@ bool D3D11Texture::InitializeShaderResourceView()
     resourceView.Texture2D.MostDetailedMip = 0;
     resourceView.Texture2D.MipLevels = textureDesc.MipLevels;
 
-    if (FAILED(m_pRenderer->GetDevice()->CreateShaderResourceView(pResource, &resourceView, &m_pResourceView)))
-        return false;
+	if (FAILED(m_pRenderer->GetDevice()->CreateShaderResourceView(pResource, &resourceView, &m_pResourceView)))
+	{
+		pResource->Release();
+		return false;
+	}
 
     // Done
     pResource->Release();
@@ -235,6 +241,8 @@ bool D3D11Texture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Textu
 
 bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
 {
+	Release();
+
     // Texture Description
     D3D11_TEXTURE2D_DESC textureDesc;
     ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
@@ -248,7 +256,8 @@ bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImag
     textureDesc.MipLevels = 1;
 
     // Color Format
-    switch (format) {
+    switch (format)
+	{
         case ColorFormat::RGBA:
             textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
             break;
@@ -268,9 +277,6 @@ bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImag
     subresourceData.SysMemPitch = static_cast<uint32_t>(uiWidth * 4);
 
     // Create Texture
-    if (m_pTexture)
-        m_pTexture->Release();
-
     if (FAILED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, &subresourceData, &m_pTexture)))
         return false;
 

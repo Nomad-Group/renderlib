@@ -28,6 +28,9 @@ bool D3D11Factory::Initialize(HWND hWindow)
 	scd.SampleDesc.Count = 4;
 	scd.Windowed = TRUE;
 
+	scd.BufferDesc.RefreshRate.Numerator = 60;
+	scd.BufferDesc.RefreshRate.Denominator = 1;
+
 	// Create Device & Swap Chain
 	auto hResult = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -85,7 +88,8 @@ bool D3D11Factory::Render()
 	else
 	{
 		// TODO: Render Queue?
-		m_pSwapChain->Present(0, 0);
+		// vsync = 1, no vsync = 0
+		m_pSwapChain->Present(1, 0);
 	}
 
 	return true;

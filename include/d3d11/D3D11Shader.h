@@ -17,6 +17,9 @@ public:
 	D3D11Shader(D3D11Renderer*, const ShaderType);
 	virtual ~D3D11Shader();
 
+	// Shader
+	virtual ShaderType GetType() const override { return m_shaderType; };
+
 	// Compiler
 	virtual bool Compile(const char* strShader, const char* strEntrypoint) override;
 	static HRESULT CompileShader(LPCVOID pSrcData, SIZE_T SrcDataSize, LPCSTR pFileName, CONST D3D_SHADER_MACRO* pDefines, ID3DInclude* pInclude, LPCSTR pEntrypoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppCode, ID3DBlob** ppErrorMsgs);
