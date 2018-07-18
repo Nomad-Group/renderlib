@@ -16,7 +16,6 @@ class D3D11RenderContext;
 class D3D11Texture;
 class D3D11BlendState;
 class D3D11RenderTarget;
-class D3D11Rect;
 class D3D11Font;
 class D3D11Shader;
 class D3D11ShaderBundle;

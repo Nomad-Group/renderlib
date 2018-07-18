@@ -15,14 +15,12 @@ class D3D11RenderContext : public IRenderContext
 
 	D3D11BlendState* m_pBlendState = nullptr;
 	D3D11RenderTarget* m_pRenderTarget = nullptr;
-	D3D11Rect* m_pRect = nullptr;
 
 	// Viewport
 	D3D11_VIEWPORT m_viewport;
 	Vector2 m_size;
 
 	// Texture
-	// TODO: memory cleanup?!
 	struct TextureDrawInfo
 	{
 		TextureDrawInfo() = default;
@@ -33,6 +31,18 @@ class D3D11RenderContext : public IRenderContext
 		IVideoBuffer* pVertexBuffer = nullptr;
 		ID3D11SamplerState* pSamplerState = nullptr;
 	} m_textureDrawInfo;
+
+	// Rectangle
+	struct RectangleDrawInfo
+	{
+		RectangleDrawInfo() = default;
+		~RectangleDrawInfo();
+
+		D3D11ShaderBundle* pShaderBundle = nullptr;
+		IShaderInputLayout* pInputLayout = nullptr;
+		IVideoBuffer* pVertexBuffer = nullptr;
+		IVideoBuffer* pColorBuffer = nullptr;
+	} m_rectangleDrawInfo;
 
 	// State Saver
 	FW1FontWrapper::CFW1StateSaver m_stateSaver;

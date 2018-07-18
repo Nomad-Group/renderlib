@@ -3,7 +3,6 @@
 #include "d3d11/D3D11BlendState.h"
 #include "d3d11/D3D11ShaderBundle.h"
 #include "d3d11/D3D11RenderTarget.h"
-#include "d3d11/D3D11Rect.h"
 #include "d3d11/D3D11Font.h"
 #include "d3d11/D3D11Texture.h"
 #include "d3d11/D3D11Shader.h"

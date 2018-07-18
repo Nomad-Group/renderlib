@@ -3,26 +3,18 @@
 #include <D3DCompiler.h>
 
 // Rect
-const char d3d11_rect_shader_quad[] =
-	"cbuffer ShaderConstants : register(b0) {"
-	"   float4x4 TransformMatrix : packoffset(c0);"
+const char d3d11_rect_shader[] =
+	"cbuffer ShaderConstant"
+	"{"
+	"	float4 color : COLOR;"
 	"};"
-	"float4 VS(uint VertexIndex : SV_VertexID) : SV_Position{"
-	"   const float2 corners[4] = {"
-	"      float2(0.0f, 1.0f),"
-	"      float2(0.0f, 0.0f),"
-	"      float2(1.0f, 1.0f),"
-	"      float2(1.0f, 0.0f)"
-	"   };"
-	"   return mul(TransformMatrix, float4(corners[VertexIndex].xy, 0.0f, 1.0f));"
-	"}";
-
-const char d3d11_rect_shader_color[] =
-	"cbuffer ShaderConstants : register(b0) {"
-	"   float4 Color : packoffset(c4);"
-	"};"
-	"float4 PS() : SV_Target {"
-	"   return Color;"
+	"float4 VS(float2 pos : POSITION) : SV_POSITION"
+	"{"
+	"	return float4(pos.x, pos.y, 0.0f, 1.0f);"
+	"}"
+	"float4 PS() : SV_TARGET"
+	"{"
+	"	return color;"
 	"}";
 
 // Texture

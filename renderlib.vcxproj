@@ -165,7 +165,6 @@
     <ClInclude Include="include\d3d11\D3D11BlendState.h" />
     <ClInclude Include="include\d3d11\D3D11Factory.h" />
     <ClInclude Include="include\d3d11\D3D11Font.h" />
-    <ClInclude Include="include\d3d11\D3D11Rect.h" />
     <ClInclude Include="include\d3d11\D3D11RenderContext.h" />
     <ClInclude Include="include\d3d11\D3D11Renderer.h" />
     <ClInclude Include="include\d3d11\D3D11RenderQueue.h" />
@@ -194,7 +193,6 @@
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
     <ClCompile Include="src\d3d11\D3D11Font.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Rect.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderContext.cpp" />
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Factory.cpp" />
