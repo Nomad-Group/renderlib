@@ -3,6 +3,7 @@
 #include "d3d11/D3D11RenderTarget.h"
 #include "d3d11/D3D11Rect.h"
 #include "d3d11/D3D11VideoBuffer.h"
+#include "d3d11/D3D11ShaderBundle.h"
 
 D3D11RenderContext::D3D11RenderContext(D3D11Renderer* pRenderer) :
 	m_pRenderer(pRenderer)
@@ -31,7 +32,8 @@ bool D3D11RenderContext::Setup()
 		return false;
 
 	// Texture Info
-	D3D11Texture::SetupContext(m_pRenderer, this);
+	if (!D3D11Texture::SetupContext(m_pRenderer, this))
+		return false;
 
 	// TODO: This has to be configurable
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -111,9 +113,26 @@ void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
 	m_pRect->DrawRect(this, rect, color);
 }
 
+D3D11RenderContext::TextureDrawInfo::~TextureDrawInfo()
+{
+	delete pShaderBundle;
+	delete pInputLayout;
+	delete pVertexBuffer;
+	if (pSamplerState)
+		pSamplerState->Release();
+}
+
 void D3D11RenderContext::DrawTexture(IRenderTexture* pTexture, const math::Vector2& position)
 {
-	
+	m_textureDrawInfo.pShaderBundle->Apply(this);
+
+	auto shaderresourceview = reinterpret_cast<D3D11Texture*>(pTexture)->GetShaderResourceView();
+	m_pDeviceContext->PSSetShaderResources(0, 1, &shaderresourceview);
+	m_pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
+
+	m_textureDrawInfo.pVertexBuffer->Apply(this, m_textureDrawInfo.pInputLayout->GetSize());
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Draw(6);
 }
 
 void D3D11RenderContext::SaveState()

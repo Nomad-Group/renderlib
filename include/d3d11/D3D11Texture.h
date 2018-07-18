@@ -60,4 +60,7 @@ public:
 	// Render
     virtual bool IsValid() const override { return m_pTexture != nullptr; };
 	virtual void Render(IRenderContext*) override;
+
+	// Internal
+	inline ID3D11ShaderResourceView* GetShaderResourceView() { return m_pResourceView; };
 };

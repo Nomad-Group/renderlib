@@ -38,7 +38,7 @@ bool D3D11ShaderBundle::Initialize()
     return true;
 }
 
-bool D3D11ShaderBundle::SetInputLayout(D3D11ShaderInputLayout* pInputLayout)
+bool D3D11ShaderBundle::SetInputLayout(IShaderInputLayout* pInputLayout)
 {
 	if(m_pVertexShader)
 		return m_pVertexShader->SetInputLayout(pInputLayout);

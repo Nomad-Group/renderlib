@@ -10,12 +10,12 @@ class D3D11Rect
 	ID3D11Device* m_pDevice = nullptr;
 
 	D3D11ShaderBundle* m_pShaderBundle = nullptr;
-	ID3D11Buffer* m_pBuffer = nullptr;
+	IVideoBuffer* m_pBuffer = nullptr;
 
 	struct ShaderConstants {
 		float TransformMatrix[16];
 		float Color[4];
-	} shaderConstants;
+	} m_shaderConstants;
 
 public:
 	D3D11Rect(D3D11Renderer* pRenderer);

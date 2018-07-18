@@ -11,17 +11,12 @@ D3D11Rect::D3D11Rect(D3D11Renderer* pRenderer) :
 D3D11Rect::~D3D11Rect()
 {
     delete m_pShaderBundle;
-
-    if (m_pBuffer)
-        m_pBuffer->Release();
+	delete m_pBuffer;
 }
 
 bool D3D11Rect::Initialize()
 {
     m_pDevice = m_pRenderer->GetDevice();
-
-    // Constants
-    ZeroMemory(&shaderConstants, sizeof(shaderConstants));
 
     // Shader
     m_pShaderBundle = new D3D11ShaderBundle(m_pRenderer);
@@ -30,21 +25,11 @@ bool D3D11Rect::Initialize()
         return false;
 
     // Buffer
-    D3D11_BUFFER_DESC bufferDesc;
-    ZeroMemory(&bufferDesc, sizeof(bufferDesc));
+	ZeroMemory(&m_shaderConstants, sizeof(m_shaderConstants));
 
-    bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    bufferDesc.ByteWidth = sizeof(ShaderConstants);
-    bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-
-    // Create Buffer
-    if (m_pDevice->CreateBuffer(&bufferDesc, nullptr, &m_pBuffer) != S_OK)
-	{
-        if (m_pBuffer)
-            m_pBuffer->Release();
-
-        return false;
-    }
+	m_pBuffer = m_pRenderer->CreateBuffer(BufferType::Constant, sizeof(m_shaderConstants), BufferUsage::Dynamic);
+	if (!m_pBuffer->Initialize(&m_shaderConstants))
+		return false;
 
     // Done
     return true;
@@ -56,25 +41,32 @@ void D3D11Rect::DrawRect(D3D11RenderContext* pRenderContext, const Rectf& rect, 
 
     // Setup
 	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-    m_pShaderBundle->Apply(pRenderContext, m_pBuffer);
+    m_pShaderBundle->Apply(pRenderContext);
+	m_pBuffer->Apply(pRenderContext);
 
     // Matrix
 	const Vector2f& viewport = pRenderContext->GetViewportSize();
 
-    shaderConstants.TransformMatrix[0] = rect.w * 2.0f / viewport.x;
-    shaderConstants.TransformMatrix[12] = -1.0f + rect.x * 2.0f / viewport.x;
-    shaderConstants.TransformMatrix[5] = rect.h * -2.0f / viewport.y;
-    shaderConstants.TransformMatrix[13] = 1.0f + rect.y * -2.0f / viewport.y;
-    shaderConstants.TransformMatrix[10] = 1.0f;
-    shaderConstants.TransformMatrix[15] = 1.0f;
+    m_shaderConstants.TransformMatrix[0] = rect.w * 2.0f / viewport.x;
+    m_shaderConstants.TransformMatrix[12] = -1.0f + rect.x * 2.0f / viewport.x;
+    m_shaderConstants.TransformMatrix[5] = rect.h * -2.0f / viewport.y;
+    m_shaderConstants.TransformMatrix[13] = 1.0f + rect.y * -2.0f / viewport.y;
+    m_shaderConstants.TransformMatrix[10] = 1.0f;
+    m_shaderConstants.TransformMatrix[15] = 1.0f;
 
     // Color
-    shaderConstants.Color[0] = static_cast<float>(color.r) / 255.0f;
-    shaderConstants.Color[1] = static_cast<float>(color.g) / 255.0f;
-    shaderConstants.Color[2] = static_cast<float>(color.b) / 255.0f;
-    shaderConstants.Color[3] = static_cast<float>(color.a) / 255.0f;
+    m_shaderConstants.Color[0] = static_cast<float>(color.r) / 255.0f;
+    m_shaderConstants.Color[1] = static_cast<float>(color.g) / 255.0f;
+    m_shaderConstants.Color[2] = static_cast<float>(color.b) / 255.0f;
+    m_shaderConstants.Color[3] = static_cast<float>(color.a) / 255.0f;
+
+	// Update Constant Buffer
+	void* pBufferData = nullptr;
+	if (!m_pBuffer->Map(pRenderContext, BufferAccess::WriteDiscard, &pBufferData))
+		return;
+	memcpy(pBufferData, &m_shaderConstants, sizeof(m_shaderConstants));
+	m_pBuffer->Unmap(pRenderContext);
 
     // Draw
-	pDeviceContext->UpdateSubresource(m_pBuffer, 0, nullptr, &shaderConstants, 0, 0);
 	pDeviceContext->Draw(4, 0);
 }

@@ -26,14 +26,11 @@ class D3D11RenderContext : public IRenderContext
 	struct TextureDrawInfo
 	{
 		TextureDrawInfo() = default;
-		~TextureDrawInfo()
-		{
-			delete pShaderBundle;
-			if (pSamplerState)
-				pSamplerState->Release();
-		}
+		~TextureDrawInfo();
 
 		D3D11ShaderBundle* pShaderBundle = nullptr;
+		IShaderInputLayout* pInputLayout = nullptr;
+		IVideoBuffer* pVertexBuffer = nullptr;
 		ID3D11SamplerState* pSamplerState = nullptr;
 	} m_textureDrawInfo;
 

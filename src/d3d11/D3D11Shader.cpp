@@ -89,15 +89,15 @@ bool D3D11Shader::Compile(const char* strShader, const char* strEntrypoint)
 bool D3D11Shader::SetInputLayout(IShaderInputLayout* pInputLayout)
 {
 	auto pInputElements = reinterpret_cast<D3D11ShaderInputLayout*>(pInputLayout)->GetInputElements();
-	bool success = SUCCEEDED(m_pRenderer->GetDevice()->CreateInputLayout(pInputElements,
+	auto hr = m_pRenderer->GetDevice()->CreateInputLayout(pInputElements,
 		pInputLayout->GetNumElements(),
 		m_pShaderCode->GetBufferPointer(),
 		m_pShaderCode->GetBufferSize(),
-		&m_pInputLayout));
+		&m_pInputLayout);
 
 	free(pInputElements);
 
-	return success;
+	return SUCCEEDED(hr);
 }
 
 void D3D11Shader::Apply(IRenderContext* pRenderContext)

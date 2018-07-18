@@ -91,8 +91,10 @@ void D3D11VideoBuffer::Apply(IRenderContext* pRenderContext, size_t stIndexOrSiz
 		break;
 
 	case BufferType::Constant:
+	{
 		pDeviceContext->VSSetConstantBuffers(stIndexOrSize, 1, &m_pBuffer);
-		break;
+		pDeviceContext->PSSetConstantBuffers(stIndexOrSize, 1, &m_pBuffer);
+	} break;
 
 	default:
 		return;

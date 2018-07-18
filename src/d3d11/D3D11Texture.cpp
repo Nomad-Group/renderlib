@@ -15,6 +15,12 @@ D3D11Texture::~D3D11Texture()
     Release();
 }
 
+struct TextureVertex2
+{
+	float position[2];
+	float texcoords[2];
+};
+
 bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pContext)
 {
 	auto& textureDrawInfo = pContext->m_textureDrawInfo;
@@ -24,16 +30,31 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
 		return true;
 
 	/**/
-	auto pInputLayout = pRenderer->CreateShaderInputLayout();
-	pInputLayout->AddFloat("POSITION", 2);
-	pInputLayout->AddFloat("TEXCOORDS", 2);
+	textureDrawInfo.pInputLayout = pRenderer->CreateShaderInputLayout();
+	textureDrawInfo.pInputLayout->AddFloat("POSITION", 2);
+	textureDrawInfo.pInputLayout->AddFloat("TEXCOORD", 2);
 
 	// Shader Bundle
 	textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(pRenderer);
 	textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader_v2, d3d11_texture_shader_v2);
-	//textureDrawInfo.pShaderBundle->SetupInputLayout(d3d11_texture_input, ARRAYSIZE(d3d11_texture_input));
 
-	if (!textureDrawInfo.pShaderBundle->Initialize())
+	if (!textureDrawInfo.pShaderBundle->Initialize() ||
+		!textureDrawInfo.pShaderBundle->SetInputLayout(textureDrawInfo.pInputLayout))
+		return false;
+
+	// Vertex Buffer
+	static TextureVertex2 vertices[6] = {
+		{ 1.0f, -1.0f,   1.0f, 1.0f }, // bottom right
+		{ -1.0f, 1.0f,   0.0f, 0.0f }, // top left
+		{ 1.0f, 1.0f,    1.0f, 0.0f }, // top right
+
+		{ -1.0f, 1.0f,   0.0f, 0.0f }, // top left
+		{ 1.0f, -1.0f,   1.0f, 1.0f }, // bottom right
+		{ -1.0f, -1.0f,  0.0f, 1.0f }, // bottom left
+	};
+
+	textureDrawInfo.pVertexBuffer = pRenderer->CreateBuffer(BufferType::Vertex, textureDrawInfo.pInputLayout->GetSize() * 6, BufferUsage::Default);
+	if (!textureDrawInfo.pVertexBuffer->Initialize(&vertices))
 		return false;
 
 	/*

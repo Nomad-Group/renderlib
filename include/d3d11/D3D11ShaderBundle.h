@@ -12,7 +12,7 @@ class D3D11ShaderBundle
 
 	IRenderShader* m_pVertexShader = nullptr;
 	IRenderShader* m_pPixelShader = nullptr;
-	D3D11ShaderInputLayout* m_pInputLayout = nullptr;
+	IShaderInputLayout* m_pInputLayout = nullptr;
 
 public:
 	D3D11ShaderBundle(D3D11Renderer* pRenderer);
@@ -20,7 +20,7 @@ public:
 
 	void SetShaders(const char* vertex_shader, const char* pixel_shader);
 	bool Initialize();
-	bool SetInputLayout(D3D11ShaderInputLayout* pInputLayout);
+	bool SetInputLayout(IShaderInputLayout* pInputLayout);
 	
 	void Apply(D3D11RenderContext* pRenderContext, ID3D11Buffer* pConstantBuffer = nullptr) const;
 };

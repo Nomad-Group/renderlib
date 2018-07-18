@@ -5,8 +5,6 @@
 
 bool D3D11Texture::LoadFromPNG(IRenderContext* pRenderContext, const std::string& path)
 {
-    Release();
-
     // Open File
     FILE* pFile = nullptr;
     fopen_s(&pFile, path.c_str(), "rb");
