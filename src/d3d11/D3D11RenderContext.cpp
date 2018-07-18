@@ -1,9 +1,6 @@
-#include "d3d11/D3D11RenderContext.h"
-#include "d3d11/D3D11BlendState.h"
-#include "d3d11/D3D11RenderTarget.h"
-#include "d3d11/D3D11VideoBuffer.h"
-#include "d3d11/D3D11ShaderBundle.h"
-#include "d3d11/D3D11Shaders.h"
+#include "D3D11RenderContext.h"
+#include "D3D11BlendState.h"
+#include "D3D11RenderTarget.h"
 
 D3D11RenderContext::D3D11RenderContext(D3D11Renderer* pRenderer) :
 	m_pRenderer(pRenderer),

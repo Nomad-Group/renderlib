@@ -1,5 +1,5 @@
-#include "d3d11/D3D11Factory.h"
-#include "d3d11/D3D11RenderQueue.h"
+#include "D3D11Factory.h"
+#include "D3D11RenderQueue.h"
 
 #pragma comment(lib, "d3d11.lib")
 

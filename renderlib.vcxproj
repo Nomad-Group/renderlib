@@ -162,20 +162,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\d3d11\D3D11BlendState.h" />
-    <ClInclude Include="include\d3d11\D3D11Factory.h" />
-    <ClInclude Include="include\d3d11\D3D11Font.h" />
-    <ClInclude Include="include\d3d11\D3D11RenderContext.h" />
-    <ClInclude Include="include\d3d11\D3D11Renderer.h" />
-    <ClInclude Include="include\d3d11\D3D11RenderQueue.h" />
-    <ClInclude Include="include\d3d11\D3D11RenderSurface.h" />
-    <ClInclude Include="include\d3d11\D3D11RenderTarget.h" />
-    <ClInclude Include="include\d3d11\D3D11Shader.h" />
-    <ClInclude Include="include\d3d11\D3D11ShaderBundle.h" />
-    <ClInclude Include="include\d3d11\D3D11ShaderInputLayout.h" />
-    <ClInclude Include="include\d3d11\D3D11Shaders.h" />
-    <ClInclude Include="include\d3d11\D3D11Texture.h" />
-    <ClInclude Include="include\d3d11\D3D11VideoBuffer.h" />
     <ClInclude Include="include\renderlib\detail\renderlibColors.h" />
     <ClInclude Include="include\renderlib\detail\renderlibFactory.h" />
     <ClInclude Include="include\renderlib\detail\renderlibMath.h" />
@@ -191,6 +177,20 @@
     <ClInclude Include="include\renderlib\IShaderInputLayout.h" />
     <ClInclude Include="include\renderlib\IVideoBuffer.h" />
     <ClInclude Include="include\renderlib\renderlib.h" />
+    <ClInclude Include="src\d3d11\D3D11BlendState.h" />
+    <ClInclude Include="src\d3d11\D3D11Factory.h" />
+    <ClInclude Include="src\d3d11\D3D11Font.h" />
+    <ClInclude Include="src\d3d11\D3D11RenderContext.h" />
+    <ClInclude Include="src\d3d11\D3D11Renderer.h" />
+    <ClInclude Include="src\d3d11\D3D11RenderQueue.h" />
+    <ClInclude Include="src\d3d11\D3D11RenderSurface.h" />
+    <ClInclude Include="src\d3d11\D3D11RenderTarget.h" />
+    <ClInclude Include="src\d3d11\D3D11Shader.h" />
+    <ClInclude Include="src\d3d11\D3D11ShaderBundle.h" />
+    <ClInclude Include="src\d3d11\D3D11ShaderInputLayout.h" />
+    <ClInclude Include="src\d3d11\D3D11Shaders.h" />
+    <ClInclude Include="src\d3d11\D3D11Texture.h" />
+    <ClInclude Include="src\d3d11\D3D11VideoBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />

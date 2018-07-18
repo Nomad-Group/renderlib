@@ -56,35 +56,8 @@
     <ClInclude Include="include\renderlib\IRenderFont.h">
       <Filter>Header\renderlib</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11BlendState.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Font.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Renderer.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11RenderQueue.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11RenderTarget.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11ShaderBundle.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Shaders.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Texture.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderlib\IRenderContext.h">
       <Filter>Header\renderlib</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11RenderContext.h">
-      <Filter>Header\d3d11</Filter>
     </ClInclude>
     <ClInclude Include="include\renderlib\impl\renderlibD3D11.h">
       <Filter>Header\renderlib\impl</Filter>
@@ -92,34 +65,61 @@
     <ClInclude Include="include\renderlib\detail\renderlibFactory.h">
       <Filter>Header\renderlib\detail</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Factory.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderlib\detail\renderlibMath.h">
       <Filter>Header\renderlib\detail</Filter>
     </ClInclude>
     <ClInclude Include="include\renderlib\IRenderShader.h">
       <Filter>Header\renderlib</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Shader.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderlib\IVideoBuffer.h">
       <Filter>Header\renderlib</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11VideoBuffer.h">
-      <Filter>Header\d3d11</Filter>
     </ClInclude>
     <ClInclude Include="include\renderlib\IShaderInputLayout.h">
       <Filter>Header\renderlib</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11ShaderInputLayout.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderlib\IRenderSurface.h">
       <Filter>Header\renderlib</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11RenderSurface.h">
+    <ClInclude Include="src\d3d11\D3D11BlendState.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11Factory.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11Font.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11RenderContext.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11Renderer.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11RenderQueue.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11RenderSurface.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11RenderTarget.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11Shader.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11ShaderBundle.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11ShaderInputLayout.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11Shaders.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11Texture.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11VideoBuffer.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
   </ItemGroup>

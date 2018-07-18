@@ -1,8 +1,8 @@
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11RenderContext.h"
-#include "d3d11/D3D11Texture.h"
-#include "d3d11/D3D11ShaderBundle.h"
-#include "d3d11/D3D11Shaders.h"
+#include "D3D11Renderer.h"
+#include "D3D11RenderContext.h"
+#include "D3D11Texture.h"
+#include "D3D11ShaderBundle.h"
+#include "D3D11Shaders.h"
 
 D3D11Texture::D3D11Texture(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)

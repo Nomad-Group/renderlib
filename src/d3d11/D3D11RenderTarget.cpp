@@ -1,7 +1,7 @@
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11RenderContext.h"
-#include "d3d11/D3D11RenderTarget.h"
-#include "d3d11/D3D11Texture.h"
+#include "D3D11Renderer.h"
+#include "D3D11RenderContext.h"
+#include "D3D11RenderTarget.h"
+#include "D3D11Texture.h"
 
 D3D11RenderTarget::~D3D11RenderTarget()
 {

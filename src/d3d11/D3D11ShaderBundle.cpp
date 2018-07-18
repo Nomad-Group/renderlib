@@ -1,8 +1,8 @@
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11RenderContext.h"
-#include "d3d11/D3D11ShaderBundle.h"
-#include "d3d11/D3D11Shader.h"
-#include "d3d11/D3D11ShaderInputLayout.h"
+#include "D3D11Renderer.h"
+#include "D3D11RenderContext.h"
+#include "D3D11ShaderBundle.h"
+#include "D3D11Shader.h"
+#include "D3D11ShaderInputLayout.h"
 
 D3D11ShaderBundle::D3D11ShaderBundle(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)

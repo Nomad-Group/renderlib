@@ -1,6 +1,6 @@
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11RenderContext.h"
-#include "d3d11/D3D11Font.h"
+#include "D3D11Renderer.h"
+#include "D3D11RenderContext.h"
+#include "D3D11Font.h"
 #include "FW1FontWrapper/FW1FontWrapper.h"
 #include <locale>
 #include <codecvt>

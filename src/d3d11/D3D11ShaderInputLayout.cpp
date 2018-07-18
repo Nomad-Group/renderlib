@@ -1,5 +1,5 @@
-#include "d3d11/D3D11ShaderInputLayout.h"
-#include "d3d11/D3D11Renderer.h"
+#include "D3D11ShaderInputLayout.h"
+#include "D3D11Renderer.h"
 
 D3D11ShaderInputLayout::D3D11ShaderInputLayout(D3D11Renderer* pRenderer) :
 	m_pRenderer(pRenderer)

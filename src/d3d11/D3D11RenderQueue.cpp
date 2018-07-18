@@ -1,7 +1,7 @@
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11RenderQueue.h"
-#include "d3d11/D3D11Texture.h"
-#include "d3d11/D3D11RenderTarget.h"
+#include "D3D11Renderer.h"
+#include "D3D11RenderQueue.h"
+#include "D3D11Texture.h"
+#include "D3D11RenderTarget.h"
 
 D3D11RenderQueue::D3D11RenderQueue(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)

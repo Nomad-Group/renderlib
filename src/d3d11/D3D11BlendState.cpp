@@ -1,6 +1,6 @@
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11RenderContext.h"
-#include "d3d11/D3D11BlendState.h"
+#include "D3D11Renderer.h"
+#include "D3D11RenderContext.h"
+#include "D3D11BlendState.h"
 
 D3D11BlendState::~D3D11BlendState()
 {

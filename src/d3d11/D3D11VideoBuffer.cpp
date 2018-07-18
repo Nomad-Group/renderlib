@@ -1,6 +1,6 @@
-#include "d3d11/D3D11VideoBuffer.h"
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11RenderContext.h"
+#include "D3D11VideoBuffer.h"
+#include "D3D11Renderer.h"
+#include "D3D11RenderContext.h"
 
 D3D11VideoBuffer::D3D11VideoBuffer(D3D11Renderer* pRenderer, const BufferType eType, const size_t stSize, const BufferUsage eUsage) :
 	m_pRenderer(pRenderer),

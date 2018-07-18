@@ -1,5 +1,5 @@
-#include "d3d11/D3D11Renderer.h"
-#include "d3d11/D3D11Texture.h"
+#include "D3D11Renderer.h"
+#include "D3D11Texture.h"
 #include "png.h"
 #include <sstream>
 
