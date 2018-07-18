@@ -6,20 +6,12 @@
 
 D3D11Texture::D3D11Texture(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)
-{
-    memset(&m_vertices, 0, sizeof(m_vertices));
-}
+{}
 
 D3D11Texture::~D3D11Texture()
 {
     Release();
 }
-
-struct TextureVertex2
-{
-	float position[2];
-	float texcoords[2];
-};
 
 bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pContext)
 {
@@ -29,7 +21,7 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
 	if (textureDrawInfo.pShaderBundle)
 		return true;
 
-	/**/
+	// Input Layout
 	textureDrawInfo.pInputLayout = pRenderer->CreateShaderInputLayout();
 	textureDrawInfo.pInputLayout->AddFloat("POSITION", 2);
 	textureDrawInfo.pInputLayout->AddFloat("TEXCOORD", 2);
@@ -43,7 +35,7 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
 		return false;
 
 	// Vertex Buffer
-	static TextureVertex2 vertices[6] = {
+	static const TextureVertex vertices[6] = {
 		{ 1.0f, -1.0f,   1.0f, 1.0f }, // bottom right
 		{ -1.0f, 1.0f,   0.0f, 0.0f }, // top left
 		{ 1.0f, 1.0f,    1.0f, 0.0f }, // top right
@@ -56,15 +48,6 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
 	textureDrawInfo.pVertexBuffer = pRenderer->CreateBuffer(BufferType::Vertex, textureDrawInfo.pInputLayout->GetSize() * 6, BufferUsage::Default);
 	if (!textureDrawInfo.pVertexBuffer->Initialize(&vertices))
 		return false;
-
-	/*
-    // Texture Shader
-    textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(pRenderer);
-    textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader, d3d11_texture_shader);
-    textureDrawInfo.pShaderBundle->SetupInputLayout(d3d11_texture_input, ARRAYSIZE(d3d11_texture_input));
-
-    if (!textureDrawInfo.pShaderBundle->Initialize())
-        return false;*/
 
     // Sampler State
     D3D11_SAMPLER_DESC colorMapDesc;
@@ -88,6 +71,28 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
     return true;
 }
 
+D3D11RenderContext::TextureDrawInfo::~TextureDrawInfo()
+{
+	delete pShaderBundle;
+	delete pInputLayout;
+	delete pVertexBuffer;
+	if (pSamplerState)
+		pSamplerState->Release();
+}
+
+void D3D11RenderContext::DrawTexture(IRenderTexture* pTexture, const math::Vector2& position)
+{
+	m_textureDrawInfo.pShaderBundle->Apply(this);
+
+	auto shaderresourceview = reinterpret_cast<D3D11Texture*>(pTexture)->GetShaderResourceView();
+	m_pDeviceContext->PSSetShaderResources(0, 1, &shaderresourceview);
+	m_pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
+
+	m_textureDrawInfo.pVertexBuffer->Apply(this, m_textureDrawInfo.pInputLayout->GetSize());
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Draw(6);
+}
+
 void D3D11Texture::Release()
 {
     // Texture
@@ -97,111 +102,12 @@ void D3D11Texture::Release()
         m_pTexture = nullptr;
     }
 
-    // Resource View
-    if (m_pResourceView)
+    // Shader Resource View
+    if (m_pShaderResourceView)
 	{
-        m_pResourceView->Release();
-        m_pResourceView = nullptr;
+        m_pShaderResourceView->Release();
+        m_pShaderResourceView = nullptr;
     }
-
-    // Vertex Buffer
-    if (m_pVertexBuffer)
-	{
-        m_pVertexBuffer->Release();
-        m_pVertexBuffer = nullptr;
-    }
-}
-
-void D3D11Texture::Render(IRenderContext* pRenderContext)
-{
-	auto d3d11RenderContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext);
-	auto pDeviceContext = d3d11RenderContext->GetDeviceContext();
-
-    // Vertex Buffer
-    if ((m_pVertexBuffer == nullptr || m_bUpdateVertexBuffer) && !UpdateVertexBuffer(pRenderContext))
-        return;
-
-    // Shader
-	d3d11RenderContext->m_textureDrawInfo.pShaderBundle->Apply(d3d11RenderContext);
-	pDeviceContext->PSSetShaderResources(0, 1, &m_pResourceView);
-
-    // Sampler
-	pDeviceContext->PSSetSamplers(0, 1, &d3d11RenderContext->m_textureDrawInfo.pSamplerState);
-
-    // Vertex
-	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    uint32_t stride = sizeof(TextureVertex);
-    uint32_t offset = 0;
-	pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-
-    // Draw
-	pDeviceContext->Draw(6, 0);
-}
-
-bool D3D11Texture::UpdateVertexBuffer(IRenderContext* pRenderContext)
-{
-	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
-
-    // Viewport Size
-    const Vector2f& viewport = pRenderContext->GetViewportSize();
-
-    const float scalex = 1 / viewport.x * 2.f;
-    const float scaley = 1 / viewport.y * 2.f;
-
-    // Rect Matrix
-    XMFLOAT4A rect(
-        static_cast<float>(m_position.x),
-        static_cast<float>(m_position.y),
-        static_cast<float>(m_size.x),
-        static_cast<float>(m_size.y)
-    );
-
-    rect.z = (rect.x + rect.z) * scalex - 1.f;
-    rect.w = 1.f - (rect.y + rect.w) * scaley;
-    rect.x = rect.x * scalex - 1.f;
-    rect.y = 1.f - rect.y * scaley;
-
-    // Vertices
-    m_vertices[0] = {XMFLOAT3(rect.x, rect.w, 0.5f), XMFLOAT2(0.f, 1.f)};
-    m_vertices[1] = {XMFLOAT3(rect.x, rect.y, 0.5f), XMFLOAT2(0.f, 0.f)};
-    m_vertices[2] = {XMFLOAT3(rect.z, rect.w, 0.5f), XMFLOAT2(1.f, 1.f)};
-    m_vertices[3] = {XMFLOAT3(rect.z, rect.y, 0.5f), XMFLOAT2(1.f, 0.f)};
-    m_vertices[4] = {XMFLOAT3(rect.z, rect.w, 0.5f), XMFLOAT2(1.f, 1.f)};
-    m_vertices[5] = {XMFLOAT3(rect.x, rect.y, 0.5f), XMFLOAT2(0.f, 0.f)};
-
-    // Create Vertex Buffer
-    if (!m_pVertexBuffer)
-	{
-        D3D11_BUFFER_DESC vertexDesc;
-        ZeroMemory(&vertexDesc, sizeof(vertexDesc));
-        vertexDesc.Usage = D3D11_USAGE_DYNAMIC;
-        vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        vertexDesc.ByteWidth = sizeof(TextureVertex) * 6;
-        vertexDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-        D3D11_SUBRESOURCE_DATA resourceData;
-        ZeroMemory(&resourceData, sizeof(resourceData));
-        resourceData.pSysMem = m_vertices;
-
-        if (FAILED(m_pRenderer->GetDevice()->CreateBuffer(&vertexDesc, &resourceData, &m_pVertexBuffer)))
-            return false;
-    }
-
-    // Open (Map)
-    D3D11_MAPPED_SUBRESOURCE subresource;
-    if (FAILED(pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource)))
-        return false;
-
-    // Copy
-    memcpy(subresource.pData, (void*)&m_vertices, sizeof(m_vertices));
-
-    // Close (Unmap)
-    pDeviceContext->Unmap(m_pVertexBuffer, 0);
-
-    // Done
-	m_bUpdateVertexBuffer = false;
-    return true;
 }
 
 bool D3D11Texture::InitializeShaderResourceView()
@@ -222,7 +128,7 @@ bool D3D11Texture::InitializeShaderResourceView()
     resourceView.Texture2D.MostDetailedMip = 0;
     resourceView.Texture2D.MipLevels = textureDesc.MipLevels;
 
-	if (FAILED(m_pRenderer->GetDevice()->CreateShaderResourceView(pResource, &resourceView, &m_pResourceView)))
+	if (FAILED(m_pRenderer->GetDevice()->CreateShaderResourceView(pResource, &resourceView, &m_pShaderResourceView)))
 	{
 		pResource->Release();
 		return false;
@@ -231,15 +137,6 @@ bool D3D11Texture::InitializeShaderResourceView()
     // Done
     pResource->Release();
     return true;
-}
-
-void D3D11Texture::SetPosition(const Vector2& pos)
-{
-    if (m_position == pos)
-        return;
-
-    m_position = pos;
-	m_bUpdateVertexBuffer = true;
 }
 
 bool D3D11Texture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Texture2D* pTexture)
@@ -262,16 +159,8 @@ bool D3D11Texture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Textu
 	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
 	pDeviceContext->CopyResource(m_pTexture, pTexture);
 
-    // Shader Resource View
-    if (!InitializeShaderResourceView())
-        return false;
-
-    // Vertex Buffer
-    if (!UpdateVertexBuffer(pRenderContext))
-        return false;
-
     // Done
-    return true;
+    return InitializeShaderResourceView();
 }
 
 bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
@@ -319,12 +208,8 @@ bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImag
     m_size.x = uiWidth;
     m_size.y = uiHeight;
 
-    // Shader Resource View
-    if (!InitializeShaderResourceView())
-        return false;
-
     // Done
-    return true;
+	return InitializeShaderResourceView();
 }
 
 bool D3D11Texture::BlitFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, const uint32_t rowPitch, const Vector2& position,

@@ -113,28 +113,6 @@ void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
 	m_pRect->DrawRect(this, rect, color);
 }
 
-D3D11RenderContext::TextureDrawInfo::~TextureDrawInfo()
-{
-	delete pShaderBundle;
-	delete pInputLayout;
-	delete pVertexBuffer;
-	if (pSamplerState)
-		pSamplerState->Release();
-}
-
-void D3D11RenderContext::DrawTexture(IRenderTexture* pTexture, const math::Vector2& position)
-{
-	m_textureDrawInfo.pShaderBundle->Apply(this);
-
-	auto shaderresourceview = reinterpret_cast<D3D11Texture*>(pTexture)->GetShaderResourceView();
-	m_pDeviceContext->PSSetShaderResources(0, 1, &shaderresourceview);
-	m_pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
-
-	m_textureDrawInfo.pVertexBuffer->Apply(this, m_textureDrawInfo.pInputLayout->GetSize());
-	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Draw(6);
-}
-
 void D3D11RenderContext::SaveState()
 {
 	m_stateSaver.saveCurrentState(m_pDeviceContext);

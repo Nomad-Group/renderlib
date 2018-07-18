@@ -28,7 +28,7 @@ struct IVideoBuffer
 	virtual ~IVideoBuffer() = default;
 
 	// Initialize
-	virtual bool Initialize(void* pInitialData = nullptr) = 0;
+	virtual bool Initialize(const void* pInitialData = nullptr) = 0;
 
 	// Buffer
 	// for constant buffer: stIndexOrSize = slot

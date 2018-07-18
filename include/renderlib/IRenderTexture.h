@@ -17,13 +17,7 @@ struct IRenderTexture
 	// Update
 	virtual bool BlitFromMemory(IRenderContext*, uint8_t* pImage, uint32_t rowPitch, const math::Vector2& position, const math::Vector2& size) = 0;
 
-	// Settings
+	// Getter
 	virtual const math::Vector2& GetSize() const = 0;
-	
-	virtual void SetPosition(const math::Vector2&) = 0;
-    virtual const math::Vector2& GetPosition() const = 0;
-
-	// Render
     virtual bool IsValid() const = 0;
-	virtual void Render(IRenderContext*) = 0;
 };

@@ -1,16 +1,5 @@
 #pragma once
 #include "renderlib/renderlib.h"
-#include <DirectXMath.h>
-
-using XMFLOAT4A = DirectX::XMFLOAT4A;
-using XMFLOAT3  = DirectX::XMFLOAT3;
-using XMFLOAT2  = DirectX::XMFLOAT2;
-
-struct TextureVertex
-{
-	XMFLOAT3 pos;
-	XMFLOAT2 tex0;
-};
 
 class D3D11Renderer;
 class D3D11ShaderBundle;
@@ -25,14 +14,15 @@ private:
     Vector2 m_size;
 
 	// Shader Resource View
-	ID3D11ShaderResourceView* m_pResourceView = nullptr;
+	ID3D11ShaderResourceView* m_pShaderResourceView = nullptr;
 	bool InitializeShaderResourceView();
-
+	
 	// Vertex
-	ID3D11Buffer* m_pVertexBuffer = nullptr;
-	bool m_bUpdateVertexBuffer = false;
-	TextureVertex m_vertices[6];
-	bool UpdateVertexBuffer(IRenderContext*);
+	struct TextureVertex
+	{
+		float position[2];
+		float texcoords[2];
+	};
 
 	// Texture
 	ID3D11Texture2D* m_pTexture = nullptr;	
@@ -52,15 +42,10 @@ public:
 	// Update
 	virtual bool BlitFromMemory(IRenderContext*, uint8_t* pImage, uint32_t rowPitch, const Vector2& position, const Vector2& size) override;
 	
-	// Settings
+	// Getter
     virtual const Vector2& GetSize() const override { return m_size; };
-    virtual void SetPosition(const Vector2&) override;
-    virtual const Vector2& GetPosition() const override { return m_position; };
-
-	// Render
     virtual bool IsValid() const override { return m_pTexture != nullptr; };
-	virtual void Render(IRenderContext*) override;
 
 	// Internal
-	inline ID3D11ShaderResourceView* GetShaderResourceView() { return m_pResourceView; };
+	inline ID3D11ShaderResourceView* GetShaderResourceView() { return m_pShaderResourceView; };
 };

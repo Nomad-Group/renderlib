@@ -15,7 +15,7 @@ D3D11VideoBuffer::~D3D11VideoBuffer()
 		m_pBuffer->Release();
 }
 
-bool D3D11VideoBuffer::Initialize(void* pInitialData)
+bool D3D11VideoBuffer::Initialize(const void* pInitialData)
 {
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));

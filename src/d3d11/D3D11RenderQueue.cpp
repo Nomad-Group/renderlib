@@ -199,8 +199,7 @@ struct D3D11DrawTextureCommand : _detail::IRenderCommand
 
     void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
-        pTexture->SetPosition(position);
-        pTexture->Render(pRenderContext);
+		pRenderContext->DrawTexture(pTexture, position);
     }
 };
 

@@ -17,7 +17,7 @@ public:
 	~D3D11VideoBuffer();
 
 	// Initialize
-	virtual bool Initialize(void*) override;
+	virtual bool Initialize(const void*) override;
 
 	// Buffer
 	virtual void Apply(IRenderContext*, size_t stIndexOrSize, size_t stOffset) override;
