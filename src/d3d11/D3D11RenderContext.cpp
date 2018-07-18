@@ -31,10 +31,6 @@ bool D3D11RenderContext::Setup()
 	if (!m_surface.Setup())
 		return false;
 
-	// TODO: This has to be configurable
-	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
 	// TODO: Also configurable
 	D3D11_RASTERIZER_DESC rd;
 	rd.FillMode = D3D11_FILL_SOLID;
@@ -54,8 +50,6 @@ bool D3D11RenderContext::Setup()
 	ID3D11RasterizerState* pRS = nullptr;
 	m_pRenderer->m_pDevice->CreateRasterizerState(&rd, &pRS);
 	m_pDeviceContext->RSSetState(pRS);
-
-	
 
 	// Done
 	return true;
@@ -90,13 +84,38 @@ void D3D11RenderContext::Render()
 	if(m_pBlendState)
 		m_pBlendState->Apply(this);
 }
-
-void D3D11RenderContext::Draw(size_t stNumElements)
+D3D_PRIMITIVE_TOPOLOGY PrimitiveTopologyToD3DEnum(PrimitiveTopology eTopology)
 {
+	switch (eTopology)
+	{
+	case PrimitiveTopology::PointList:
+		return D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
+
+	case PrimitiveTopology::LineList:
+		return D3D_PRIMITIVE_TOPOLOGY_LINELIST;
+	
+	case PrimitiveTopology::LineStrip:
+		return D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
+
+	case PrimitiveTopology::TriangleList:
+		return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	case PrimitiveTopology::TriangleStrip:
+		return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+
+	default:
+		return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	}
+}
+
+void D3D11RenderContext::Draw(PrimitiveTopology eTopology, size_t stNumElements)
+{
+	m_pDeviceContext->IASetPrimitiveTopology(PrimitiveTopologyToD3DEnum(eTopology));
 	m_pDeviceContext->Draw(stNumElements, 0);
 }
-void D3D11RenderContext::DrawIndexed(size_t stNumElements)
+void D3D11RenderContext::DrawIndexed(PrimitiveTopology eTopology, size_t stNumElements)
 {
+	m_pDeviceContext->IASetPrimitiveTopology(PrimitiveTopologyToD3DEnum(eTopology));
 	m_pDeviceContext->DrawIndexed(stNumElements, 0, 0);
 }
 

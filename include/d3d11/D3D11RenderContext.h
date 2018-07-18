@@ -44,8 +44,8 @@ public:
 	virtual IRenderTarget* GetBackBufferRenderTarget() override;
 
 	// Drawing
-	virtual void Draw(size_t) override;
-	virtual void DrawIndexed(size_t stNumElements) override;
+	virtual void Draw(PrimitiveTopology, size_t) override;
+	virtual void DrawIndexed(PrimitiveTopology, size_t stNumElements) override;
 
 	virtual IRenderSurface* GetSurface() override { return &m_surface; };
 

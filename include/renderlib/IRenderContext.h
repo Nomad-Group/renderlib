@@ -1,5 +1,14 @@
 #pragma once
 
+enum class PrimitiveTopology
+{
+	PointList,
+	LineList,
+	LineStrip,
+	TriangleList,
+	TriangleStrip
+};
+
 // IRenderContext is not threadsafe!
 struct IRenderContext
 {
@@ -15,8 +24,8 @@ struct IRenderContext
 	virtual void Render() = 0;
 
 	// Drawing
-	virtual void Draw(size_t stNumElements) = 0;
-	virtual void DrawIndexed(size_t stNumElements) = 0;
+	virtual void Draw(PrimitiveTopology, size_t stNumElements) = 0;
+	virtual void DrawIndexed(PrimitiveTopology, size_t stNumElements) = 0;
 
 	virtual IRenderSurface* GetSurface() = 0;
 

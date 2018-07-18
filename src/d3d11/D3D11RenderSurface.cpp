@@ -136,7 +136,7 @@ void D3D11RenderSurface::DrawRect(const Rect& rect, const RGBA& color)
 	m_rectangleDrawInfo.pVertexBuffer->Apply(m_pRenderContext, m_rectangleDrawInfo.pInputLayout->GetSize());
 	m_rectangleDrawInfo.pColorBuffer->Apply(m_pRenderContext);
 	
-	m_pRenderContext->Draw(6);
+	m_pRenderContext->Draw(PrimitiveTopology::TriangleList, 6);
 }
 
 D3D11RenderSurface::TextureDrawInfo::~TextureDrawInfo()
@@ -190,7 +190,6 @@ void D3D11RenderSurface::DrawTexture(IRenderTexture* pTexture, const math::Vecto
 
 	// Draw
 	m_textureDrawInfo.pVertexBuffer->Apply(m_pRenderContext, m_textureDrawInfo.pInputLayout->GetSize());
-	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
-	m_pRenderContext->Draw(6);
+	m_pRenderContext->Draw(PrimitiveTopology::TriangleList, 6);
 }
