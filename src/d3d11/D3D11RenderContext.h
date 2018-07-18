@@ -8,7 +8,7 @@ class D3D11RenderContext : public IRenderContext
 {
 	friend class D3D11Factory;
 	friend class D3D11Renderer;
-	friend class D3D11Texture;
+	friend class D3D11RenderTexture;
 
 	// Rendering
 	D3D11Renderer* m_pRenderer;

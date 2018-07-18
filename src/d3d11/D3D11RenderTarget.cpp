@@ -1,7 +1,7 @@
 #include "D3D11Renderer.h"
 #include "D3D11RenderContext.h"
 #include "D3D11RenderTarget.h"
-#include "D3D11Texture.h"
+#include "D3D11RenderTexture.h"
 
 D3D11RenderTarget::~D3D11RenderTarget()
 {
@@ -112,7 +112,7 @@ void D3D11RenderTarget::Apply(IRenderContext* pRenderContext)
 
 bool D3D11RenderTarget::CopyTexture(IRenderContext* pRenderContext, IRenderTexture* texture)
 {
-    auto pTexture = reinterpret_cast<D3D11Texture*>(texture);
+    auto pTexture = reinterpret_cast<D3D11RenderTexture*>(texture);
 	if (pTexture == nullptr || m_bBackbuffer)
 		return false;
 

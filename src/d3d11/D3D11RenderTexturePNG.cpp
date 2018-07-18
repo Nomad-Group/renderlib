@@ -1,9 +1,9 @@
 #include "D3D11Renderer.h"
-#include "D3D11Texture.h"
+#include "D3D11RenderTexture.h"
 #include "png.h"
 #include <sstream>
 
-bool D3D11Texture::LoadFromPNG(IRenderContext* pRenderContext, const std::string& path)
+bool D3D11RenderTexture::LoadFromPNG(IRenderContext* pRenderContext, const std::string& path)
 {
     // Open File
     FILE* pFile = nullptr;

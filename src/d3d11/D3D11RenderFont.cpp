@@ -1,24 +1,24 @@
 #include "D3D11Renderer.h"
 #include "D3D11RenderContext.h"
-#include "D3D11Font.h"
+#include "D3D11RenderFont.h"
 #include "FW1FontWrapper/FW1FontWrapper.h"
 #include <locale>
 #include <codecvt>
 
 static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
-D3D11Font::D3D11Font(D3D11Renderer* pRenderer, std::string name) :
+D3D11RenderFont::D3D11RenderFont(D3D11Renderer* pRenderer, std::string name) :
     m_pRenderer(pRenderer),
     m_sName(name)
 {}
 
-D3D11Font::~D3D11Font()
+D3D11RenderFont::~D3D11RenderFont()
 {
     if (m_pFontWrapper)
         m_pFontWrapper->Release();
 }
 
-bool D3D11Font::Initialize()
+bool D3D11RenderFont::Initialize()
 {
     m_pDevice = m_pRenderer->GetDevice();
 
@@ -31,7 +31,7 @@ bool D3D11Font::Initialize()
 	return SUCCEEDED(hResult);
 }
 
-void D3D11Font::DrawString(IRenderContext* pRenderContext, const Vector2f& pos, const std::string& str) const
+void D3D11RenderFont::DrawString(IRenderContext* pRenderContext, const Vector2f& pos, const std::string& str) const
 {
     if (!m_pFontWrapper)
         return;
@@ -49,7 +49,7 @@ void D3D11Font::DrawString(IRenderContext* pRenderContext, const Vector2f& pos, 
                                FW1_RESTORESTATE | FW1_NOWORDWRAP);
 }
 
-void D3D11Font::DrawStringW(IRenderContext* pRenderContext, const Vector2f& pos, const std::wstring& str) const
+void D3D11RenderFont::DrawStringW(IRenderContext* pRenderContext, const Vector2f& pos, const std::wstring& str) const
 {
     if (!m_pFontWrapper)
         return;
@@ -67,7 +67,7 @@ void D3D11Font::DrawStringW(IRenderContext* pRenderContext, const Vector2f& pos,
 		FW1_RESTORESTATE | FW1_NOWORDWRAP);
 }
 
-void D3D11Font::DrawStringEx(IRenderContext* pRenderContext, const Rectf& rect, const std::string& str, FontRenderFlags::Enum eFlags) const
+void D3D11RenderFont::DrawStringEx(IRenderContext* pRenderContext, const Rectf& rect, const std::string& str, FontRenderFlags::Enum eFlags) const
 {
     if (!m_pFontWrapper)
         return;
@@ -106,7 +106,7 @@ void D3D11Font::DrawStringEx(IRenderContext* pRenderContext, const Rectf& rect, 
                                flags);
 }
 
-void D3D11Font::MeasureString(const std::string& str, Vector2f& size, FontRenderFlags::Enum eFlags) const
+void D3D11RenderFont::MeasureString(const std::string& str, Vector2f& size, FontRenderFlags::Enum eFlags) const
 {
     if (!m_pFontWrapper)
         return;
@@ -138,7 +138,7 @@ void D3D11Font::MeasureString(const std::string& str, Vector2f& size, FontRender
     size.y = rect.Top + rect.Bottom;
 }
 
-void D3D11Font::MeasureStringW(const std::wstring& str, Vector2f& size, FontRenderFlags::Enum eFlags) const
+void D3D11RenderFont::MeasureStringW(const std::wstring& str, Vector2f& size, FontRenderFlags::Enum eFlags) const
 {
     if (!m_pFontWrapper)
         return;

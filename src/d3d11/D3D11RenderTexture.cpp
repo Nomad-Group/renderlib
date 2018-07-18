@@ -1,19 +1,19 @@
 #include "D3D11Renderer.h"
 #include "D3D11RenderContext.h"
-#include "D3D11Texture.h"
+#include "D3D11RenderTexture.h"
 #include "D3D11ShaderBundle.h"
 #include "D3D11Shaders.h"
 
-D3D11Texture::D3D11Texture(D3D11Renderer* pRenderer) :
+D3D11RenderTexture::D3D11RenderTexture(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)
 {}
 
-D3D11Texture::~D3D11Texture()
+D3D11RenderTexture::~D3D11RenderTexture()
 {
     Release();
 }
 
-void D3D11Texture::Release()
+void D3D11RenderTexture::Release()
 {
     // Texture
     if (m_pTexture)
@@ -30,7 +30,7 @@ void D3D11Texture::Release()
     }
 }
 
-bool D3D11Texture::InitializeShaderResourceView()
+bool D3D11RenderTexture::InitializeShaderResourceView()
 {
     // Resource
     ID3D11Resource* pResource = nullptr;
@@ -59,7 +59,7 @@ bool D3D11Texture::InitializeShaderResourceView()
     return true;
 }
 
-bool D3D11Texture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Texture2D* pTexture)
+bool D3D11RenderTexture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Texture2D* pTexture)
 {
     Release();
 
@@ -83,7 +83,7 @@ bool D3D11Texture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Textu
     return InitializeShaderResourceView();
 }
 
-bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
+bool D3D11RenderTexture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
 {
 	Release();
 
@@ -132,7 +132,7 @@ bool D3D11Texture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImag
 	return InitializeShaderResourceView();
 }
 
-bool D3D11Texture::BlitFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, const uint32_t rowPitch, const Vector2& position,
+bool D3D11RenderTexture::BlitFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, const uint32_t rowPitch, const Vector2& position,
                                   const Vector2& size)
 {
     D3D11_BOX box;

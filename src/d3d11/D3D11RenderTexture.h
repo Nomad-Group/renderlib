@@ -4,7 +4,7 @@
 class D3D11Renderer;
 class D3D11ShaderBundle;
 
-class D3D11Texture : public IRenderTexture
+class D3D11RenderTexture : public IRenderTexture
 {
 	friend class D3D11RenderContext;
 
@@ -23,8 +23,8 @@ private:
 	ID3D11Texture2D* m_pTexture = nullptr;	
 
 public:
-	D3D11Texture(D3D11Renderer*);
-	virtual ~D3D11Texture();
+	D3D11RenderTexture(D3D11Renderer*);
+	virtual ~D3D11RenderTexture();
 
 	// Release
 	void Release();

@@ -3,7 +3,7 @@
 #include <d3d11.h>
 
 class D3D11Renderer;
-class D3D11Shader : public IRenderShader
+class D3D11RenderShader : public IRenderShader
 {
 	D3D11Renderer* m_pRenderer;
 	const ShaderType m_shaderType;
@@ -14,8 +14,8 @@ class D3D11Shader : public IRenderShader
 	ID3D11InputLayout* m_pInputLayout = nullptr;
 
 public:
-	D3D11Shader(D3D11Renderer*, const ShaderType);
-	virtual ~D3D11Shader();
+	D3D11RenderShader(D3D11Renderer*, const ShaderType);
+	virtual ~D3D11RenderShader();
 
 	// Shader
 	virtual ShaderType GetType() const override { return m_shaderType; };

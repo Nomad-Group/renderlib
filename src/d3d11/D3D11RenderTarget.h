@@ -1,6 +1,6 @@
 #pragma once
 #include "D3D11Renderer.h"
-#include "D3D11Texture.h"
+#include "D3D11RenderTexture.h"
 
 class D3D11RenderTarget : public IRenderTarget
 {

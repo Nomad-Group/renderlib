@@ -1,14 +1,14 @@
-#include "D3D11Shader.h"
+#include "D3D11RenderShader.h"
 #include "D3D11Renderer.h"
 #include "D3D11RenderContext.h"
 #include "D3D11ShaderInputLayout.h"
 
-D3D11Shader::D3D11Shader(D3D11Renderer* pRenderer, const ShaderType shaderType) :
+D3D11RenderShader::D3D11RenderShader(D3D11Renderer* pRenderer, const ShaderType shaderType) :
 	m_pRenderer(pRenderer),
 	m_shaderType(shaderType)
 {}
 
-D3D11Shader::~D3D11Shader()
+D3D11RenderShader::~D3D11RenderShader()
 {
 	if (m_pShaderCode)
 		m_pShaderCode->Release();
@@ -17,7 +17,7 @@ D3D11Shader::~D3D11Shader()
 		m_pShader->Release();
 }
 
-bool D3D11Shader::Compile(const char* strShader, const char* strEntrypoint)
+bool D3D11RenderShader::Compile(const char* strShader, const char* strEntrypoint)
 {
 	const char* strTarget = nullptr;
 	switch (m_shaderType)
@@ -86,7 +86,7 @@ bool D3D11Shader::Compile(const char* strShader, const char* strEntrypoint)
 	return success;
 }
 
-bool D3D11Shader::SetInputLayout(IShaderInputLayout* pInputLayout)
+bool D3D11RenderShader::SetInputLayout(IShaderInputLayout* pInputLayout)
 {
 	auto pInputElements = reinterpret_cast<D3D11ShaderInputLayout*>(pInputLayout)->GetInputElements();
 	auto hr = m_pRenderer->GetDevice()->CreateInputLayout(pInputElements,
@@ -100,7 +100,7 @@ bool D3D11Shader::SetInputLayout(IShaderInputLayout* pInputLayout)
 	return SUCCEEDED(hr);
 }
 
-void D3D11Shader::Apply(IRenderContext* pRenderContext)
+void D3D11RenderShader::Apply(IRenderContext* pRenderContext)
 {
 	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
 
@@ -122,7 +122,7 @@ void D3D11Shader::Apply(IRenderContext* pRenderContext)
 		pDeviceContext->IASetInputLayout(m_pInputLayout);
 }
 
-HRESULT D3D11Shader::CompileShader(const LPCVOID pSrcData, const SIZE_T SrcDataSize, const LPCSTR pFileName,
+HRESULT D3D11RenderShader::CompileShader(const LPCVOID pSrcData, const SIZE_T SrcDataSize, const LPCSTR pFileName,
 	CONST D3D_SHADER_MACRO* pDefines, ID3DInclude* pInclude, const LPCSTR pEntrypoint,
 	const LPCSTR pTarget, const UINT Flags1, const UINT Flags2, ID3DBlob** ppCode,
 	ID3DBlob** ppErrorMsgs)

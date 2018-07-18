@@ -5,7 +5,7 @@ using namespace math;
 #include "FW1FontWrapper/FW1FontWrapper.h"
 #include "D3D11Renderer.h"
 
-class D3D11Font : public IRenderFont
+class D3D11RenderFont : public IRenderFont
 {
 	D3D11Renderer* m_pRenderer = nullptr;
 	ID3D11Device* m_pDevice = nullptr;
@@ -18,8 +18,8 @@ class D3D11Font : public IRenderFont
 	RGBA m_color;
 
 public:
-	D3D11Font(D3D11Renderer* pRenderer, std::string name);
-	virtual ~D3D11Font() override;
+	D3D11RenderFont(D3D11Renderer* pRenderer, std::string name);
+	virtual ~D3D11RenderFont() override;
 
 	bool Initialize();
 

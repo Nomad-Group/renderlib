@@ -86,9 +86,6 @@
     <ClInclude Include="src\d3d11\D3D11Factory.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="src\d3d11\D3D11Font.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="src\d3d11\D3D11RenderContext.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
@@ -104,9 +101,6 @@
     <ClInclude Include="src\d3d11\D3D11RenderTarget.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="src\d3d11\D3D11Shader.h">
-      <Filter>Header\d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="src\d3d11\D3D11ShaderBundle.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
@@ -116,18 +110,21 @@
     <ClInclude Include="src\d3d11\D3D11Shaders.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="src\d3d11\D3D11Texture.h">
+    <ClInclude Include="src\d3d11\D3D11VideoBuffer.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="src\d3d11\D3D11VideoBuffer.h">
+    <ClInclude Include="src\d3d11\D3D11RenderFont.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11RenderShader.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11RenderTexture.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
-      <Filter>Source\d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Font.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp">
@@ -140,12 +137,6 @@
       <Filter>Source\d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11ShaderBundle.cpp">
-      <Filter>Source\d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Texture.cpp">
-      <Filter>Source\d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11TexturePNG.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11RenderContext.cpp">
@@ -229,9 +220,6 @@
     <ClCompile Include="third_party\FW1FontWrapper\FW1Precompiled.cpp">
       <Filter>Source\third_party\FW1FontWrapper</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Shader.cpp">
-      <Filter>Source\d3d11</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11VideoBuffer.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
@@ -242,6 +230,18 @@
       <Filter>Source\renderlib</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11RenderSurface.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderFont.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderShader.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderTexture.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderTexturePNG.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
   </ItemGroup>

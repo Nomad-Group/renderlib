@@ -2,7 +2,7 @@
 #include "D3D11Shaders.h"
 #include "D3D11ShaderBundle.h"
 #include "D3D11RenderContext.h"
-#include "D3D11Texture.h"
+#include "D3D11RenderTexture.h"
 
 D3D11RenderSurface::D3D11RenderSurface(D3D11Renderer* pRenderer, D3D11RenderContext* pRenderContext) :
 	m_pRenderer(pRenderer),
@@ -183,7 +183,7 @@ void D3D11RenderSurface::DrawTexture(IRenderTexture* pTexture, const math::Vecto
 	// Shader & Resources
 	auto pDeviceContext = m_pRenderContext->GetDeviceContext();
 
-	auto pShaderResourceView = reinterpret_cast<D3D11Texture*>(pTexture)->GetShaderResourceView();
+	auto pShaderResourceView = reinterpret_cast<D3D11RenderTexture*>(pTexture)->GetShaderResourceView();
 	pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
 	m_textureDrawInfo.pShaderBundle->Apply(m_pRenderContext);
 	pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);

@@ -1,8 +1,8 @@
 #include "D3D11Renderer.h"
 #include "D3D11RenderTarget.h"
-#include "D3D11Font.h"
-#include "D3D11Texture.h"
-#include "D3D11Shader.h"
+#include "D3D11RenderFont.h"
+#include "D3D11RenderTexture.h"
+#include "D3D11RenderShader.h"
 #include "D3D11ShaderInputLayout.h"
 #include "D3D11VideoBuffer.h"
 #include "FW1FontWrapper/FW1FontWrapper.h"
@@ -68,7 +68,7 @@ IRenderFont* D3D11Renderer::GetFont(const std::string& name)
     }
 
     // Create new Font
-    auto pFont = new D3D11Font(this, name);
+    auto pFont = new D3D11RenderFont(this, name);
     if (!pFont->Initialize())
 	{
         delete pFont;
@@ -82,12 +82,12 @@ IRenderFont* D3D11Renderer::GetFont(const std::string& name)
 
 IRenderTexture* D3D11Renderer::CreateTexture()
 {
-    return new D3D11Texture(this);
+    return new D3D11RenderTexture(this);
 }
 
 IRenderShader* D3D11Renderer::CreateShader(const ShaderType shaderType)
 {
-	return new D3D11Shader(this, shaderType);
+	return new D3D11RenderShader(this, shaderType);
 }
 
 IShaderInputLayout* D3D11Renderer::CreateShaderInputLayout()
