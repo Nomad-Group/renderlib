@@ -6,7 +6,8 @@
 #include "d3d11/D3D11Shaders.h"
 
 D3D11RenderContext::D3D11RenderContext(D3D11Renderer* pRenderer) :
-	m_pRenderer(pRenderer)
+	m_pRenderer(pRenderer),
+	m_surface(pRenderer, this)
 {}
 
 D3D11RenderContext::~D3D11RenderContext()
@@ -26,8 +27,8 @@ bool D3D11RenderContext::Setup()
 	if (!m_pBlendState->Initialize(m_pRenderer->m_pDevice))
 		return false;
 
-	// Texture Info
-	if (!D3D11Texture::SetupContext(m_pRenderer, this))
+	// Surface
+	if (!m_surface.Setup())
 		return false;
 
 	// TODO: This has to be configurable
@@ -54,28 +55,7 @@ bool D3D11RenderContext::Setup()
 	m_pRenderer->m_pDevice->CreateRasterizerState(&rd, &pRS);
 	m_pDeviceContext->RSSetState(pRS);
 
-	// Rectangle
-	// Input Layout
-	m_rectangleDrawInfo.pInputLayout = m_pRenderer->CreateShaderInputLayout();
-	m_rectangleDrawInfo.pInputLayout->AddFloat("POSITION", 2);
-
-	// Shader Bundle
-	m_rectangleDrawInfo.pShaderBundle = new D3D11ShaderBundle(m_pRenderer);
-	m_rectangleDrawInfo.pShaderBundle->SetShaders(d3d11_rect_shader, d3d11_rect_shader);
-
-	if (!m_rectangleDrawInfo.pShaderBundle->Initialize() ||
-		!m_rectangleDrawInfo.pShaderBundle->SetInputLayout(m_rectangleDrawInfo.pInputLayout))
-		return false;
-
-	// Vertex Buffer
-	m_rectangleDrawInfo.pVertexBuffer = m_pRenderer->CreateBuffer(BufferType::Vertex, m_rectangleDrawInfo.pInputLayout->GetSize() * 6, BufferUsage::Dynamic);
-	if (!m_rectangleDrawInfo.pVertexBuffer->Initialize())
-		return false;
-
-	// Color Buffer
-	m_rectangleDrawInfo.pColorBuffer = m_pRenderer->CreateBuffer(BufferType::Constant, sizeof(float) * 4, BufferUsage::Dynamic);
-	if (!m_rectangleDrawInfo.pColorBuffer->Initialize())
-		return false;
+	
 
 	// Done
 	return true;
@@ -118,57 +98,6 @@ void D3D11RenderContext::Draw(size_t stNumElements)
 void D3D11RenderContext::DrawIndexed(size_t stNumElements)
 {
 	m_pDeviceContext->DrawIndexed(stNumElements, 0, 0);
-}
-
-D3D11RenderContext::RectangleDrawInfo::~RectangleDrawInfo()
-{
-	delete pShaderBundle;
-	delete pInputLayout;
-	delete pVertexBuffer;
-	delete pColorBuffer;
-}
-
-void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
-{
-	// Update Vertex Buffer
-	// Position
-	const math::Vector2f scale(1 / (float)m_size.x * 2.f, 1 / (float)m_size.y * 2.f);
-	const math::Rectf frect(
-		(float)rect.x * scale.x - 1.0f,
-		1.0f - (float)rect.y * scale.y,
-		((float)rect.x + (float)rect.w) * scale.x - 1.0f,
-		1.0f - ((float)rect.y + (float)rect.h) * scale.y
-	);
-
-	const float vertices[12] = {
-		frect.x, frect.h,
-		frect.x, frect.y,
-		frect.w, frect.h,
-		frect.w, frect.y,
-		frect.w, frect.h,
-		frect.x, frect.y
-	};
-
-	void* pBufferData = nullptr;
-	if (!m_rectangleDrawInfo.pVertexBuffer->Map(this, BufferAccess::WriteDiscard, &pBufferData))
-		return;
-
-	memcpy(pBufferData, vertices, sizeof(vertices));
-	m_rectangleDrawInfo.pVertexBuffer->Unmap(this);
-
-	// Color Buffer
-	if (!m_rectangleDrawInfo.pColorBuffer->Map(this, BufferAccess::WriteDiscard, &pBufferData))
-		return;
-
-	float colors[4] = { (float)color.r / 255.0f, (float)color.g / 255.0f, (float)color.b / 255.0f, (float)color.a / 255.0f };
-	memcpy(pBufferData, colors, sizeof(colors));
-	m_rectangleDrawInfo.pColorBuffer->Unmap(this);
-
-	// Draw
-	m_rectangleDrawInfo.pShaderBundle->Apply(this);
-	m_rectangleDrawInfo.pVertexBuffer->Apply(this, m_rectangleDrawInfo.pInputLayout->GetSize());
-	m_rectangleDrawInfo.pColorBuffer->Apply(this);
-	Draw(6);
 }
 
 void D3D11RenderContext::SaveState()

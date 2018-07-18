@@ -168,6 +168,7 @@
     <ClInclude Include="include\d3d11\D3D11RenderContext.h" />
     <ClInclude Include="include\d3d11\D3D11Renderer.h" />
     <ClInclude Include="include\d3d11\D3D11RenderQueue.h" />
+    <ClInclude Include="include\d3d11\D3D11RenderSurface.h" />
     <ClInclude Include="include\d3d11\D3D11RenderTarget.h" />
     <ClInclude Include="include\d3d11\D3D11Shader.h" />
     <ClInclude Include="include\d3d11\D3D11ShaderBundle.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="include\renderlib\IRenderFont.h" />
     <ClInclude Include="include\renderlib\IRenderQueue.h" />
     <ClInclude Include="include\renderlib\IRenderShader.h" />
+    <ClInclude Include="include\renderlib\IRenderSurface.h" />
     <ClInclude Include="include\renderlib\IRenderTarget.h" />
     <ClInclude Include="include\renderlib\IRenderTexture.h" />
     <ClInclude Include="include\renderlib\IShaderInputLayout.h" />
@@ -197,6 +199,7 @@
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Factory.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderQueue.cpp" />
+    <ClCompile Include="src\d3d11\D3D11RenderSurface.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
     <ClCompile Include="src\d3d11\D3D11Shader.cpp" />
     <ClCompile Include="src\d3d11\D3D11ShaderBundle.cpp" />

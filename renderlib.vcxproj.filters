@@ -116,6 +116,12 @@
     <ClInclude Include="include\d3d11\D3D11ShaderInputLayout.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderlib\IRenderSurface.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11RenderSurface.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
@@ -234,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="src\renderlib\renderlibMath.cpp">
       <Filter>Source\renderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderSurface.cpp">
+      <Filter>Source\d3d11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

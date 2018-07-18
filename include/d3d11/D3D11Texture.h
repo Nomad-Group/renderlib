@@ -18,13 +18,6 @@ private:
 	// Shader Resource View
 	ID3D11ShaderResourceView* m_pShaderResourceView = nullptr;
 	bool InitializeShaderResourceView();
-	
-	// Vertex
-	struct TextureVertex
-	{
-		float position[2];
-		float texcoords[2];
-	};
 
 	// Texture
 	ID3D11Texture2D* m_pTexture = nullptr;	
@@ -33,7 +26,7 @@ public:
 	D3D11Texture(D3D11Renderer*);
 	virtual ~D3D11Texture();
 
-	static bool SetupContext(D3D11Renderer*, D3D11RenderContext*);
+	// Release
 	void Release();
 
 	// Loader

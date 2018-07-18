@@ -1,5 +1,6 @@
 #pragma once
 #include "D3D11Renderer.h"
+#include "D3D11RenderSurface.h"
 
 #include "FW1FontWrapper/CFW1StateSaver.h"
 
@@ -16,33 +17,11 @@ class D3D11RenderContext : public IRenderContext
 	D3D11BlendState* m_pBlendState = nullptr;
 	D3D11RenderTarget* m_pRenderTarget = nullptr;
 
+	D3D11RenderSurface m_surface;
+
 	// Viewport
 	D3D11_VIEWPORT m_viewport;
 	Vector2 m_size;
-
-	// Texture
-	struct TextureDrawInfo
-	{
-		TextureDrawInfo() = default;
-		~TextureDrawInfo();
-
-		D3D11ShaderBundle* pShaderBundle = nullptr;
-		IShaderInputLayout* pInputLayout = nullptr;
-		IVideoBuffer* pVertexBuffer = nullptr;
-		ID3D11SamplerState* pSamplerState = nullptr;
-	} m_textureDrawInfo;
-
-	// Rectangle
-	struct RectangleDrawInfo
-	{
-		RectangleDrawInfo() = default;
-		~RectangleDrawInfo();
-
-		D3D11ShaderBundle* pShaderBundle = nullptr;
-		IShaderInputLayout* pInputLayout = nullptr;
-		IVideoBuffer* pVertexBuffer = nullptr;
-		IVideoBuffer* pColorBuffer = nullptr;
-	} m_rectangleDrawInfo;
 
 	// State Saver
 	FW1FontWrapper::CFW1StateSaver m_stateSaver;
@@ -68,8 +47,7 @@ public:
 	virtual void Draw(size_t) override;
 	virtual void DrawIndexed(size_t stNumElements) override;
 
-	virtual void DrawRect(const Rect& rect, const RGBA& color) override;
-	virtual void DrawTexture(IRenderTexture*, const math::Vector2&, const math::Vector2&) override;
+	virtual IRenderSurface* GetSurface() override { return &m_surface; };
 
 	// State Saver
 	virtual void SaveState() override;

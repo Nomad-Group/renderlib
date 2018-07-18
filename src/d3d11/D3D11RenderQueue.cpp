@@ -110,7 +110,7 @@ struct D3D11DrawRectCommand : _detail::IRenderCommand
 
     void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
-        pRenderContext->DrawRect(rect, col);
+        pRenderContext->GetSurface()->DrawRect(rect, col);
     }
 };
 
@@ -199,7 +199,7 @@ struct D3D11DrawTextureCommand : _detail::IRenderCommand
 
     void Render(IRenderer* pRenderer, IRenderContext* pRenderContext) override
     {
-		pRenderContext->DrawTexture(pTexture, position);
+		pRenderContext->GetSurface()->DrawTexture(pTexture, position);
     }
 };
 

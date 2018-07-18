@@ -7,6 +7,7 @@
 
 struct IRenderer;
 struct IRenderContext;
+struct IRenderSurface;
 struct IRenderFont;
 struct IRenderTexture;
 struct IRenderTarget;
@@ -19,6 +20,7 @@ struct IShaderInputLayout;
 
 #include "IRenderer.h"
 #include "IRenderContext.h"
+#include "IRenderSurface.h"
 #include "IRenderTexture.h"
 #include "IRenderTarget.h"
 #include "IRenderFont.h"
