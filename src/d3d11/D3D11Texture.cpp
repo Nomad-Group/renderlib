@@ -28,25 +28,15 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
 
 	// Shader Bundle
 	textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(pRenderer);
-	textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader_v2, d3d11_texture_shader_v2);
+	textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader, d3d11_texture_shader);
 
 	if (!textureDrawInfo.pShaderBundle->Initialize() ||
 		!textureDrawInfo.pShaderBundle->SetInputLayout(textureDrawInfo.pInputLayout))
 		return false;
 
 	// Vertex Buffer
-	static const TextureVertex vertices[6] = {
-		{ 1.0f, -1.0f,   1.0f, 1.0f }, // bottom right
-		{ -1.0f, 1.0f,   0.0f, 0.0f }, // top left
-		{ 1.0f, 1.0f,    1.0f, 0.0f }, // top right
-
-		{ -1.0f, 1.0f,   0.0f, 0.0f }, // top left
-		{ 1.0f, -1.0f,   1.0f, 1.0f }, // bottom right
-		{ -1.0f, -1.0f,  0.0f, 1.0f }, // bottom left
-	};
-
-	textureDrawInfo.pVertexBuffer = pRenderer->CreateBuffer(BufferType::Vertex, textureDrawInfo.pInputLayout->GetSize() * 6, BufferUsage::Default);
-	if (!textureDrawInfo.pVertexBuffer->Initialize(&vertices))
+	textureDrawInfo.pVertexBuffer = pRenderer->CreateBuffer(BufferType::Vertex, textureDrawInfo.pInputLayout->GetSize() * 6, BufferUsage::Dynamic);
+	if (!textureDrawInfo.pVertexBuffer->Initialize())
 		return false;
 
     // Sampler State
@@ -80,14 +70,44 @@ D3D11RenderContext::TextureDrawInfo::~TextureDrawInfo()
 		pSamplerState->Release();
 }
 
-void D3D11RenderContext::DrawTexture(IRenderTexture* pTexture, const math::Vector2& position)
+void D3D11RenderContext::DrawTexture(IRenderTexture* pTexture, const math::Vector2& position, const math::Vector2& size)
 {
-	m_textureDrawInfo.pShaderBundle->Apply(this);
+	math::Vector2 renderSize = size;
+	if (size.x == 0 && size.y == 0)
+		renderSize = pTexture->GetSize();
 
-	auto shaderresourceview = reinterpret_cast<D3D11Texture*>(pTexture)->GetShaderResourceView();
-	m_pDeviceContext->PSSetShaderResources(0, 1, &shaderresourceview);
+	// Position
+	const math::Vector2f scale(1 / (float)m_size.x * 2.f, 1 / (float)m_size.y * 2.f);
+	const math::Rectf rect(
+		(float)position.x * scale.x - 1.0f,
+		1.0f - (float)position.y * scale.y,
+		((float)position.x + (float)renderSize.x) * scale.x - 1.0f,
+		1.0f - ((float)position.y + (float)renderSize.y) * scale.y
+	);
+
+	const D3D11Texture::TextureVertex vertices[6] = {
+		{ rect.x, rect.h, 0.0f, 1.0f },
+		{ rect.x, rect.y, 0.0f, 0.0f },
+		{ rect.w, rect.h, 1.0f, 1.0f },
+		{ rect.w, rect.y, 1.0f, 0.0f },
+		{ rect.w, rect.h, 1.0f, 1.0f },
+		{ rect.x, rect.y, 0.0f, 0.0f }
+	};
+
+	void* pBufferData = nullptr;
+	if(!m_textureDrawInfo.pVertexBuffer->Map(this, BufferAccess::WriteDiscard, &pBufferData))
+		return;
+
+	memcpy(pBufferData, vertices, sizeof(vertices));
+	m_textureDrawInfo.pVertexBuffer->Unmap(this);
+
+	// Shader & Resources
+	auto pShaderResourceView = reinterpret_cast<D3D11Texture*>(pTexture)->GetShaderResourceView();
+	m_pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
+	m_textureDrawInfo.pShaderBundle->Apply(this);
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
 
+	// Draw
 	m_textureDrawInfo.pVertexBuffer->Apply(this, m_textureDrawInfo.pInputLayout->GetSize());
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	Draw(6);

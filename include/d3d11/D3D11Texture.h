@@ -6,6 +6,8 @@ class D3D11ShaderBundle;
 
 class D3D11Texture : public IRenderTexture
 {
+	friend class D3D11RenderContext;
+
 private:
 	D3D11Renderer* m_pRenderer;
 

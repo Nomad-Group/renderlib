@@ -19,7 +19,7 @@ struct IRenderContext
 	virtual void DrawIndexed(size_t stNumElements) = 0;
 
 	virtual void DrawRect(const math::Rect& rect, const math::RGBA& color) = 0;
-	virtual void DrawTexture(IRenderTexture*, const math::Vector2&) = 0;
+	virtual void DrawTexture(IRenderTexture*, const math::Vector2& position, const math::Vector2& size = math::Vector2()) = 0;
 
 	// State Saver
 	virtual void SaveState() = 0;

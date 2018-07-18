@@ -59,7 +59,7 @@ public:
 	virtual void DrawIndexed(size_t stNumElements) override;
 
 	virtual void DrawRect(const Rect& rect, const RGBA& color) override;
-	virtual void DrawTexture(IRenderTexture*, const math::Vector2&) override;
+	virtual void DrawTexture(IRenderTexture*, const math::Vector2&, const math::Vector2&) override;
 
 	// State Saver
 	virtual void SaveState() override;

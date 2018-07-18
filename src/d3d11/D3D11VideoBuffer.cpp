@@ -66,7 +66,11 @@ bool D3D11VideoBuffer::Initialize(const void* pInitialData)
 		return false;
 	}
 
-	// Create Buffer
+	// Create Buffer (without initial data)
+	if (pInitialData == nullptr)
+		return SUCCEEDED(m_pRenderer->GetDevice()->CreateBuffer(&desc, nullptr, &m_pBuffer));
+
+	// Create Buffer (with initial data)
 	D3D11_SUBRESOURCE_DATA data;
 	ZeroMemory(&data, sizeof(data));
 	data.pSysMem = pInitialData;
