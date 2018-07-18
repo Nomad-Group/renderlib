@@ -50,8 +50,8 @@ bool D3D11RenderContext::Setup()
 	rd.DepthBiasClamp = 0.0f;
 	rd.SlopeScaledDepthBias = 0.0f;
 
-	rd.FillMode = D3D11_FILL_WIREFRAME;
-	rd.AntialiasedLineEnable = TRUE;
+	//rd.FillMode = D3D11_FILL_WIREFRAME;
+	//rd.AntialiasedLineEnable = TRUE;
 
 	ID3D11RasterizerState* pRS = nullptr;
 	m_pRenderer->m_pDevice->CreateRasterizerState(&rd, &pRS);
@@ -109,6 +109,11 @@ void D3D11RenderContext::DrawRect(const Rect& rect, const RGBA& color)
 		return;
 
 	m_pRect->DrawRect(this, rect, color);
+}
+
+void D3D11RenderContext::DrawTexture(IRenderTexture* pTexture, const math::Vector2& position)
+{
+	
 }
 
 void D3D11RenderContext::SaveState()

@@ -51,6 +51,31 @@ const char d3d11_texture_shader[] =
 	"	return colorMap_.Sample(colorSampler_, frag.tex0);"
 	"}";
 
+const char d3d11_texture_shader_v2[] =
+	"Texture2D colorMap : register(t0);"
+	"SamplerState colorSampler : register(s0);"
+	"struct VS_Input"
+	"{"
+	"	float2 pos : POSITION;"
+	"	float2 texcoords : TEXCOORD0;"
+	"};"
+	"struct PS_Input"
+	"{"
+	"	float2 pos : SV_POSITION;"
+	"	float2 texcoords : TEXCOORD0;"
+	"};"
+	"PS_Input VS(VS_Input vertex)"
+	"{"
+	"	PS_Input vsOut = (PS_Input)0;"
+	"	vsOut.pos = vertex.pos;"
+	"	vsOut.texcoords = vertex.texcoords;"
+	"	return vsOut;"
+	"}"
+	"float4 PS(PS_Input frag) : SV_TARGET"
+	"{"
+	"	return colorMap.Sample(colorSampler, frag.texcoords);"
+	"}";
+
 // Line    
 static char d3d11_line_shaders[] =
     "struct VSOut"

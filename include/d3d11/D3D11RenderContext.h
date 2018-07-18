@@ -9,6 +9,7 @@ class D3D11RenderContext : public IRenderContext
 	friend class D3D11Renderer;
 	friend class D3D11Texture;
 
+	// Rendering
 	D3D11Renderer* m_pRenderer;
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
@@ -21,10 +22,16 @@ class D3D11RenderContext : public IRenderContext
 	Vector2 m_size;
 
 	// Texture
+	// TODO: memory cleanup?!
 	struct TextureDrawInfo
 	{
 		TextureDrawInfo() = default;
-		~TextureDrawInfo() = default;
+		~TextureDrawInfo()
+		{
+			delete pShaderBundle;
+			if (pSamplerState)
+				pSamplerState->Release();
+		}
 
 		D3D11ShaderBundle* pShaderBundle = nullptr;
 		ID3D11SamplerState* pSamplerState = nullptr;
@@ -36,12 +43,12 @@ class D3D11RenderContext : public IRenderContext
 public:
 	D3D11RenderContext(D3D11Renderer*);
 	virtual ~D3D11RenderContext() override;
-
-	inline ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; };
 	
+	// Render Context
 	void Shutdown();
 	bool Setup();
 
+	// Render
 	virtual void Render() override;
 
 	// Viewport
@@ -50,13 +57,17 @@ public:
 
 	virtual IRenderTarget* GetBackBufferRenderTarget() override;
 
-	// Basic Drawing
+	// Drawing
 	virtual void Draw(size_t) override;
 	virtual void DrawIndexed(size_t stNumElements) override;
 
 	virtual void DrawRect(const Rect& rect, const RGBA& color) override;
+	virtual void DrawTexture(IRenderTexture*, const math::Vector2&) override;
 
 	// State Saver
 	virtual void SaveState() override;
 	virtual void RestoreState() override;
+
+	// Internal
+	inline ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; };
 };

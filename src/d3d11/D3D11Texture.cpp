@@ -19,17 +19,31 @@ bool D3D11Texture::SetupContext(D3D11Renderer* pRenderer, D3D11RenderContext* pC
 {
 	auto& textureDrawInfo = pContext->m_textureDrawInfo;
 
-    // Init once
-    if (textureDrawInfo.pShaderBundle)
-        return true;
+	// Init once
+	if (textureDrawInfo.pShaderBundle)
+		return true;
 
+	/**/
+	auto pInputLayout = pRenderer->CreateShaderInputLayout();
+	pInputLayout->AddFloat("POSITION", 2);
+	pInputLayout->AddFloat("TEXCOORDS", 2);
+
+	// Shader Bundle
+	textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(pRenderer);
+	textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader_v2, d3d11_texture_shader_v2);
+	//textureDrawInfo.pShaderBundle->SetupInputLayout(d3d11_texture_input, ARRAYSIZE(d3d11_texture_input));
+
+	if (!textureDrawInfo.pShaderBundle->Initialize())
+		return false;
+
+	/*
     // Texture Shader
     textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(pRenderer);
     textureDrawInfo.pShaderBundle->SetShaders(d3d11_texture_shader, d3d11_texture_shader);
     textureDrawInfo.pShaderBundle->SetupInputLayout(d3d11_texture_input, ARRAYSIZE(d3d11_texture_input));
 
     if (!textureDrawInfo.pShaderBundle->Initialize())
-        return false;
+        return false;*/
 
     // Sampler State
     D3D11_SAMPLER_DESC colorMapDesc;
