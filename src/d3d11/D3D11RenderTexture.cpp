@@ -106,11 +106,11 @@ bool D3D11RenderTexture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t*
     switch (format)
 	{
         case ColorFormat::RGBA:
-            textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+            textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
             break;
 
         case ColorFormat::BGRA:
-            textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+            textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
             break;
 
         default:
