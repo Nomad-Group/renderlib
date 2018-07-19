@@ -86,7 +86,7 @@ bool D3D11RenderTexture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D1
     return InitializeShaderResourceView();
 }
 
-bool D3D11RenderTexture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
+bool D3D11RenderTexture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
 {
 	Release();
 
@@ -135,14 +135,14 @@ bool D3D11RenderTexture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t*
 	return InitializeShaderResourceView();
 }
 
-bool D3D11RenderTexture::LoadFromFile(IRenderContext* pRenderContext, const std::string& path)
+bool D3D11RenderTexture::LoadFromFile(const std::string& path)
 {
 	int w, h, n;
 	unsigned char* pImageData = stbi_load(path.c_str(), &w, &h, &n, 4);
 	if (pImageData == nullptr)
 		return false;
 
-	const bool success = LoadFromMemory(pRenderContext, pImageData, w, h, ColorFormat::RGBA);
+	const bool success = LoadFromMemory(pImageData, w, h, ColorFormat::RGBA);
 	stbi_image_free(pImageData);
 
 	return success;
@@ -162,4 +162,23 @@ bool D3D11RenderTexture::BlitFromMemory(IRenderContext* pRenderContext, uint8_t*
 	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
 	pDeviceContext->UpdateSubresource(m_pTexture, 0, &box, pImage, rowPitch, size.x * size.y * 4);
     return true;
+}
+
+void D3D11RenderTexture::Bind(IRenderContext* pRenderContext, ShaderType eShaderType, uint8_t uiSlot)
+{
+	auto pDeviceContext = reinterpret_cast<D3D11RenderContext*>(pRenderContext)->GetDeviceContext();
+
+	switch (eShaderType)
+	{
+	case ShaderType::Vertex:
+		pDeviceContext->VSSetShaderResources(uiSlot, 1, &m_pShaderResourceView);
+		break;
+
+	case ShaderType::Pixel:
+		pDeviceContext->PSSetShaderResources(uiSlot, 1, &m_pShaderResourceView);
+		break;
+
+	default:
+		return;
+	}
 }

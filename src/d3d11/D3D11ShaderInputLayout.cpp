@@ -45,7 +45,7 @@ D3D11_INPUT_ELEMENT_DESC* D3D11ShaderInputLayout::GetInputElements()
 {
 	auto pInputElements = (D3D11_INPUT_ELEMENT_DESC*)malloc(sizeof(D3D11_INPUT_ELEMENT_DESC) * m_elements.size());
 	size_t i = 0;
-	for (auto& element : m_elements)
+	for (const auto& element : m_elements)
 	{
 		pInputElements[i] = element.desc;
 		pInputElements[i].SemanticName = element.name.c_str();

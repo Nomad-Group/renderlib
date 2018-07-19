@@ -183,8 +183,7 @@ void D3D11RenderSurface::DrawTexture(IRenderTexture* pTexture, const math::Vecto
 	// Shader & Resources
 	auto pDeviceContext = m_pRenderContext->GetDeviceContext();
 
-	auto pShaderResourceView = reinterpret_cast<D3D11RenderTexture*>(pTexture)->GetShaderResourceView();
-	pDeviceContext->PSSetShaderResources(0, 1, &pShaderResourceView);
+	pTexture->Bind(m_pRenderContext, ShaderType::Pixel, 0);
 	m_textureDrawInfo.pShaderBundle->Apply(m_pRenderContext);
 	pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
 
