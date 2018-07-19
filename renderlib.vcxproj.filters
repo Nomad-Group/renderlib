@@ -229,9 +229,6 @@
     <ClCompile Include="src\d3d11\D3D11ShaderInputLayout.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderlib\renderlibMath.cpp">
-      <Filter>Source\renderlib</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11RenderSurface.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
