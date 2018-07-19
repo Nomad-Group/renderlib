@@ -137,6 +137,6 @@ void D3D11RenderContext::SetRenderTargets(size_t stNumRenderTargets, IRenderTarg
 	for (size_t i = 0; i < stNumRenderTargets; i++)
 		m_pRenderTargetViews[i] = reinterpret_cast<D3D11RenderTarget*>(ppRenderTargets[i])->GetRenderTargetView();
 
-	ID3D11DepthStencilView* pDepthStencilView_ = (pDepthStencilView == nullptr) ? nullptr : reinterpret_cast<D3D11RenderTarget*>(pDepthStencilView)->GetDepthStencilView();
-	m_pDeviceContext->OMSetRenderTargets(stNumRenderTargets, m_pRenderTargetViews, pDepthStencilView_);
+	//ID3D11DepthStencilView* pDepthStencilView_ = (pDepthStencilView == nullptr) ? nullptr : reinterpret_cast<D3D11RenderTarget*>(pDepthStencilView)->GetDepthStencilView();
+	m_pDeviceContext->OMSetRenderTargets(stNumRenderTargets, m_pRenderTargetViews, nullptr);// pDepthStencilView_);
 }

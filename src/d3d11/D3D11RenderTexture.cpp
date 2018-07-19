@@ -33,12 +33,91 @@ void D3D11RenderTexture::Release()
     }
 }
 
+DXGI_FORMAT TranslateTextureFormatEnum(TextureFormat eFormat)
+{
+	switch (eFormat)
+	{
+	case TextureFormat::RGBA_UInt32:
+		return DXGI_FORMAT_R8G8B8A8_UNORM;
+
+	case TextureFormat::RGBA_Float32:
+		return DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+	case TextureFormat::DepthStencil_Float32_UInt8:
+		return DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	case TextureFormat::Depth_Float32:
+		return DXGI_FORMAT_D32_FLOAT;
+
+	default:
+		return DXGI_FORMAT_UNKNOWN;
+	}
+}
+
+UINT TranslateBindFlags(TextureBinding eBinding)
+{
+	switch (eBinding)
+	{
+	case TextureBinding::ShaderResource:
+		return D3D11_BIND_SHADER_RESOURCE;
+
+	case TextureBinding::RenderTarget:
+		return D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+
+	case TextureBinding::DepthStencil:
+		return D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
+
+	default:
+		return 0;
+	}
+}
+
+bool D3D11RenderTexture::Create(const math::Vector2& size, TextureFormat eFormat, TextureBinding eBinding, const void* pInitialData, const size_t stPitch)
+{
+	Release();
+	m_size = size;
+
+	// Texture Description
+	D3D11_TEXTURE2D_DESC textureDesc;
+	memset(&textureDesc, 0, sizeof(D3D11_TEXTURE2D_DESC));
+
+	textureDesc.Width = size.x;
+	textureDesc.Height = size.y;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+
+	textureDesc.BindFlags = TranslateBindFlags(eBinding);
+	textureDesc.Format = TranslateTextureFormatEnum(eFormat);
+
+	// Create (without initial data)
+	if (pInitialData == nullptr)
+	{
+		return
+			SUCCEEDED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, nullptr, &m_pTexture)) &&
+			InitializeShaderResourceView();
+	}
+
+	// Subresource
+	D3D11_SUBRESOURCE_DATA subresourceData;
+	ZeroMemory(&subresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
+	subresourceData.pSysMem = pInitialData;
+	subresourceData.SysMemPitch = stPitch;
+
+	// Create
+	if (FAILED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, &subresourceData, &m_pTexture)))
+		return false;
+
+	return InitializeShaderResourceView();
+}
+
 bool D3D11RenderTexture::InitializeShaderResourceView()
 {
-    // Resource
-    ID3D11Resource* pResource = nullptr;
-    if (FAILED(m_pTexture->QueryInterface(__uuidof(ID3D11Resource), reinterpret_cast<LPVOID*>(&pResource))))
-        return false;
+	// Resource
+	ID3D11Resource* pResource = nullptr;
+	if (FAILED(m_pTexture->QueryInterface(__uuidof(ID3D11Resource), reinterpret_cast<LPVOID*>(&pResource))))
+		return false;
 
     // Texture Info
     D3D11_TEXTURE2D_DESC textureDesc;
@@ -46,20 +125,15 @@ bool D3D11RenderTexture::InitializeShaderResourceView()
 
     // Resource View
     D3D11_SHADER_RESOURCE_VIEW_DESC resourceView;
+	ZeroMemory(&resourceView, sizeof(resourceView));
+
     resourceView.Format = textureDesc.Format;
     resourceView.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    resourceView.Texture2D.MostDetailedMip = 0;
-    resourceView.Texture2D.MipLevels = textureDesc.MipLevels;
+	resourceView.Texture2D.MipLevels = textureDesc.MipLevels;
 
-	if (FAILED(m_pRenderer->GetDevice()->CreateShaderResourceView(pResource, &resourceView, &m_pShaderResourceView)))
-	{
-		pResource->Release();
-		return false;
-	}
-
-    // Done
-    pResource->Release();
-    return true;
+	// Create
+	auto hr = m_pRenderer->GetDevice()->CreateShaderResourceView(pResource, &resourceView, &m_pShaderResourceView);
+	return SUCCEEDED(hr);
 }
 
 bool D3D11RenderTexture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D11Texture2D* pTexture)
@@ -88,51 +162,9 @@ bool D3D11RenderTexture::LoadFrom2DTexture(IRenderContext* pRenderContext, ID3D1
 
 bool D3D11RenderTexture::LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format)
 {
-	Release();
-
-    // Texture Description
-    D3D11_TEXTURE2D_DESC textureDesc;
-    ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
-
-    textureDesc.Width = uiWidth;
-    textureDesc.Height = uiHeight;
-    textureDesc.ArraySize = 1;
-    textureDesc.SampleDesc.Count = 1;
-    textureDesc.Usage = D3D11_USAGE_DEFAULT;
-    textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-    textureDesc.MipLevels = 1;
-
-    // Color Format
-    switch (format)
-	{
-        case ColorFormat::RGBA:
-            textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-            break;
-
-        case ColorFormat::BGRA:
-            textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-            break;
-
-        default:
-            return false;
-    }
-
-    // Subresource
-    D3D11_SUBRESOURCE_DATA subresourceData;
-    ZeroMemory(&subresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-    subresourceData.pSysMem = pImage;
-    subresourceData.SysMemPitch = static_cast<uint32_t>(uiWidth * 4);
-
-    // Create Texture
-    if (FAILED(m_pRenderer->GetDevice()->CreateTexture2D(&textureDesc, &subresourceData, &m_pTexture)))
-        return false;
-
-    // Setup D3D11Texture
-    m_size.x = uiWidth;
-    m_size.y = uiHeight;
-
-    // Done
-	return InitializeShaderResourceView();
+	return 	
+		Create(math::Vector2(uiWidth, uiHeight), TextureFormat::RGBA_UInt32, TextureBinding::ShaderResource, pImage, uiWidth * 4) &&
+		InitializeShaderResourceView();
 }
 
 bool D3D11RenderTexture::LoadFromFile(const std::string& path)

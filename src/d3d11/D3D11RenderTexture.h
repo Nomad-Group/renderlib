@@ -4,6 +4,8 @@
 class D3D11Renderer;
 class D3D11ShaderBundle;
 
+DXGI_FORMAT TranslateTextureFormatEnum(TextureFormat eFormat);
+
 class D3D11RenderTexture : public IRenderTexture
 {
 	friend class D3D11RenderContext;
@@ -29,6 +31,8 @@ public:
 	// Release
 	void Release();
 
+	bool Create(const math::Vector2& size, TextureFormat eFormat, TextureBinding eBinding, const void* pInitialData = nullptr, const size_t stPitch = 0);
+
 	// Loader
 	bool LoadFrom2DTexture(IRenderContext*, ID3D11Texture2D* pTexture);
 	virtual bool LoadFromMemory(uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format) override;
@@ -45,5 +49,6 @@ public:
     virtual bool IsValid() const override { return m_pTexture != nullptr; };
 
 	// Internal
+	inline ID3D11Texture2D* GetTexture() { return m_pTexture; };
 	inline ID3D11ShaderResourceView* GetShaderResourceView() { return m_pShaderResourceView; };
 };

@@ -6,6 +6,21 @@ enum class ColorFormat : uint8_t
     BGRA
 };
 
+enum class TextureFormat : uint8_t
+{
+	RGBA_UInt32,
+	RGBA_Float32,
+	DepthStencil_Float32_UInt8, // 32bit Z-buffer, 8-bit Stencil
+	Depth_Float32, // 32bit Z-buffer
+};
+
+enum class TextureBinding : uint8_t
+{
+	ShaderResource,
+	RenderTarget,	// Shader Resource + Render Target
+	DepthStencil,	// Shader Resource + Depth Stencil
+};
+
 struct IRenderTexture
 {
 	virtual ~IRenderTexture() = default;
