@@ -5,13 +5,27 @@ D3D11ShaderInputLayout::D3D11ShaderInputLayout(D3D11Renderer* pRenderer) :
 	m_pRenderer(pRenderer)
 {}
 
-D3D11ShaderInputElement::D3D11ShaderInputElement(const std::string _name, const size_t stOffset, const size_t stSize) :
-	name(_name),
+D3D11ShaderInputElement::D3D11ShaderInputElement(const ShaderInputElement _type, const size_t stOffset, const size_t stSize) :
+	eType(_type),
 	size(stSize)
 {
 	ZeroMemory(&desc, sizeof(desc));
 
-	desc.SemanticName = name.c_str();
+	switch (eType)
+	{
+	case ShaderInputElement::Position:
+		desc.SemanticName = "POSITION";
+		break;
+
+	case ShaderInputElement::Texcoord:
+		desc.SemanticName = "TEXCOORD";
+		break;
+
+	case ShaderInputElement::Color:
+		desc.SemanticName = "COLOR";
+		break;
+	}	
+
 	desc.AlignedByteOffset = stOffset;
 	desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 }
@@ -22,9 +36,9 @@ D3D11ShaderInputLayout::~D3D11ShaderInputLayout()
 		m_pInputLayout->Release();
 }
 
-void D3D11ShaderInputLayout::AddFloat(const std::string& name, uint8_t uiNumFloats)
+void D3D11ShaderInputLayout::AddFloat(const ShaderInputElement eType, uint8_t uiNumFloats)
 {
-	m_elements.emplace_back(name, m_stSize, sizeof(float) * uiNumFloats);
+	m_elements.emplace_back(eType, m_stSize, sizeof(float) * uiNumFloats);
 	D3D11ShaderInputElement& element = m_elements.back();
 	m_stSize += element.size;
 
@@ -48,7 +62,6 @@ D3D11_INPUT_ELEMENT_DESC* D3D11ShaderInputLayout::GetInputElements()
 	for (const auto& element : m_elements)
 	{
 		pInputElements[i] = element.desc;
-		pInputElements[i].SemanticName = element.name.c_str();
 		i++;
 	}
 

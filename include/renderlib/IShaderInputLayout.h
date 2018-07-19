@@ -1,5 +1,12 @@
 #pragma once
 
+enum class ShaderInputElement
+{
+	Position,
+	Texcoord,
+	Color
+};
+
 struct IShaderInputLayout
 {
 	virtual ~IShaderInputLayout() = default;
@@ -9,5 +16,5 @@ struct IShaderInputLayout
 	virtual size_t GetNumElements() const = 0;
 
 	// Elements
-	virtual void AddFloat(const std::string&, uint8_t uiNumFloats) = 0;
+	virtual void AddFloat(ShaderInputElement, uint8_t uiNumFloats) = 0;
 };

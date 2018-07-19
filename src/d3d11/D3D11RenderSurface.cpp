@@ -20,7 +20,7 @@ bool D3D11RenderSurface::SetupRectangle()
 {
 	// Input Layout
 	m_rectangleDrawInfo.pInputLayout = m_pRenderer->CreateShaderInputLayout();
-	m_rectangleDrawInfo.pInputLayout->AddFloat("POSITION", 2);
+	m_rectangleDrawInfo.pInputLayout->AddFloat(ShaderInputElement::Position, 2);
 
 	// Shader Bundle
 	m_rectangleDrawInfo.pShaderBundle = new D3D11ShaderBundle(m_pRenderer);
@@ -48,8 +48,8 @@ bool D3D11RenderSurface::SetupTexture()
 {
 	// Input Layout
 	m_textureDrawInfo.pInputLayout = m_pRenderer->CreateShaderInputLayout();
-	m_textureDrawInfo.pInputLayout->AddFloat("POSITION", 2);
-	m_textureDrawInfo.pInputLayout->AddFloat("TEXCOORD", 2);
+	m_textureDrawInfo.pInputLayout->AddFloat(ShaderInputElement::Position, 2);
+	m_textureDrawInfo.pInputLayout->AddFloat(ShaderInputElement::Texcoord, 2);
 
 	// Shader Bundle
 	m_textureDrawInfo.pShaderBundle = new D3D11ShaderBundle(m_pRenderer);

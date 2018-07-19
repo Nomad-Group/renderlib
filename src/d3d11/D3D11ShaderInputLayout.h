@@ -5,11 +5,11 @@
 
 struct D3D11ShaderInputElement
 {
-	D3D11ShaderInputElement(const std::string, const size_t stOffset, const size_t stSize);
+	D3D11ShaderInputElement(const ShaderInputElement, const size_t stOffset, const size_t stSize);
 	~D3D11ShaderInputElement() = default;
 
 	D3D11_INPUT_ELEMENT_DESC desc;
-	const std::string name;
+	const ShaderInputElement eType;
 	const size_t size;
 };
 
@@ -35,5 +35,5 @@ public:
 	// Elements
 	D3D11_INPUT_ELEMENT_DESC* GetInputElements();
 
-	virtual void AddFloat(const std::string&, uint8_t uiNumFloats) override;
+	virtual void AddFloat(ShaderInputElement, uint8_t uiNumFloats) override;
 };
