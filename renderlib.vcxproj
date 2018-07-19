@@ -91,11 +91,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/stb/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
-      <AdditionalLibraryDirectories>third_party/libpng/x86/;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Lib>
     <Link>
       <AdditionalDependencies>zlib.lib;libpng16.lib</AdditionalDependencies>
@@ -108,11 +110,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/stb/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
-      <AdditionalLibraryDirectories>third_party/libpng/x64/;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Lib>
     <Link>
       <AdditionalDependencies>zlib.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -127,7 +131,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/stb/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -136,7 +140,8 @@
       <AdditionalLibraryDirectories>third_party/libpng/x86/</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
       <AdditionalLibraryDirectories>third_party/libpng/x86/;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -148,7 +153,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include/;third_party/;third_party/libpng/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include/;third_party/;third_party/stb/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -157,7 +162,8 @@
       <AdditionalLibraryDirectories>third_party/libpng/x64/</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>zlib.lib;libpng16.lib;</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
       <AdditionalLibraryDirectories>third_party/libpng/x64/;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -205,7 +211,6 @@
     <ClCompile Include="src\d3d11\D3D11ShaderBundle.cpp" />
     <ClCompile Include="src\d3d11\D3D11ShaderInputLayout.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTexture.cpp" />
-    <ClCompile Include="src\d3d11\D3D11RenderTexturePNG.cpp" />
     <ClCompile Include="src\d3d11\D3D11VideoBuffer.cpp" />
     <ClCompile Include="src\renderlib\renderlibMath.cpp" />
     <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBA.cpp" />

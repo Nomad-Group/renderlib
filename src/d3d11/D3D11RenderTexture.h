@@ -32,7 +32,7 @@ public:
 	// Loader
 	bool LoadFrom2DTexture(IRenderContext*, ID3D11Texture2D* pTexture);
 	virtual bool LoadFromMemory(IRenderContext*, uint8_t* pImage, uint32_t uiWidth, uint32_t uiHeight, ColorFormat format) override;
-	virtual bool LoadFromPNG(IRenderContext*, const std::string& path) override;
+	virtual bool LoadFromFile(IRenderContext*, const std::string& path) override;
 	
 	// Update
 	virtual bool BlitFromMemory(IRenderContext*, uint8_t* pImage, uint32_t rowPitch, const Vector2& position, const Vector2& size) override;

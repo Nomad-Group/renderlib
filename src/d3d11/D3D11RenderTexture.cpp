@@ -4,6 +4,9 @@
 #include "D3D11ShaderBundle.h"
 #include "D3D11Shaders.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 D3D11RenderTexture::D3D11RenderTexture(D3D11Renderer* pRenderer) :
     m_pRenderer(pRenderer)
 {}
@@ -130,6 +133,19 @@ bool D3D11RenderTexture::LoadFromMemory(IRenderContext* pRenderContext, uint8_t*
 
     // Done
 	return InitializeShaderResourceView();
+}
+
+bool D3D11RenderTexture::LoadFromFile(IRenderContext* pRenderContext, const std::string& path)
+{
+	int w, h, n;
+	unsigned char* pImageData = stbi_load(path.c_str(), &w, &h, &n, 4);
+	if (pImageData == nullptr)
+		return false;
+
+	const bool success = LoadFromMemory(pRenderContext, pImageData, w, h, ColorFormat::RGBA);
+	stbi_image_free(pImageData);
+
+	return success;
 }
 
 bool D3D11RenderTexture::BlitFromMemory(IRenderContext* pRenderContext, uint8_t* pImage, const uint32_t rowPitch, const Vector2& position,
