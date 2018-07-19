@@ -18,7 +18,9 @@ struct IRenderContext
 	virtual const math::Vector2& GetViewportSize() const = 0;
 	virtual void SetViewportSize(const math::Vector2&) = 0;
 
+	// Render Target
 	virtual IRenderTarget* GetBackBufferRenderTarget() = 0;
+	virtual void SetRenderTargets(size_t stNumRenderTargets, IRenderTarget**, IRenderTarget* pDepthStencilView = nullptr) = 0;
 
 	// Render
 	virtual void Render() = 0;

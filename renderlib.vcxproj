@@ -181,6 +181,7 @@
     <ClInclude Include="include\renderlib\IRenderTarget.h" />
     <ClInclude Include="include\renderlib\IRenderTexture.h" />
     <ClInclude Include="include\renderlib\IShaderInputLayout.h" />
+    <ClInclude Include="include\renderlib\IShaderSampler.h" />
     <ClInclude Include="include\renderlib\IVideoBuffer.h" />
     <ClInclude Include="include\renderlib\renderlib.h" />
     <ClInclude Include="src\d3d11\D3D11BlendState.h" />
@@ -196,7 +197,9 @@
     <ClInclude Include="src\d3d11\D3D11ShaderInputLayout.h" />
     <ClInclude Include="src\d3d11\D3D11Shaders.h" />
     <ClInclude Include="src\d3d11\D3D11RenderTexture.h" />
+    <ClInclude Include="src\d3d11\D3D11ShaderSampler.h" />
     <ClInclude Include="src\d3d11\D3D11VideoBuffer.h" />
+    <ClInclude Include="third_party\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
@@ -211,6 +214,7 @@
     <ClCompile Include="src\d3d11\D3D11ShaderBundle.cpp" />
     <ClCompile Include="src\d3d11\D3D11ShaderInputLayout.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTexture.cpp" />
+    <ClCompile Include="src\d3d11\D3D11ShaderSampler.cpp" />
     <ClCompile Include="src\d3d11\D3D11VideoBuffer.cpp" />
     <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBA.cpp" />
     <ClCompile Include="third_party\FW1FontWrapper\CFW1ColorRGBAInterface.cpp" />

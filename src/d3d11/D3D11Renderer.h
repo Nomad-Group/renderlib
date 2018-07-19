@@ -21,6 +21,7 @@ class D3D11RenderShader;
 class D3D11ShaderBundle;
 class D3D11ShaderInputLayout;
 class D3D11VideoBuffer;
+class D3D11ShaderSampler;
 
 class D3D11Renderer : public IRenderer
 {
@@ -61,6 +62,7 @@ public:
 	virtual IRenderTexture* CreateTexture() override;
 	virtual IRenderShader* CreateShader(const ShaderType) override;
 	virtual IShaderInputLayout* CreateShaderInputLayout() override;
+	virtual IShaderSampler* CreateShaderSampler() override;
 	virtual IVideoBuffer* CreateBuffer(const BufferType, const size_t, const BufferUsage) override;
-	virtual IRenderTarget* CreateRenderTarget(const Vector2& size) override;
+	virtual IRenderTarget* CreateRenderTarget() override;
 };

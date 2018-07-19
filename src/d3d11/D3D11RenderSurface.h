@@ -15,7 +15,7 @@ class D3D11RenderSurface : public IRenderSurface
 		D3D11ShaderBundle* pShaderBundle = nullptr;
 		IShaderInputLayout* pInputLayout = nullptr;
 		IVideoBuffer* pVertexBuffer = nullptr;
-		ID3D11SamplerState* pSamplerState = nullptr;
+		IShaderSampler* pSamplerState = nullptr;
 	} m_textureDrawInfo;
 
 	struct TextureVertex

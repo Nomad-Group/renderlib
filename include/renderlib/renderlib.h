@@ -14,6 +14,7 @@ struct IRenderTarget;
 struct IRenderShader;
 struct IVideoBuffer;
 struct IShaderInputLayout;
+struct IShaderSampler;
 
 #include "IRenderShader.h" // (ShaderType enum)
 #include "IVideoBuffer.h" // (BufferType, BufferUsage enum)
@@ -25,6 +26,7 @@ struct IShaderInputLayout;
 #include "IRenderTarget.h"
 #include "IRenderFont.h"
 #include "IShaderInputLayout.h"
+#include "IShaderSampler.h"
 
 #include "IRenderQueue.h"
 

@@ -15,9 +15,13 @@ class D3D11RenderContext : public IRenderContext
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
 	D3D11BlendState* m_pBlendState = nullptr;
-	D3D11RenderTarget* m_pRenderTarget = nullptr;
+	D3D11RenderTarget* m_pBackBuffer = nullptr;
 
 	D3D11RenderSurface m_surface;
+
+	// State
+	static constexpr const size_t MAX_RENDER_TARGET_VIEWS = 4;
+	ID3D11RenderTargetView* m_pRenderTargetViews[MAX_RENDER_TARGET_VIEWS];
 
 	// Viewport
 	D3D11_VIEWPORT m_viewport;
@@ -41,7 +45,9 @@ public:
 	virtual const Vector2& GetViewportSize() const override { return m_size; };
 	virtual void SetViewportSize(const Vector2&) override;
 
+	// Render Targets
 	virtual IRenderTarget* GetBackBufferRenderTarget() override;
+	virtual void SetRenderTargets(size_t stNumRenderTargets, IRenderTarget**, IRenderTarget* pDepthStencilView) override;
 
 	// Drawing
 	virtual void Draw(PrimitiveTopology, size_t) override;

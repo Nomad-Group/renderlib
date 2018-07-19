@@ -125,6 +125,15 @@
     <ClInclude Include="src\d3d11\D3D11RenderTexture.h">
       <Filter>Header\d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderlib\IShaderSampler.h">
+      <Filter>Header\renderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d11\D3D11ShaderSampler.h">
+      <Filter>Header\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\stb\stb_image.h">
+      <Filter>Source\third_party\stb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
@@ -239,6 +248,9 @@
       <Filter>Source\d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11RenderTexture.cpp">
+      <Filter>Source\d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11ShaderSampler.cpp">
       <Filter>Source\d3d11</Filter>
     </ClCompile>
   </ItemGroup>

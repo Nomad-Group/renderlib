@@ -5,7 +5,10 @@
 D3D11RenderContext::D3D11RenderContext(D3D11Renderer* pRenderer) :
 	m_pRenderer(pRenderer),
 	m_surface(pRenderer, this)
-{}
+{
+	for (size_t i = 0; i < MAX_RENDER_TARGET_VIEWS; i++)
+		m_pRenderTargetViews[i] = nullptr;
+}
 
 D3D11RenderContext::~D3D11RenderContext()
 {
@@ -16,8 +19,10 @@ D3D11RenderContext::~D3D11RenderContext()
 bool D3D11RenderContext::Setup()
 {
 	// Render Target
-	m_pRenderTarget = new D3D11RenderTarget();
-	m_pRenderTarget->InitializeBackbuffer(m_pRenderer);
+	m_pBackBuffer = new D3D11RenderTarget(m_pRenderer);
+	m_pBackBuffer->InitializeBackbuffer();
+
+	m_pRenderTargetViews[0] = m_pBackBuffer->GetRenderTargetView();
 
 	// Blend State
 	m_pBlendState = new D3D11BlendState();
@@ -57,8 +62,8 @@ void D3D11RenderContext::Shutdown()
 	delete m_pBlendState;
 	m_pBlendState = nullptr;
 
-	delete m_pRenderTarget;
-	m_pRenderTarget = nullptr;
+	delete m_pBackBuffer;
+	m_pBackBuffer = nullptr;
 }
 
 void D3D11RenderContext::SetViewportSize(const Vector2& size)
@@ -67,6 +72,7 @@ void D3D11RenderContext::SetViewportSize(const Vector2& size)
 
 	m_viewport.Width = static_cast<float>(size.x);
 	m_viewport.Height = static_cast<float>(size.y);
+	m_viewport.MaxDepth = 1.0f;
 }
 
 void D3D11RenderContext::Render()
@@ -75,7 +81,7 @@ void D3D11RenderContext::Render()
 		return;
 
 	// Setup render state
-	m_pRenderTarget->Apply(this);
+	m_pBackBuffer->Apply(this);
 	m_pDeviceContext->RSSetViewports(1, &m_viewport);
 
 	if(m_pBlendState)
@@ -125,4 +131,12 @@ void D3D11RenderContext::RestoreState()
 	m_stateSaver.restoreSavedState();
 }
 
-IRenderTarget* D3D11RenderContext::GetBackBufferRenderTarget() { return m_pRenderTarget; }
+IRenderTarget* D3D11RenderContext::GetBackBufferRenderTarget() { return m_pBackBuffer; }
+void D3D11RenderContext::SetRenderTargets(size_t stNumRenderTargets, IRenderTarget** ppRenderTargets, IRenderTarget* pDepthStencilView)
+{
+	for (size_t i = 0; i < stNumRenderTargets; i++)
+		m_pRenderTargetViews[i] = reinterpret_cast<D3D11RenderTarget*>(ppRenderTargets[i])->GetRenderTargetView();
+
+	ID3D11DepthStencilView* pDepthStencilView_ = (pDepthStencilView == nullptr) ? nullptr : reinterpret_cast<D3D11RenderTarget*>(pDepthStencilView)->GetDepthStencilView();
+	m_pDeviceContext->OMSetRenderTargets(stNumRenderTargets, m_pRenderTargetViews, pDepthStencilView_);
+}

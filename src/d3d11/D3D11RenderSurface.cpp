@@ -65,21 +65,8 @@ bool D3D11RenderSurface::SetupTexture()
 		return false;
 
 	// Sampler State
-	D3D11_SAMPLER_DESC colorMapDesc;
-	ZeroMemory(&colorMapDesc, sizeof(colorMapDesc));
-
-	colorMapDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	colorMapDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	colorMapDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	colorMapDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	colorMapDesc.MaxAnisotropy = 1;
-	colorMapDesc.MipLODBias = 0.0f;
-	colorMapDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	colorMapDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	colorMapDesc.MinLOD = 0;
-
-	// Sampler State
-	if (FAILED(m_pRenderer->GetDevice()->CreateSamplerState(&colorMapDesc, &m_textureDrawInfo.pSamplerState)))
+	m_textureDrawInfo.pSamplerState = m_pRenderer->CreateShaderSampler();
+	if (!m_textureDrawInfo.pSamplerState->Create())
 		return false;
 
 	// Done
@@ -144,8 +131,7 @@ D3D11RenderSurface::TextureDrawInfo::~TextureDrawInfo()
 	delete pShaderBundle;
 	delete pInputLayout;
 	delete pVertexBuffer;
-	if (pSamplerState)
-		pSamplerState->Release();
+	delete pSamplerState;
 }
 
 void D3D11RenderSurface::DrawTexture(IRenderTexture* pTexture, const math::Vector2& position, const math::Vector2& size)
@@ -185,7 +171,7 @@ void D3D11RenderSurface::DrawTexture(IRenderTexture* pTexture, const math::Vecto
 
 	pTexture->Bind(m_pRenderContext, ShaderType::Pixel, 0);
 	m_textureDrawInfo.pShaderBundle->Apply(m_pRenderContext);
-	pDeviceContext->PSSetSamplers(0, 1, &m_textureDrawInfo.pSamplerState);
+	m_textureDrawInfo.pSamplerState->Bind(m_pRenderContext, ShaderType::Pixel, 0);
 
 	// Draw
 	m_textureDrawInfo.pVertexBuffer->Apply(m_pRenderContext, m_textureDrawInfo.pInputLayout->GetSize());

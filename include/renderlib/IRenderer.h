@@ -11,6 +11,7 @@ struct IRenderer
     virtual IRenderTexture* CreateTexture() = 0;
 	virtual IRenderShader* CreateShader(const ShaderType) = 0;
 	virtual IShaderInputLayout* CreateShaderInputLayout() = 0;
+	virtual IShaderSampler* CreateShaderSampler() = 0;
 	virtual IVideoBuffer* CreateBuffer(const BufferType, const size_t, const BufferUsage = BufferUsage::Default) = 0;
-	virtual IRenderTarget* CreateRenderTarget(const math::Vector2& size) = 0;
+	virtual IRenderTarget* CreateRenderTarget() = 0;
 };
